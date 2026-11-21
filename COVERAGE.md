@@ -37,6 +37,8 @@
 
 ## 内容和影音
 
+**YouTube** 的 Safari 网页助手可单独安装，支持首页和搜索结果里的部分独立广告位，以及普通播放页上已经可点击的「跳过广告」按钮。轻量版和合并版原有的 Google 广告域名规则不能保证过滤原生 YouTube App 的片头和中插。独立助手无需开启 HTTPS 解密。[范围与安装](youtube/README.md)
+
 | App | 已实现的规则 | 适用条件与依据 |
 | --- | --- | --- |
 | 小红书、知乎 | 小红书首页去掉带非空 `ads_info` 对象的广告卡，另拦三台广告素材主机。知乎首页按 `type=feed_advert` 过滤 | 小红书保留仅有商品关联、直播标记的普通条目，知乎保留未知类型。作者自行植入的推广通常没有这类标记。[小红书](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/xiaohongshu_splash_ad_block.plugin#L58-L65) · [知乎](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/zhihu.js#L33-L69) |

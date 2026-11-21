@@ -33,8 +33,9 @@ jobs:
           JQ: ${{ runner.temp }}/jq
         run: python3 -B -m unittest discover -s tests -v
 
-      - name: Test the check-in assistant with simulated pages
+      - name: Test the Safari helpers with simulated pages
         run: |
           python3 -m venv "$RUNNER_TEMP/checkin-tests"
           "$RUNNER_TEMP/checkin-tests/bin/python" -m pip install --only-binary=:all: playwright==1.58.0
           "$RUNNER_TEMP/checkin-tests/bin/python" tests/checkin_browser.py
+          "$RUNNER_TEMP/checkin-tests/bin/python" tests/youtube_browser.py
