@@ -13,9 +13,11 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / ".github" / "scripts"))
 import audit_release as gate
+import audit_host_update
+from sync_ad_hosts import CANDIDATES
 
 
-ENTRY = "- 范围：审核签到脚本更新\n- 风险：保持设备权限不变\n- 验证：运行实际脚本测试\n"
+ENTRY = "- 范围：审核网页广告脚本更新\n- 风险：保持设备权限不变\n- 验证：运行实际脚本测试\n"
 
 
 class ReleaseAuditTests(unittest.TestCase):
@@ -46,7 +48,8 @@ class ReleaseAuditTests(unittest.TestCase):
         (self.repo / "README.md").write_text("Example", encoding="utf-8")
         head = self.commit()
         report = {}
-        gate.run(self.base, head, False, report)
+        with patch.object(audit_host_update, "snapshot", side_effect=AssertionError("unrelated release fetched source")):
+            gate.run(self.base, head, False, report)
         self.assertEqual(report["变更文件"], ["README.md"])
         self.assertEqual(report["手工精确域名数"], 45)
         self.assertEqual(report["HTTPS 主机数"], 27)
@@ -71,13 +74,30 @@ class ReleaseAuditTests(unittest.TestCase):
         self.assertFalse(gate.has_new_record("", ENTRY.replace("风险", "范围")))
         self.assertFalse(gate.has_new_record("", ENTRY.replace("保持设备权限不变", "已看")))
 
+    def test_scheduled_poll_verifies_same_head_and_propagates_origin_failures(self):
+        current = "c" * 40
+        with patch.object(gate, "verify_source", return_value={"核验上游提交": current}) as verify:
+            report = {}
+            gate.run(self.base, self.base, False, report, current)
+            self.assertIn("无需发版", report["类别"])
+            self.assertEqual(report["核验上游提交"], current)
+            self.assertEqual(verify.call_args.args[1], current)
+            self.assertEqual(verify.call_args.kwargs, {"unchanged": True})
+        with patch.object(gate, "verify_source", side_effect=ValueError("source unavailable")):
+            with self.assertRaisesRegex(ValueError, "source unavailable"):
+                gate.run(self.base, self.base, False, {}, current)
+        (self.repo / "README.md").write_text("Changed", encoding="utf-8")
+        head = self.commit()
+        with self.assertRaisesRegex(ValueError, "current release"):
+            gate.run(self.base, head, False, {}, current)
+
     def test_automated_mode_never_falls_back_to_manual_review(self):
         (self.repo / gate.RECORD).write_text(ENTRY, encoding="utf-8")
         head = self.commit()
         with patch.object(gate, "audit_commits", side_effect=ValueError("restricted")) as guard:
             with self.assertRaisesRegex(ValueError, "restricted"):
                 gate.run(self.base, "HEAD", True, {})
-        guard.assert_called_once_with(self.base, head)
+        guard.assert_called_once_with(self.base, head, None)
 
     def test_pure_managed_diff_needs_no_manual_record(self):
         for name in gate.PLUGINS:
@@ -92,8 +112,18 @@ class ReleaseAuditTests(unittest.TestCase):
             path.write_bytes((before + newline.join(block) + newline + after).encode())
         head = self.commit()
         report = {}
-        gate.run(self.base, head, False, report)
+        sources = {key: domain + "\n" + "\n".join(f"{h} @ads" for h in new & allowed)
+                   for key, (domain, allowed) in CANDIDATES.items()}
+        with patch.object(audit_host_update, "snapshot", return_value=("a" * 40, sources)) as fetch:
+            gate.run(self.base, head, False, report)
+        fetch.assert_called_once_with("a" * 40)
         self.assertIn("仅受管", report["类别"])
+        (self.repo / gate.RECORD).write_text(ENTRY, encoding="utf-8")
+        (self.repo / "sample.js").write_text("// unrelated local change", encoding="utf-8")
+        head = self.commit()
+        with patch.object(audit_host_update, "snapshot", side_effect=ValueError("source is missing")):
+            with self.assertRaisesRegex(ValueError, "source is missing"):
+                gate.run(self.base, head, False, {})
 
     def test_failure_reports_without_rendering_filename_markup(self):
         dest = self.repo / "summary"

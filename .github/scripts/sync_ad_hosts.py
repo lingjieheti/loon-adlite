@@ -1,5 +1,5 @@
 """Sync a small reviewed set of exact ad hosts from v2ray/domain-list-community (MIT)."""
-from hashlib import sha1
+from hashlib import sha1, sha256
 import os
 from pathlib import Path
 import re
@@ -22,6 +22,8 @@ SOURCE = f"# Source: {REPOSITORY}@"
 OID = re.compile(r"[0-9a-f]{40}")
 RULE = re.compile(r"DOMAIN,([a-z0-9.-]+),REJECT")
 MAX_FILE = 256 * 1024
+# Reviewed MIT license at 564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8.
+LICENSE_SHA256 = "b9d84a22870d3f21c91a4c6e410c9cc51d00902f5233ad0c84011479244bf7d2"
 
 
 def git(directory, *args, timeout=15):
@@ -38,6 +40,7 @@ def read_snapshot(repo, commit):
     if not OID.fullmatch(commit):
         raise ValueError("Invalid upstream commit")
     paths = {"data/" + name: name for name in CANDIDATES}
+    paths["LICENSE"] = "LICENSE"
     entries = git(repo, "ls-tree", "-z", commit, "--", *paths)
     files = {}
     for entry in filter(None, entries.split(b"\0")):
@@ -54,18 +57,34 @@ def read_snapshot(repo, commit):
         digest = sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
         if len(data) != size or digest != blob:
             raise ValueError(f"Invalid Git blob for {path}")
+        if path == "LICENSE" and sha256(data).hexdigest() != LICENSE_SHA256:
+            raise ValueError("Upstream LICENSE changed and requires review")
         files[paths[path]] = data.decode("utf-8")
-    if set(files) != set(CANDIDATES):
+    if set(files) != set(paths.values()):
         raise ValueError("Required upstream files are missing")
+    del files["LICENSE"]
     return files
 
 
-def snapshot():
+def snapshot(revision=None):
+    if revision is not None and not OID.fullmatch(revision):
+        raise ValueError("Invalid upstream commit")
     with tempfile.TemporaryDirectory() as directory:
         git(directory, "init", "--bare", "--quiet", "--object-format=sha1", "--template=")
+        remote = f"https://github.com/{REPOSITORY}.git"
+        branch = "refs/heads/master:refs/heads/upstream"
         git(directory, "fetch", "--quiet", "--depth=1", "--no-tags", "--no-recurse-submodules",
-            f"https://github.com/{REPOSITORY}.git", "refs/heads/master:refs/heads/upstream", timeout=90)
+            remote, branch, timeout=90)
         commit = git(directory, "rev-parse", "--verify", "refs/heads/upstream^{commit}").decode("ascii").strip()
+        if revision is not None and revision != commit:
+            # Only trust commits reachable from the named upstream branch. A raw hash
+            # fetch alone can also resolve objects from other refs or a GitHub fork.
+            git(directory, "fetch", "--quiet", "--unshallow", "--no-tags", "--no-recurse-submodules",
+                remote, branch, timeout=90)
+            if git(directory, "cat-file", "-t", revision).strip() != b"commit":
+                raise ValueError("Expected an upstream commit object")
+            git(directory, "merge-base", "--is-ancestor", revision, "refs/heads/upstream")
+            commit = revision
         return commit, read_snapshot(directory, commit)
 
 
@@ -153,5 +172,8 @@ def update(root, commit, files):
 
 if __name__ == "__main__":
     revision, contents = snapshot()
+    if dest := os.environ.get("GITHUB_OUTPUT"):
+        with open(dest, "a", encoding="utf-8") as output:
+            output.write(f"upstream_sha={revision}\n")
     changed = update(ROOT, revision, contents)
     print(f"Upstream {revision}, {len(selected(contents))} reviewed ad hosts, changed={changed}")

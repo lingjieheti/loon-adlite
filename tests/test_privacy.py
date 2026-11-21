@@ -61,10 +61,8 @@ def audit(path):
 
 class PluginPrivacy(unittest.TestCase):
     def test_every_published_plugin_has_only_its_reviewed_permissions(self):
-        # Reminder sections and script pins are verified separately by test_checkin.
-        reminders = {"checkin/JD-reminder.lpx", "checkin/Shopping-rewards.lpx"}
         self.assertEqual({p.relative_to(shared.ROOT).as_posix() for p in shared.ROOT.rglob("*.lpx")},
-                         set(PROFILES) | reminders)
+                         set(PROFILES))
         self.assertEqual(len(REVIEWED_HOSTS), 27)
         for name in PROFILES:
             with self.subTest(name=name):

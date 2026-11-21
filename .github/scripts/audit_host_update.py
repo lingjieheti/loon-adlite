@@ -1,9 +1,34 @@
 """Check the exact release diff independently of the updater's write operation."""
+import argparse
 from pathlib import Path
 import subprocess
-import sys
 
-from sync_ad_hosts import OID, PLUGINS, read_block
+from sync_ad_hosts import OID, PLUGINS, SOURCE, read_block, selected, snapshot
+
+
+def managed_block(data):
+    """Extract the exact managed bytes, after validating delimiters and allowed hosts."""
+    prefix, suffix, _ = read_block(data.decode("utf-8"))
+    return data[len(prefix.encode()):len(data) - len(suffix.encode())]
+
+
+def verify_source(files, upstream=None, unchanged=False):
+    blocks = [managed_block(files[name]) for name in PLUGINS]
+    if not blocks[0] or blocks[0] != blocks[1]:
+        raise ValueError("Both subscriptions must declare the same non-empty source and host list")
+    recorded = blocks[0].splitlines()[0].decode("ascii").removeprefix(SOURCE)
+    if upstream is None:
+        upstream = recorded
+    if not OID.fullmatch(upstream) or (not unchanged and recorded != upstream):
+        raise ValueError("The reported source does not match the upstream revision under review")
+    published = read_block(files[PLUGINS[0]].decode("utf-8"))[2]
+    # A no-op keeps the previous source comment. Verify both revisions if the
+    # upstream moved, so an invented older provenance cannot get a passing check.
+    for pin in dict.fromkeys([upstream, recorded]):
+        revision, inputs = snapshot(pin)
+        if revision != pin or selected(inputs) != published:
+            raise ValueError("Published host list does not match the complete selection from the pinned upstream")
+    return {"核验上游提交": upstream, "插件标记的上游提交": recorded, "核验上游域名数": len(published)}
 
 
 def audit_pairs(before, after):
@@ -27,7 +52,7 @@ def audit_pairs(before, after):
         raise ValueError("Generated host lists or source revisions differ across subscriptions")
 
 
-def audit_commits(base, candidate):
+def audit_commits(base, candidate, upstream=None):
     if not all(OID.fullmatch(sha) for sha in (base, candidate)):
         raise ValueError("Expected full commit hashes")
     repo = Path(__file__).resolve().parents[2]
@@ -48,8 +73,14 @@ def audit_commits(base, candidate):
             files[name] = git("show", f"{sha}:{name}")
         copies.append(files)
     audit_pairs(*copies)
+    return verify_source(copies[1], upstream)
 
 
 if __name__ == "__main__":
-    audit_commits(*sys.argv[1:])
+    parser = argparse.ArgumentParser()
+    parser.add_argument("base")
+    parser.add_argument("candidate")
+    parser.add_argument("--upstream")
+    args = parser.parse_args()
+    audit_commits(args.base, args.candidate, args.upstream)
     print("Audited candidate diff: only reviewed exact ad hosts and their source revision changed.")

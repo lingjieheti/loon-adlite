@@ -1,5 +1,6 @@
 """Verify the compiled plugin rules and exercise update, withdrawal and failed snapshots offline."""
 from pathlib import Path
+from hashlib import sha256
 import subprocess
 from tempfile import TemporaryDirectory
 import sys
@@ -21,10 +22,14 @@ SNAPSHOT = {
 FIRST = "564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8"
 NEXT = "b" * 40
 EXPECTED = {"ads-union.jd.com", "adsview.qq.com", "adsview2.qq.com", "ad.api.3g.youku.com", "ad.api.mobile.youku.com"}
+FIXTURE_LICENSE = b"Reviewed test license\n"
 
 
 class SyncTests(unittest.TestCase):
     def setUp(self):
+        self.license_pin = patch.object(sync, "LICENSE_SHA256", sha256(FIXTURE_LICENSE).hexdigest())
+        self.license_pin.start()
+        self.addCleanup(self.license_pin.stop)
         directory = TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
@@ -87,7 +92,7 @@ class SyncTests(unittest.TestCase):
             sync.update(self.root, NEXT, SNAPSHOT)
         self.assertEqual(before, self.copies())
 
-    def git_fixture(self, mode="100644", jd=SNAPSHOT["jd"].encode()):
+    def git_fixture(self, mode="100644", jd=SNAPSHOT["jd"].encode(), license_text=FIXTURE_LICENSE, parent=None):
         # Construct Git objects directly so symlink tests also run on Windows without link privileges.
         repo = self.root / "upstream.git"
         repo.mkdir(exist_ok=True)
@@ -106,8 +111,13 @@ class SyncTests(unittest.TestCase):
             entry_mode = mode if name == "jd" else "100644"
             entries.append(entry_mode.encode() + b" blob " + oid + b"\t" + name.encode() + b"\n")
         data = write("mktree", payload=b"".join(entries))
-        tree = write("mktree", payload=b"040000 tree " + data + b"\tdata\n")
-        commit = write("commit-tree", tree.decode(), "-m", "fixture").decode()
+        contents = b"040000 tree " + data + b"\tdata\n"
+        if license_text is not None:
+            license_blob = write("hash-object", "-w", "--stdin", payload=license_text)
+            contents += b"100644 blob " + license_blob + b"\tLICENSE\n"
+        tree = write("mktree", payload=contents)
+        parents = ["-p", parent] if parent else []
+        commit = write("commit-tree", tree.decode(), *parents, "-m", "fixture").decode()
         write("update-ref", "refs/heads/master", commit)
         return repo, commit
 

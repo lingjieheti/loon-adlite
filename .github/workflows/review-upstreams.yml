@@ -2,7 +2,7 @@ name: Review upstream files
 
 on:
   schedule:
-    - cron: '27 3 * * 1'
+    - cron: '27 3 * * *'
   workflow_dispatch:
 
 permissions:
@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Compare the files cited in SOURCES.md
+      - name: Compare the pinned source and coverage references
         env:
           GH_TOKEN: ${{ github.token }}
         run: python3 .github/scripts/review_upstreams.py

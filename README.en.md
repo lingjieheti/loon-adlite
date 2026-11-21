@@ -22,11 +22,9 @@ The Douyin feed rules have been tested on sample responses. Their effect on the 
 
 The YouTube website helper tries to click the official Skip Ad button when it appears. A separate helper hides selected ad slots on Pornhub. [Install the YouTube userscript](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [Install the Pornhub userscript](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js) · [Safari filtering options (Chinese)](web/README.md)
 
-The rewards guide covers daily check-ins for JD Beans and SMZDM, and claiming JD or Taobao shop coupons you select. Douyin promotions use the official activity page. [Check-in and coupon guide (Chinese)](checkin/README.md)
-
 ## Updates
 
-GitHub checks a reviewed set of ad hosts weekly. When the list changes and tests pass, GitHub publishes the update to the same subscription URL. Changes to in-app filters for Bilibili and JD are reviewed separately.
+GitHub checks the upstream ad host list daily and runs a security audit every time. It publishes changes to the approved host list at the same subscription URL only after the audit and all tests pass. It also checks upstream sources for in-app filters such as Bilibili and JD daily. Changes to those filters get a separate security review before release.
 
 The subscription follows `main`. Set Loon to check external resources daily for automatic updates. To roll back, replace `main` in the subscription URL with the full commit hash you want. [Commit history](https://github.com/lingjieheti/loon-adlite/commits/main/)
 

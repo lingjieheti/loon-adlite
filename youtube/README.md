@@ -10,7 +10,7 @@
 
 ## 在 iPad 上启用
 
-1. 在 Safari 启用 [Userscripts 扩展](https://apps.apple.com/app/id1463298887)。如果已经在用本项目的签到助手，沿用同一个脚本目录即可。
+1. 在 Safari 启用 [Userscripts 扩展](https://apps.apple.com/app/id1463298887)。
 2. 用 Safari [打开 YouTube 助手脚本](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)，在扩展菜单中打开 Userscripts，点安装。也可以将下载的 `youtube.user.js` 保存到已选的脚本目录，再打开一次扩展菜单。[Userscripts 安装说明](https://github.com/quoid/userscripts#ios-ipados)
 3. 在 Safari 打开 [YouTube 网页](https://www.youtube.com/)，允许扩展在你使用的 YouTube 站点运行，刷新页面。播放器布局变化或要求本人点击时，仍可手动点官方跳过按钮。
 

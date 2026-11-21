@@ -22,11 +22,9 @@ Las reglas para las recomendaciones de Douyin se han probado con muestras de res
 
 En la web de YouTube, un script intenta pulsar el botón oficial para saltar el anuncio cuando aparece. Otro permite ocultar algunos espacios publicitarios en Pornhub. [Instalar el script de YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [Instalar el script de Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
 
-La guía explica cómo registrar la visita diaria en JD y SMZDM y cómo solicitar cupones de JD o de tiendas de Taobao que hayas elegido. Las promociones de Douyin se gestionan en la página oficial de cada actividad. [Guía de recompensas y cupones (en chino)](checkin/README.md)
-
 ## Actualizaciones
 
-GitHub comprueba cada semana una selección de dominios publicitarios. Si la lista cambia y supera las pruebas, la actualización se publica automáticamente en la misma dirección de suscripción. Las reglas para anuncios integrados en aplicaciones como Bilibili y JD se revisan por separado.
+GitHub coteja a diario los dominios publicitarios con su fuente y realiza una auditoría de seguridad en cada revisión. Los cambios en la lista de dominios aprobados se publican automáticamente en la misma dirección de suscripción tras superar la auditoría y todas las pruebas. También se comprueban a diario las fuentes de los filtros integrados de aplicaciones como Bilibili y JD. Los cambios en esos filtros requieren una revisión de seguridad específica antes de su publicación.
 
 La suscripción sigue la rama `main`. Puedes configurar Loon para que compruebe los recursos externos a diario. Para volver a una versión anterior, sustituye `main` en la dirección de suscripción por el hash completo del commit que quieras. [Historial de versiones](https://github.com/lingjieheti/loon-adlite/commits/main/)
 

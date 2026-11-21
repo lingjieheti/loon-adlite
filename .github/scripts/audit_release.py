@@ -8,7 +8,7 @@ import subprocess
 import sys
 from tempfile import TemporaryDirectory
 
-from audit_host_update import audit_commits, audit_pairs
+from audit_host_update import audit_commits, audit_pairs, managed_block, verify_source
 from sync_ad_hosts import OID, PLUGINS, ROOT, START, read_block
 
 sys.path.insert(0, str(ROOT / "tests"))
@@ -70,7 +70,7 @@ def delta(old, new):
     return {"新增": sorted(new - old), "移除": sorted(old - new)}
 
 
-def run(base, head, managed, report):
+def run(base, head, managed, report, upstream=None):
     if not OID.fullmatch(base) or not (head == "HEAD" or OID.fullmatch(head)):
         raise ValueError("Expected a full base SHA and full head SHA or HEAD")
     candidate = git("rev-parse", "--verify", "HEAD^{commit}").decode().strip()
@@ -105,13 +105,32 @@ def run(base, head, managed, report):
                    "复写新增行数": len(rewrites - old_rewrites), "复写移除行数": len(old_rewrites - rewrites)})
 
     if managed:
-        audit_commits(base, candidate)
+        report.update(audit_commits(base, candidate, upstream))
         report["类别"] = "自动发布，已校验两个受管区及父提交"
         return
+
+    # Compare Git blob bytes across both revisions, independent of checkout EOL settings.
+    after = {name: blob(candidate, name) for name in PLUGINS}
+    blocks = {name: managed_block(data) for name, data in after.items()}
+    if len(set(blocks.values())) != 1:
+        raise ValueError("Subscriptions disagree on managed contents or upstream revision")
+    if upstream is not None:
+        if base != candidate:
+            raise ValueError("A no-change upstream check must use the current release as its base")
+        report.update(verify_source(after, upstream, unchanged=True))
+        report["类别"] = "上游轮询，已独立核对本次来源与已发布名单，无需发版"
+        return
+
+    before = {name: blob(base, name) for name in PLUGINS if name in paths}
+    for name, previous in before.items():
+        old = managed_block(previous) if previous and START.encode() in previous else b""
+        if old != blocks[name]:
+            # A manual audit entry cannot override a false source declaration, even
+            # when the PR also updates scripts, docs or manually maintained rules.
+            report.update(verify_source(after))
+            break
     if set(paths) == set(PLUGINS):
         # A PR merge may have two parents. Its two validated blobs can still be a pure managed diff.
-        before = {name: blob(base, name) for name in PLUGINS}
-        after = {name: blob(candidate, name) for name in PLUGINS}
         if all(v is not None for v in (*before.values(), *after.values())):
             try:
                 audit_pairs(before, after)
@@ -150,10 +169,11 @@ def main():
     parser.add_argument("--base", required=True)
     parser.add_argument("--head", required=True)
     parser.add_argument("--managed", action="store_true")
+    parser.add_argument("--upstream", help="Independently verify this scheduled upstream snapshot")
     args = parser.parse_args()
     report = {"结果": "失败"}
     try:
-        run(args.base, args.head, args.managed, report)
+        run(args.base, args.head, args.managed, report, args.upstream)
         report["结果"] = "通过"
     except Exception as exc:
         # An unexpected parser or Git failure must also leave a failed audit in the run summary.

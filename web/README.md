@@ -10,7 +10,7 @@
 
 ## 在 Safari 隐藏 Pornhub 网页广告位
 
-1. 在 iPad 或 iPhone 上启用 Safari 的 Userscripts 扩展。如果已经使用本项目的 YouTube 或签到助手，沿用原来的脚本目录即可。[Userscripts](https://apps.apple.com/app/id1463298887)
+1. 在 iPad 或 iPhone 上启用 Safari 的 Userscripts 扩展。如果已使用本项目的 YouTube 去广告助手，沿用原来的脚本目录即可。[Userscripts](https://apps.apple.com/app/id1463298887)
 2. 用 Safari 打开脚本，在扩展菜单内选择 Userscripts 并安装。如果 `pornhub.user.js` 已在选定的脚本目录，直接打开扩展菜单确认它已启用即可。[打开脚本](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js) · [扩展安装说明](https://github.com/quoid/userscripts#ios-ipados)
 3. 允许扩展在你使用的目标站点运行，然后刷新页面。以后可在 Userscripts 中检查脚本更新；停用后刷新页面即可恢复原布局。
 

@@ -22,11 +22,9 @@ Quy tắc cho bảng tin Douyin đã được thử với dữ liệu mẫu. Hi�
 
 Công cụ dành cho trang web YouTube thử bấm nút Bỏ qua quảng cáo khi nút chính thức xuất hiện. Một công cụ riêng có thể ẩn một số vị trí quảng cáo trên Pornhub. [Mở đoạn mã cho YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [Mở đoạn mã cho Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
 
-Hướng dẫn bao gồm điểm danh JD và SMZDM, cùng cách nhận phiếu giảm giá JD hoặc phiếu cửa hàng Taobao mà bạn chọn. Với ưu đãi Douyin, hãy dùng trang chương trình chính thức. [Hướng dẫn điểm danh và nhận mã (tiếng Trung)](checkin/README.md)
-
 ## Cập nhật
 
-Mỗi tuần, GitHub đối chiếu các tên miền quảng cáo đã được xét duyệt. Khi danh sách thay đổi và vượt qua kiểm thử, bản mới được tự động đăng tại cùng địa chỉ đăng ký. Các quy tắc lọc quảng cáo bên trong Bilibili và JD được xét duyệt riêng.
+Mỗi ngày, GitHub đối chiếu các tên miền quảng cáo với nguồn gốc của danh sách và kiểm tra bảo mật trong mỗi lần đối chiếu. Khi danh sách tên miền đã duyệt thay đổi, bản cập nhật chỉ được tự động đăng tại địa chỉ đăng ký cũ sau khi vượt qua kiểm tra bảo mật và toàn bộ kiểm thử. Nguồn của các quy tắc lọc quảng cáo trong ứng dụng như Bilibili và JD cũng được đối chiếu hằng ngày. Mọi thay đổi đối với các quy tắc này đều được đánh giá bảo mật riêng trước khi phát hành.
 
 Địa chỉ đăng ký theo nhánh `main`. Bạn có thể đặt Loon kiểm tra tài nguyên bên ngoài hằng ngày. Để quay lại bản cũ, thay `main` trong địa chỉ bằng mã băm đầy đủ của lần sửa đổi mong muốn. [Lịch sử thay đổi](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
