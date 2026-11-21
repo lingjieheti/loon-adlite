@@ -8,7 +8,7 @@ GitHub 每天北京时间 11:27 排期比对本页和覆盖说明（COVERAGE.md�
 
 ## Loon 去广告插件
 
-轻量版和合并版共用精确域名清单。内嵌版处理微信和哔哩哔哩的四条响应，合并版也包含这四条。三个插件随本仓库发布，在设备上执行 Loon 原生规则。下表的上游链接用于核对域名、接口和字段，安装插件无需同时订阅这些来源。[轻量版](iPad-AdLite.lpx) · [内嵌版](iPad-InlineAds.lpx) · [合并版](iPad-AdSuite.lpx)
+轻量版和合并版共用精确域名清单。内嵌版的七条原生复写包括四条内容过滤和三条公众号广告监测规则，合并版全部包含。三个插件随本仓库发布，在设备上执行 Loon 原生规则。下表的上游链接用于核对域名、接口和字段，安装插件无需同时订阅这些来源。[轻量版](iPad-AdLite.lpx) · [内嵌版](iPad-InlineAds.lpx) · [合并版](iPad-AdSuite.lpx)
 
 | 功能与适用版本 | 采用的依据与本地适配 |
 | --- | --- |
@@ -21,6 +21,12 @@ GitHub 每天北京时间 11:27 排期比对本页和覆盖说明（COVERAGE.md�
 | 小红书、知乎、微博、酷安等内容 App · 合并 | 逐个核对首页广告卡、微博广告标记及酷安赞助卡，只从指定数组移除匹配项。腾讯视频和优酷的规则针对特定广告主机。爱奇艺另按首页、搜索卡片的广告标记以及官方频道资源记录的展示位过滤。视频口播和与正片合流的广告仍可能播放。[知乎广告卡](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/zhihu.js#L33-L69) · [微博字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L140-L155) · [其他内容 App 的来源](COVERAGE.md#内容和影音) |
 
 米家、同花顺系、LINE、百度地图、下厨房和美图秀秀采用完整广告主机名。贴吧、得物、猫眼、转转、BOSS 直聘、去哪儿、飞常准和两个信用卡 App 按独立广告路径或响应字段处理。信用卡 App 的适配限定为静态主机上特定广告目录的图片。每个 App 的来源链接均指向固定的 GitHub 文件版本，由每日来源比对任务追踪。[逐项广告位置与上游证据](COVERAGE.md#更多常用-app-的广告位)
+
+微信公众文章的监测规则依据存档页面脚本中的请求和回调独立编写，并核对了请求封装附加的 `devicetype`、`clientversion`、`x5` 和 `f` 参数。[公共参数](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/tmpl42f400.js#L342-L350) · [GET 请求组装](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/tmpl42f400.js#L396-L406)
+
+QQ 空间的范围来自维护者的抓包记录，曝光及 SDK 上报主机另与 AWAvenue 的域名表核对。三个主机和微信规则都由 Loon 在本机处理。[逐项请求、返回值与放行范围](COVERAGE.md#微信与-qq-广告监测) · [曝光上报域名](https://github.com/TG-Twilight/AWAvenue-Ads-Rule/blob/3b96f6337ee05400d5be302f7e9bdd5188839b82/Filters/AWAvenue-Ads-Rule-Loon.module#L735) · [SDK 上报域名](https://github.com/TG-Twilight/AWAvenue-Ads-Rule/blob/3b96f6337ee05400d5be302f7e9bdd5188839b82/Filters/AWAvenue-Ads-Rule-Loon.module#L776)
+
+腾讯 iOS 转化追踪 SDK 的下载文件在本次复核时的 SHA-256 为 `12d6d9499fd5e7af13e054beb677ab6f5ba60d181e53b4c2c7ce873db7f4f2e7`。核对归档内 `libGDTTrackSDK.a` 记录的转化地址即可验证设备端用途；订阅仅发布精确主机名。[接入说明](https://qzonestyle.gtimg.cn/open_proj/gdt_gw/cms/uploads/ios-sdk-v1.4.pdf) · [腾讯官方归档](https://imgcache.qq.com/qzone/biz/gdt/dev/sdk/ios/release/GDT_iOS_Track_SDK.zip)
 
 **许可与使用方式**　所引快照中，Biliverse 和 Prebid.js 标注 Apache-2.0，v2ray、app2smile 和 UserC23 标注 MIT，AdGuardFilters、NobyDa 和 fmz200 标注 GPL-3.0。Choler 的该版本未查到仓库级许可。表内也链接了公开的接口样例、个人使用项目和附有转载限制的资料。本文引用其观测位置，插件中没有引入这些项目的脚本文件。后续如复制代码或过滤表，应按该文件具体版本的授权和署名要求处理。[Biliverse 许可](https://github.com/Biliverse/ADBlock/blob/b0051916843f269d4b377aaf177f0d9e7b12e393/LICENSE) · [app2smile 许可](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/LICENSE.md) · [fmz200 许可](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/LICENSE) · [ZenmoFeiShi 使用说明](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/README.md#L7) · [Belcheck 使用说明](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/README.md#L7-L18)
 

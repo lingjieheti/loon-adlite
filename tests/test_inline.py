@@ -14,6 +14,8 @@ import subprocess
 import unittest
 from urllib.parse import urlsplit
 
+from test_suite import Rewrite, WECHAT_IMPRESSION_ACTION, read_sections
+
 
 PLUGIN = Path(__file__).resolve().parents[1] / "iPad-InlineAds.lpx"
 WX_AD = "https://mp.weixin.qq.com/mp/getappmsgad"
@@ -25,23 +27,7 @@ BIG_ID = 123456789012345678901234567891
 
 
 def read_rules():
-    rules = []
-    in_rewrite = False
-    url_regex = re.compile(r"\$\{url\}\s*~=\s*/((?:\\.|[^/\\])*)/([i]?)")
-    action = re.compile(r"\bthen\s+response\.json\.jq\(`([^`]+)`\)\s*$")
-    for lineno, raw in enumerate(PLUGIN.read_text(encoding="utf-8-sig").splitlines(), 1):
-        line = raw.strip()
-        if line.startswith("[") and line.endswith("]"):
-            in_rewrite = line.lower() == "[rewrite]"
-        elif in_rewrite and line and not line.startswith("#"):
-            pattern, program = url_regex.search(line), action.search(line)
-            if not line.startswith("response if ") or not (pattern and program):
-                raise ValueError(f"Unsupported rewrite at line {lineno}: {line}")
-            flags = re.IGNORECASE if pattern.group(2) == "i" else 0
-            rules.append((re.compile(pattern.group(1), flags), program.group(1), line.split(" then ", 1)[0]))
-    if not rules:
-        raise ValueError(f"No rewrite rules in {PLUGIN}")
-    return rules
+    return [Rewrite.parse(line) for line in read_sections(PLUGIN)["rewrite"]]
 
 
 class InlineAds(unittest.TestCase):
@@ -53,12 +39,13 @@ class InlineAds(unittest.TestCase):
             raise RuntimeError("Install jq or set JQ to the path of its executable.")
 
     def matching_rules(self, url):
-        return [rule for rule in self.rules if rule[0].search(url)]
+        return [rule for rule in self.rules if rule.matches(url)]
 
     def rewrite(self, url, source):
         rules = self.matching_rules(url)
         self.assertEqual(len(rules), 1, f"Expected exactly one rule for {url}")
-        _, program, _ = rules[0]
+        program = rules[0].jq
+        self.assertTrue(program, f"Expected a jq response for {url}")
         run = subprocess.run(
             [self.jq, "-c", program],
             input=json.dumps(source),
@@ -113,18 +100,20 @@ class InlineAds(unittest.TestCase):
             {urlsplit(url).hostname for url in (WX_AD, APP_FEED, WEB_FEED)},
         )
         for url in (WX_AD, WX_EXT, APP_FEED, APP_SPLASH, WEB_FEED):
-            (_, _, condition), = self.matching_rules(url)
-            self.assertRegex(condition, r"&&\s*\$\{response\.status\}\s*==\s*200(?:\s|$)")
-            header = re.search(
-                r"\$\{response\.header\['Content-Type'\]\}\s*~=\s*/((?:\\.|[^/\\])*)/i", condition,
-            )
-            self.assertIsNotNone(header)
-            mime = re.compile(header[1], re.I)
+            rule, = self.matching_rules(url)
+            self.assertTrue(rule.jq)
+            self.assertIsNotNone(rule.mime)
+            for status in (201, 204, 403, 500):
+                self.assertFalse(rule.matches(url, status=status))
             for good in ("application/json", "Application/JSON; charset=utf-8"):
-                self.assertRegex(good, mime)
+                self.assertTrue(rule.matches(url, mime=good))
             for bad in ("text/html; charset=UTF-8", "application/grpc", "application/jsonp",
                         "text/javascript", "text/plain", "application/octet-stream", ""):
-                self.assertNotRegex(bad, mime)
+                self.assertFalse(rule.matches(url, mime=bad))
+        self.assertEqual(len(self.rules), 7)
+        self.assertEqual(sum(bool(rule.jq) for rule in self.rules), 4)
+        self.assertEqual(sum(rule.phase == "request" for rule in self.rules), 2)
+        self.assertEqual(sum(rule.action == WECHAT_IMPRESSION_ACTION for rule in self.rules), 1)
 
     def test_wechat_preserves_article_fields(self):
         source = {

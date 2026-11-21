@@ -64,6 +64,11 @@ DOMAIN,mobads.baidu.com,REJECT
 DOMAIN,adscdn.baidu.com,REJECT
 DOMAIN,mobads-pre-config.cdn.bcebos.com,REJECT
 
+# QQ 空间与优量汇 · 广告曝光、SDK 事件与设备端转化上报
+DOMAIN,rpt.gdt.qq.com,REJECT
+DOMAIN,sdkreport.e.qq.com,REJECT
+DOMAIN,t.gdt.qq.com,REJECT
+
 # 腾讯广告与腾讯音乐
 DOMAIN,mi.gdt.qq.com,REJECT
 DOMAIN,pgdt.gtimg.cn,REJECT
@@ -146,6 +151,15 @@ DOMAIN,adsview2.qq.com,REJECT
 # 掌上京彩、发现精彩 · 静态广告目录中的图片
 request if ${url} ~= /^https:\/\/cdn-xyk-app\.bankofbeijing\.com\.cn\/cdn\/resource\/image\/advertise\/(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_.-]+\.(?:jpe?g|png|gif|webp)(?:\?|$)/ then reject_img(200)
 request if ${url} ~= /^https:\/\/static\.95508\.com\/mmg\/ciop\/sysabbr\/cmep\/images\/(?:apppopupads|popupads)\/(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_.-]+\.(?:jpe?g|png|gif|webp)(?:\?|$)/ then reject_img(200)
+
+# 微信公众号 · 只拦已知广告可见位置和停留时间的图片信标
+request if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/ad_report\?action=see_report&aid=[A-Za-z0-9_-]+&tid=[A-Za-z0-9_-]+&(?:seepos=[1-3]&report_type=0|seetime=(?:500|1000|2000)&report_type=1)$/ then reject_img(200)
+
+# 微信公众号 · 广告点击时间、曝光时长等附加上报
+request if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/advertisement_report\?action=extra_report(?:&extra_data=[^&#;]+&__biz=[A-Za-z0-9_%+=.-]+)?(?:&(?:uin|key|pass_ticket|wxtoken|devicetype|clientversion|appmsg_token|x5|f)=[^&#;]*)*$/ then reject_dict(200)
+
+# 微信公众号 · 为具备完整曝光标识的 GET 在本机返回成功，避免客户端重试
+response if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/advertisement_report\?report_type=1&tid=[A-Za-z0-9_-]+&aid=[A-Za-z0-9_-]+(?:&gh_id=[^&#;]*)?&adver_group_id=[^&#;]*&apurl=[^&#;]+(?:&(?:__biz|ascene|pos_type|exp_id|exp_value|r|ad_sign_data|ad_sign_k1|ad_sign_k2|ad_sign_md5|uin|key|pass_ticket|wxtoken|devicetype|clientversion|appmsg_token|x5|f)=[^&#;]*)*$/ && ${request.method} == "GET" then response.body.mock("json", `{"ret":0}`, 200)
 
 # 微信文章的独立广告接口及阅读互动接口。只处理声明为 JSON 且含广告列表和计数的响应，保留阅读数和评论。
 response if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/(?:getappmsgad|getappmsgext)(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def ok: type == "object" and ((has("ret") | not) or .ret == 0); if ok and (.base_resp == null or (.base_resp | ok)) and (.appmsgstat == null or (.appmsgstat | ok)) and (.advertisement_info | type) == "array" and (.advertisement_num | type) == "number" and .advertisement_num >= 0 then .advertisement_info = [] | .advertisement_num = 0 else . end`)
