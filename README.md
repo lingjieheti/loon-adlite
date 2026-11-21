@@ -1,6 +1,6 @@
 # 个人自用的 Loon 去广告
 
-**简体中文** · [English](README.en.md) · [日本語](README.ja.md)
+**简体中文** · [English](README.en.md) · [日本語](README.ja.md) ｜ [赞助我](SPONSOR.md)
 
 给自己的 iPhone 和 iPad 用，主要过滤常用 App 的开屏和信息流广告。优先考虑低开销的用户可以从轻量版开始。三个版本都在本机处理，没有远程脚本或遥测。
 
@@ -26,5 +26,3 @@
 需要回退时，可把订阅地址中的 `main` 换成某次提交的完整编号，导入后停用原条目。[提交历史](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
 [按 App 查看覆盖与限制](COVERAGE.md) · [规则来源核查报告](audit.html) · [离线回归测试](tests/)
-
-如果这个插件对你有帮助，欢迎自愿支持后续维护。[赞助我](SPONSOR.md)

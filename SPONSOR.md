@@ -1,43 +1,27 @@
-# 赞助我 · Support my work · 開発を応援する
+# 赞助我
 
-如果这些规则帮你少看了一些广告，欢迎随意打赏。谢谢你支持我继续维护这个项目。
+**简体中文** · [English](SPONSOR.en.md) · [日本語](SPONSOR.ja.md)
 
-If these filters have made your apps a little quieter, you’re welcome to leave a tip. Thank you for supporting this project.
+如果这些规则让你少看了些广告，欢迎自愿打赏，支持我继续维护。谢谢！
 
-このプラグインが役に立ったら、よろしければ開発を応援してください。いつもありがとうございます。
+## 支付宝
 
-## 支付宝 · Alipay
+[打开支付宝付款页](https://qr.alipay.com/fkx13023nip9yxdtfe6qqbe) · [查看支付宝收款码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/alipay.png)
 
-[打开支付宝付款页 · Open Alipay · Alipay を開く](https://qr.alipay.com/fkx13023nip9yxdtfe6qqbe)
+## 微信支付
 
-<img src="assets/sponsor/alipay.jpg" alt="支付宝收款码 · Alipay QR code" width="240">
-
-## 微信支付 · WeChat Pay
-
-用微信扫一扫，或保存图片后在「扫一扫」中从相册选取。
-
-Scan with WeChat, or save the image and select it from your album in WeChat’s scanner.
-
-WeChat でスキャンするか、画像を保存してスキャン画面のアルバムから選んでください。
-
-<img src="assets/sponsor/wechat-pay.jpg" alt="微信收款码 · WeChat Pay QR code" width="240">
+[打开微信收款码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/wechat-pay.png)，用微信「扫一扫」。如果在同一台手机上，可以先保存图片，再尝试从「扫一扫」的相册中选取。能否付款以微信提示为准。
 
 ## PayPal
 
-[打开 PayPal 付款页 · Open PayPal · PayPal を開く](https://www.paypal.com/qrcodes/p2pqrc/8CZSV4VY73PB2)
-
-<img src="assets/sponsor/paypal.jpg" alt="PayPal QR code" width="240">
+[打开 PayPal 付款页](https://www.paypal.com/qrcodes/p2pqrc/8CZSV4VY73PB2) · [查看 PayPal 收款码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/paypal.png)
 
 ## USDT · TRON (TRC20)
 
-仅支持 TRON（TRC20）网络的 USDT，单笔须大于 0.01 USDT。
+这个地址接收 **TRON（TRC20）网络的 USDT**。收款平台要求单笔金额**大于 0.01 USDT**。
 
-Send USDT on TRON (TRC20) only. The amount must be greater than 0.01 USDT.
+`TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE`
 
-USDT は TRON（TRC20）ネットワークで、1 回につき 0.01 USDT を超える額を送ってください。
+[查看 USDT 地址二维码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/usdt-tron.png)
 
-```text
-TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE
-```
-
-<img src="assets/sponsor/usdt-tron.png" alt="USDT on TRON (TRC20) address QR code" width="240">
+[返回插件首页](README.md)
