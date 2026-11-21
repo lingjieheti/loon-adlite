@@ -26,3 +26,5 @@
 需要回退时，可把订阅地址中的 `main` 换成某次提交的完整编号，导入后停用原条目。[提交历史](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
 [按 App 查看覆盖与限制](COVERAGE.md) · [规则来源核查报告](audit.html) · [离线回归测试](tests/)
+
+如果这个插件对你有帮助，欢迎自愿支持后续维护。[赞助我](SPONSOR.md)
