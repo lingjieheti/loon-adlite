@@ -9,14 +9,11 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 QR_BASE = "https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/"
 PAYMENT_LINKS = {
-    "https://qr.alipay.com/fkx13023nip9yxdtfe6qqbe",
     "https://www.paypal.com/qrcodes/p2pqrc/8CZSV4VY73PB2",
 }
 TRON_ADDRESS = "TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE"
 # These images were decoded and checked against the maintainer's original payment codes.
 QR_HASHES = {
-    "alipay.png": "6508037243e1a0236df8e56ff2cd0297ce13b34ea49b6af05dc8b67512814c9f",
-    "wechat-pay.png": "5180dea67d37f87525a9b3238677033b091eacffd8426567f1470adf1e44e5c7",
     "paypal.png": "507ba236f084b1e3b0c31a67c8696a0f4ca013fae53fbd6bd4f4218dc047c9ae",
     "usdt-tron.png": "5e40b0665731164843190e0202a79dbdff7024e22aa9b9c13d969aeac93f20ac",
 }
@@ -24,9 +21,11 @@ QR_HASHES = {
 
 class SponsorshipTests(unittest.TestCase):
     def test_published_images_match_verified_codes(self):
+        folder = ROOT / "assets" / "sponsor"
+        self.assertEqual({file.name for file in folder.iterdir()}, set(QR_HASHES) | {"paypal.jpg"})
         for filename, digest in QR_HASHES.items():
             with self.subTest(filename=filename):
-                code = (ROOT / "assets" / "sponsor" / filename).read_bytes()
+                code = (folder / filename).read_bytes()
                 self.assertEqual(hashlib.sha256(code).hexdigest(), digest)
 
     def test_payment_destinations_and_language_navigation(self):
@@ -39,7 +38,7 @@ class SponsorshipTests(unittest.TestCase):
                 links = set(re.findall(r"\]\(([^)]+)\)", body))
                 expected = (pages - {page}) | {readme} | PAYMENT_LINKS
                 expected.update(QR_BASE + name for name in QR_HASHES)
-                self.assertFalse(expected - links, f"Missing links: {expected - links}")
+                self.assertEqual(links, expected)
                 self.assertEqual(re.findall(r"^`([^`\n]+)`$", body, flags=re.MULTILINE), [TRON_ADDRESS])
                 self.assertNotIn("![", body)
                 self.assertNotIn("<img", body.lower())

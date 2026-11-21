@@ -4,14 +4,6 @@
 
 如果这些规则让你少看了些广告，欢迎自愿打赏，支持我继续维护。谢谢！
 
-## 支付宝
-
-[打开支付宝付款页](https://qr.alipay.com/fkx13023nip9yxdtfe6qqbe) · [查看支付宝收款码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/alipay.png)
-
-## 微信支付
-
-[打开微信收款码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/wechat-pay.png)，用微信「扫一扫」。如果在同一台手机上，可以先保存图片，再尝试从「扫一扫」的相册中选取。能否付款以微信提示为准。
-
 ## PayPal
 
 [打开 PayPal 付款页](https://www.paypal.com/qrcodes/p2pqrc/8CZSV4VY73PB2) · [查看 PayPal 收款码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/paypal.png)
