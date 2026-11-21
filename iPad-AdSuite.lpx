@@ -1,5 +1,5 @@
-#!name = 常用 App 去广告
-#!desc = 精确广告域名及购物、生活、内容应用的开屏与信息流规则。已包含轻量版和内嵌版。复写需要 HTTPS 解密；无远程脚本。
+#!name = 常用 App 去广告（懒人版）
+#!desc = iPhone 和 iPad 共用。域名拦截无需证书。为指定主机开启 HTTPS 解密后，还可过滤部分开屏和信息流广告。使用 Loon 原生规则。
 #!author = lingjieheti
 #!loon_version = 3.5.1(978)
 #!date = 2026-11-21

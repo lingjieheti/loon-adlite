@@ -1,11 +1,11 @@
 # 常用 App 去广告的覆盖范围
 
-本页对应 2026-11-21 的「常用 App 去广告」。iPhone 与 iPad 使用同一订阅文件 `iPad-AdSuite.lpx`。合并版和轻量版共用 45 条精确域名规则。合并版另有 28 条原生复写和 27 个精确 HTTPS 解密主机。需要处理开屏配置或信息流响应时，可按场景选用合并版或内嵌版。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。截至 2026-11-21，插件含 45 条精确域名规则和 28 条原生复写。域名拦截无需证书。部分开屏和信息流广告需要 HTTPS 解密，插件为此列出了 27 个完整主机名。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
 
 ## 网页广告
 
 - **网页竞价广告**。Loon 拦截 PubMatic、Criteo 和 TripleLift 的指定竞价主机。新增的 `tlx.3lift.com` 用于 Prebid 的浏览器竞价，AdAway 也收录了这个完整主机名。同一广告位可能向其他广告商询价。[PubMatic](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/pubmaticBidAdapter.js#L25) · [Criteo](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/criteoBidAdapter.js#L27) · [TripleLift](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/tripleliftBidAdapter.js#L10) · [AdAway](https://github.com/AdAway/adaway.github.io/blob/f39ba0a523564447dfa94e40327c1a14c02304dc/hosts.txt#L81)
-- **百度联盟展示广告**。AMP 的百度广告组件从 `dup.baidustatic.com` 加载广告脚本，EasyList China 也将其列为广告主机，因此两版均精确拦截该主机。另一个广告主机 `cpro.baidustatic.com` 有四个网站的指定脚本放行例外，因此留给能识别来源网页和路径的浏览器过滤器处理。[AMP 百度广告组件](https://github.com/ampproject/amphtml/blob/29d4f68e5a1017ed5d63e3086b219b4b25a41332/ads/vendors/baidu.js#L16-L35) · [EasyList China 主机规则](https://github.com/easylist/easylistchina/blob/7efab892b13dc99ed81f1995887a9c0f79510362/easylistchina.txt#L7928) · [网站例外](https://github.com/easylist/easylistchina/blob/7efab892b13dc99ed81f1995887a9c0f79510362/easylistchina.txt#L15828-L15829)
+- **百度联盟展示广告**。AMP 的百度广告组件从 `dup.baidustatic.com` 加载广告脚本，EasyList China 也将其列为广告主机，因此插件精确拦截该主机。另一个广告主机 `cpro.baidustatic.com` 有四个网站的指定脚本放行例外，因此留给能识别来源网页和路径的浏览器过滤器处理。[AMP 百度广告组件](https://github.com/ampproject/amphtml/blob/29d4f68e5a1017ed5d63e3086b219b4b25a41332/ads/vendors/baidu.js#L16-L35) · [EasyList China 主机规则](https://github.com/easylist/easylistchina/blob/7efab892b13dc99ed81f1995887a9c0f79510362/easylistchina.txt#L7928) · [网站例外](https://github.com/easylist/easylistchina/blob/7efab892b13dc99ed81f1995887a9c0f79510362/easylistchina.txt#L15828-L15829)
 - **Pornhub 网页**。Loon 另拦 `a.adtng.com` 和 `ads.trafficjunky.net`。页面内嵌广告、同源投放及拼入正片的片段仍可能出现。这两条全局规则也会影响其他网站。EasyList 允许 `hanime.tv` 的部分嵌入框架访问 `adtng.com/get/`；若框架实际使用 `a.adtng.com`，Loon 的域名拦截仍会生效。尚未验证该站的实际播放影响。[域名清单](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/category-ads#L74-L81) · [TrafficJunky 广告位](https://www.trafficjunky.com/advertiser/ad-formats) · [EasyList 框架例外](https://github.com/easylist/easylist/blob/68a1b6472a6954f713eb62f3919ca7b8301f5ab4/easylist/easylist_allowlist.txt#L489)
 - **Safari 页面清理**。可选助手通过站点专用 CSS 隐藏部分侧栏、移动播放页广告容器及明确标记的投放元素。它可以清掉部分广告占位，无法识别已经拼进视频的广告。该功能需用支持用户脚本的扩展单独安装。[网页助手](web/pornhub.user.js)
 
@@ -33,7 +33,7 @@
 | 美团餐饮微信小程序 | `rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement` 的成功响应中，若报错、参数错误、冲突或未找到标志为真，则保留原响应。其余符合条件的响应只移除 `data.adSiteList` 内 `adSiteId` 符合 `adunit-…` 格式的条目，后缀限非空的英文字母、数字、下划线或连字符。 | 核查时匿名访问返回 HTTP 200、`code=200`、`success=true`，其中一个广告位经规则处理后变为零个，其他字段一致。这项结果来自公开接口响应。餐饮小程序的结账、企业餐和优惠权益不能用这条结果推断。[公开接口](https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement) · [路径来源](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partD/DianPing.lpx#L19-L27) |
 | 广告素材 | 一条规则匹配 `p0.meituan.net` 和 `p1.meituan.net` 的 `/adunion/`，另一条匹配 `img.meituan.net/bizad/bizad_brandCpt_数字.jpg`，以及该主机 `/adunion/` 目录内以 `.gif.webp` 或 `.jpg.webp` 结尾的素材。 | 同主机上其他目录的商户、菜品和评价图片不会命中这两条规则。素材请求被拦后，客户端仍可能留下占位或等待重试。[p0/p1 目录](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Rewrite/MeituanAppAdMedia.snippet#L4-L7) · [品牌图文件名](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan-MeituanWaimai.lpx#L12-L16) · [img 素材后缀](https://github.com/zirawell/R-Store/blob/d0f4dd305bade7cc6a38e3445a768d72aaea0e5b/Rule/QuanX/Adblock/App/M/%E7%BE%8E%E5%9B%A2/rewrite/meituan.conf#L4) |
 
-上述 6 个主机承载的其他 HTTPS 请求也可能在本机经过 TLS 解密。网络耗时、缓存条件和 App 实现都会影响实际体验。菜单图片、结算页或优惠券出现异常时，可停用合并版，在同一网络重复打开相同页面，比对两次结果。[Loon 解密范围](https://nsloon.app/docs/MitM/)
+上述 6 个主机承载的其他 HTTPS 请求也可能在本机经过 TLS 解密。网络耗时、缓存条件和 App 实现都会影响实际体验。菜单图片、结算页或优惠券出现异常时，可停用懒人版，在同一网络重复打开相同页面，比对两次结果。[Loon 解密范围](https://nsloon.app/docs/MitM/)
 
 ## 购物和生活
 
@@ -48,20 +48,20 @@
 
 ## 内容和影音
 
-**YouTube** 的 Safari 网页助手可单独安装，支持首页和搜索结果里的部分独立广告位，以及普通播放页上已经可点击的「跳过广告」按钮。轻量版和合并版原有的 Google 广告域名规则不能保证过滤原生 YouTube App 的片头和中插。独立助手无需开启 HTTPS 解密。[范围与安装](youtube/README.md)
+**YouTube** 的 Safari 网页助手可单独安装，支持首页和搜索结果里的部分独立广告位，以及普通播放页上已经可点击的「跳过广告」按钮。插件中的 Google 广告域名规则不能保证过滤原生 YouTube App 的片头和中插。独立助手无需开启 HTTPS 解密。[范围与安装](youtube/README.md)
 
 | App | 已实现的规则 | 适用条件与依据 |
 | --- | --- | --- |
 | 小红书、知乎 | 小红书首页去掉带非空 `ads_info` 对象的广告卡，另拦三台广告素材主机。知乎首页按 `type=feed_advert` 过滤 | 小红书保留仅有商品关联、直播标记的普通条目，知乎保留未知类型。作者自行植入的推广通常没有这类标记。[小红书](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/xiaohongshu_splash_ad_block.plugin#L58-L65) · [知乎](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/zhihu.js#L33-L69) |
 | 哔哩哔哩 App 开屏 | 在 `/x/v2/splash/list` 的成功 JSON 中，素材同时满足 `is_ad=true`、`cm_mark=1` 和有效数值 ID 时才移除。`show`、`keep_ids` 只清理同一响应中仅属于已删广告的数值引用。 | 固定资料中的一条商业素材被识别。独立的品牌图、活动和曝光上报接口继续使用原响应。实际客户端是否使用该路径，仍取决于版本与投放。[开屏响应样本](https://github.com/realysy/bili-apis/blob/3802052be89effc3bbd27574037942310a23672d/docs/APP_widget/splash.md#L321-L351) · [移动端请求观测](https://github.com/UserC23/bilibili-ads-loon/blob/38ad51c6bef2be64625b7a86e9bf8aac44a4119a/docs/analysis.md#L36-L46) |
-| 微信、哔哩哔哩 | 公众号文章广告列表、B 站 App 和网页首页推荐、App 混排横幅中的广告子项 | 公众号仅尝试解析声明为 JSON 的成功 HTTP 响应，跳过 HTML 验证页面。保留阅读互动和普通推荐，避免仅凭 `ad_info` 误删视频。[内嵌版说明](README.md#内嵌广告插件) |
+| 微信、哔哩哔哩 | 公众号文章广告列表、B 站 App 和网页首页推荐、App 混排横幅中的广告子项 | 公众号仅尝试解析声明为 JSON 的成功 HTTP 响应，跳过 HTML 验证页面。保留阅读互动和普通推荐，避免仅凭 `ad_info` 误删视频。[内嵌广告说明](README.md#内嵌广告) |
 | 微博主 App | 关注流的 `statuses` 以及首页、推荐流的 `items` 中，只移除带数值 `is_ad=1` 或精确标签 `mblogtypename="广告"` 的微博。另有原有开屏和素材主机规则。 | 普通微博、文字里出现“广告”的正文和未标记推广继续显示。保留正常微博的顺序及分页字段。[广告标记](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L140-L155) · [关注流](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L438-L452) · [首页和推荐](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L96-L102) |
 | 微博轻享版 | 在 `api.weibo.cn/2/ad/weibointl` 的成功 JSON 中，仅清空 `data` 广告数组。 | 只匹配这条路径，覆盖取决于当前版本是否使用它。[轻享版专用接口](https://github.com/gj0134/Loon-Plugins/blob/5c835d0db14a4808c19cd010641be1235b6b3d73/plugins/Weibo-Intl-AdBlock.plugin#L7-L16) |
 | 酷安 | 在 `api.coolapk.com/v6/main/dataList`、`/v6/main/indexV8` 成功返回的 `data` 数组中，只移除 `entityTemplate="sponsorCard"` 的赞助卡。 | 普通动态、带商品的内容及带“红包”等字样的卡片可正常保留。页面仍可能展示未带该标记的推广。[赞助卡字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/coolapk.js#L28-L44) |
 | 网易云音乐、QQ 音乐 | 网易云开屏图片及视频广告素材，QQ 音乐广告投送及素材 | 播放与普通封面 CDN 不在域名拦截中。[网易云](https://github.com/zbsdsb/loon-adblock-plugins/blob/890f64953efc870d4ca6cc5ec19b048c88ec73bb/NeteaseCloudMusic_ads_v2.lpx#L8-L12) · [QQ 音乐](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/qqmusic_splash_ad_block.plugin#L14-L20) |
 | 腾讯视频、优酷、爱奇艺 | 腾讯广点通广告素材主机、优酷两个广告交易主机、爱奇艺规则收录的 Tanx 广告主机 | 覆盖部分外部广告请求。没有对播放清单或视频流动手。与正片拼接播放的广告、口播和未经过这些主机的贴片仍可出现。[腾讯视频](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/tencentvideo_splash_ad_block.plugin#L13-L19) · [优酷](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/youku_splash_ad_block.plugin#L18-L24) · [爱奇艺](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partA/iQIYI.lpx#L15-L23) |
 
-合并版还涵盖百度、字节穿山甲、快手、Google 和 WPS 等已知广告主机。域名规则、原生复写和完整解密主机名可查看[插件原文](iPad-AdSuite.lpx)。
+懒人版还涵盖百度、字节穿山甲、快手、Google 和 WPS 等已知广告主机。域名规则、原生复写和完整解密主机名可查看[插件原文](iPad-AdSuite.lpx)。
 
 ## 已完成的验证
 
@@ -70,4 +70,4 @@
 ## 在 iPad 上核对单条规则
 
 - **域名拦截**无需 HTTPS 解密。用 Safari 打开下方的 Google 广告脚本，再到 Loon「仪表 → 请求记录」搜索 `pagead2.googlesyndication.com`。打开刚才的记录，核对策略为 `REJECT`、规则来源为正在验证的插件。Safari 的加载错误本身无法说明由谁拦截。[打开 Google 广告脚本](https://pagead2.googlesyndication.com/tag/js/gpt.js?loon_check=1) · [Google 官方脚本地址说明](https://developers.google.com/publisher-tag/guides/general-best-practices) · [Loon 请求详情的来源字段](https://t.me/LoonNews/706)
-- **美团响应复写**适用于已启用合并版并已为该主机配置 HTTPS 解密的设备。用 Safari 打开下方的公开接口，在 Loon 请求记录中搜索 `queryWechatAdvertisement`，点开同一时间的请求，查看命中的响应复写及其来源「常用 App 去广告」。服务端也可能直接返回空的 `adSiteList`。如要核对条目变化，可仅切换本插件，在同一网络刷新接口，比对停用时出现的 `adunit-…` 广告位和启用后的结果，再恢复原状态。两次都为空则无法通过响应内容判定。[打开美团餐饮微信广告位接口](https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement)
+- **美团响应复写**适用于已启用懒人版并已为该主机配置 HTTPS 解密的设备。用 Safari 打开下方的公开接口，在 Loon 请求记录中搜索 `queryWechatAdvertisement`，点开同一时间的请求，查看命中的响应复写及其来源「常用 App 去广告（懒人版）」。服务端也可能直接返回空的 `adSiteList`。如要核对条目变化，可仅切换本插件，在同一网络刷新接口，比对停用时出现的 `adunit-…` 广告位和启用后的结果，再恢复原状态。两次都为空则无法通过响应内容判定。[打开美团餐饮微信广告位接口](https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement)

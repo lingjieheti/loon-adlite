@@ -1,29 +1,31 @@
-# Bộ lọc quảng cáo Loon cho iPhone và iPad
+# Bộ lọc quảng cáo Loon tất cả trong một
 
 [简体中文](README.md) · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · **Tiếng Việt** · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md)
 
-Đây là bộ lọc tôi dùng trên iPhone và iPad của mình. Tôi chia sẻ bộ lọc này cho những ai thường dùng ứng dụng Trung Quốc, chẳng hạn du học sinh mua sắm trên JD (京东), Taobao (淘宝) hay đặt đồ ăn qua Meituan (美团). Bộ lọc chặn một phần quảng cáo lúc mở ứng dụng và trong bảng tin. Phạm vi lọc tùy từng ứng dụng.
+Đây là tiện ích tôi dùng trên iPhone và iPad, dành cho những ai thường dùng ứng dụng Trung Quốc, kể cả du học sinh đang sống tại đây. Bộ lọc nhắm đến một số quảng cáo lúc mở JD, Taobao và Meituan, đồng thời chặn yêu cầu gửi tới các máy chủ quảng cáo đã biết trên web.
 
-## Chọn và cài đặt
+## Cài đặt
 
-Nếu mới dùng Loon, bạn có thể bắt đầu với **Lite**. Mở liên kết cài đặt bằng Safari trên iPhone hoặc iPad rồi xác nhận nhập trong Loon. Bạn cũng có thể sao chép địa chỉ đăng ký và dán vào mục Cấu hình → Plugin → ＋ trong Loon.
+**[Cài bộ lọc tất cả trong một](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx)** · [Địa chỉ đăng ký](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
 
-- **Lite** chặn yêu cầu khi tên máy chủ khớp hoàn toàn với một mục trong danh sách máy chủ quảng cáo. Bạn không cần cài chứng chỉ hay giải mã HTTPS. [Cài Lite](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [Địa chỉ đăng ký](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
-- **Inline** dùng được cùng với Lite để lọc quảng cáo trong bài viết của tài khoản chính thức trên WeChat, thẻ quảng cáo ở trang chủ Bilibili và một số quảng cáo khi mở Bilibili. [Cài Inline](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-InlineAds.lpx) · [Địa chỉ đăng ký](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-InlineAds.lpx)
-- **Suite** gồm toàn bộ quy tắc của Lite và Inline, kèm quy tắc riêng cho JD, Taobao, Meituan và Douyin (抖音). Khi dùng Suite, hãy tắt hai bản còn lại để tránh áp dụng quy tắc hai lần. Quy tắc lọc bài có nhãn quảng cáo trong mục đề xuất của Douyin đã được thử với dữ liệu mẫu. Hiệu quả trên phiên bản Douyin hiện tại vẫn cần kiểm tra trên thiết bị thật. [Cài Suite](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [Địa chỉ đăng ký](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
+Mở liên kết cài đặt trong Safari rồi xác nhận nhập vào Loon. Bạn cũng có thể dán địa chỉ đăng ký vào Configuration → Plugins → ＋. Lọc theo tên miền không cần chứng chỉ. Tiện ích xử lý ngay trên thiết bị, không tải mã lệnh từ xa và không thu thập dữ liệu sử dụng.
 
-Cả ba bản đều xử lý lưu lượng ngay trên thiết bị, không chạy mã từ xa và không thu thập dữ liệu sử dụng. Tính năng viết lại phản hồi của Suite và Inline cần Loon 3.5.1 (bản dựng 978) trở lên. Hãy bật tính năng viết lại, bật giải mã HTTPS cho các máy chủ được liệt kê và đặt thiết bị tin cậy chứng chỉ Loon của chính bạn. Các yêu cầu khác tới cùng máy chủ cũng có thể được giải mã. Thời gian thiết lập kết nối TLS và xử lý phản hồi phụ thuộc vào thiết bị, mạng và ứng dụng. [Hướng dẫn giải mã HTTPS của Loon](https://nsloon.app/docs/MitM/)
+Nếu đã đăng ký bản Suite, bạn chỉ cần làm mới đăng ký hiện tại. Nếu từng dùng tiện ích chặn quảng cáo khác của dự án này, hãy tắt mục cũ sau khi bật bản tất cả trong một để tránh áp dụng quy tắc hai lần.
 
-## Tiện ích tùy chọn cho Safari
+## Quảng cáo trong nội dung ứng dụng
 
-Bật tiện ích Userscripts trong Safari, mở liên kết của đoạn mã muốn dùng rồi chọn cài đặt trong menu tiện ích. Cho phép tiện ích chạy trên trang tương ứng và tải lại trang.
+Để lọc một số quảng cáo trong bài viết của tài khoản chính thức WeChat hoặc trên trang chủ Bilibili, hãy dùng Loon 3.5.1 (bản dựng 978) trở lên. Bật quy tắc viết lại và giải mã HTTPS cho các máy chủ được liệt kê, rồi đặt thiết bị tin cậy chứng chỉ Loon do bạn tự tạo. Những yêu cầu khác tới cùng máy chủ cũng có thể được giải mã, làm tăng thời gian kết nối và xử lý. [Hướng dẫn giải mã HTTPS của Loon](https://nsloon.app/docs/MitM/)
 
-- **YouTube trên web** có thể ẩn một số vị trí quảng cáo ở trang chủ và kết quả tìm kiếm. Khi nút bỏ qua quảng cáo của trình phát khả dụng, đoạn mã sẽ thử nhấn nút. Tính năng này chỉ hoạt động trên web. Các đoạn tài trợ đã ghép vào video vẫn phát. [Mở đoạn mã cho YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
-- **Quảng cáo trên web**. Lite và Suite chặn các yêu cầu gửi đến một số máy chủ đấu giá và phân phối quảng cáo. Trên Pornhub, bạn có thể cài thêm đoạn mã để ẩn các biểu ngữ ở thanh bên và một số vị trí quảng cáo trên giao diện di động. [Mở đoạn mã cho Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
-- **Điểm danh và nhận mã giảm giá**. Hướng dẫn có đường dẫn điểm danh hằng ngày để nhận điểm 京豆 trên JD, điểm danh trên SMZDM (什么值得买) và tìm mã giảm giá của JD, Taobao, Douyin. Bạn có thể chọn phiếu giảm giá thông thường trên JD hoặc phiếu của cửa hàng Taobao rồi để tiện ích tương ứng thử nhận khi trang đang mở trong Safari. Hãy điểm danh Taobao và nhận ưu đãi Douyin trên trang chính thức hoặc trong ứng dụng. [Hướng dẫn điểm danh và nhận mã (tiếng Trung)](checkin/README.md)
+Quy tắc cho bảng tin Douyin đã được thử với dữ liệu mẫu. Hiệu quả trên phiên bản ứng dụng hiện tại vẫn cần kiểm tra trên thiết bị. Đoạn tài trợ ghi sẵn trong video vẫn phát.
 
-## Cập nhật và khôi phục phiên bản cũ
+## Công cụ tùy chọn cho Safari
 
-Địa chỉ đăng ký lấy bản cập nhật từ nhánh `main`. Bạn có thể đặt Loon kiểm tra tài nguyên bên ngoài hằng ngày. Thời điểm làm mới do Loon quyết định. Nếu đã chép tệp qua USB, hãy tự thay tệp khi cập nhật. Để quay lại bản cũ, thay `main` trong địa chỉ đăng ký bằng mã băm đầy đủ của lần lưu (commit) bạn muốn dùng, nhập địa chỉ đó rồi tắt mục cũ. [Lịch sử thay đổi](https://github.com/lingjieheti/loon-adlite/commits/main/)
+Công cụ dành cho trang web YouTube thử bấm nút Bỏ qua quảng cáo khi nút chính thức xuất hiện. Một công cụ riêng có thể ẩn một số vị trí quảng cáo trên Pornhub. [Mở đoạn mã cho YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [Mở đoạn mã cho Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
 
-[Phạm vi lọc theo ứng dụng (tiếng Trung)](COVERAGE.md) · [Nguồn tham khảo theo tính năng (tiếng Trung)](SOURCES.md) · [Ủng hộ tác giả (tiếng Anh)](SPONSOR.en.md)
+Hướng dẫn bao gồm điểm danh JD và SMZDM, cùng cách nhận phiếu giảm giá JD hoặc phiếu cửa hàng Taobao mà bạn chọn. Với ưu đãi Douyin, hãy dùng trang chương trình chính thức. [Hướng dẫn điểm danh và nhận mã (tiếng Trung)](checkin/README.md)
+
+## Cập nhật
+
+Địa chỉ đăng ký theo nhánh `main`. Bạn có thể đặt Loon kiểm tra tài nguyên bên ngoài hằng ngày. Để quay lại bản cũ, thay `main` trong địa chỉ bằng mã băm đầy đủ của lần sửa đổi mong muốn. [Lịch sử thay đổi](https://github.com/lingjieheti/loon-adlite/commits/main/)
+
+[Phạm vi lọc theo ứng dụng (tiếng Trung)](COVERAGE.md) · [Nguồn tham khảo theo tính năng (tiếng Trung)](SOURCES.md) · [Kiểm thử hồi quy ngoại tuyến](tests/) · [Ủng hộ tác giả (tiếng Anh)](SPONSOR.en.md)

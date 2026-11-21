@@ -1,31 +1,31 @@
-# Mes filtres Loon pour iPhone et iPad
+# Mon filtre publicitaire tout-en-un pour Loon
 
 [简体中文](README.md) · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · **Français** · [Español](README.es.md) · [العربية](README.ar.md)
 
-J’utilise ces filtres sur mon iPhone et mon iPad pour limiter la publicité dans les applications du quotidien en Chine continentale. Si vous y étudiez ou y travaillez, vous connaissez peut-être JD (京东) et Taobao (淘宝) pour les achats, ou Meituan (美团) pour les livraisons de repas. Selon l’application, les filtres bloquent certaines publicités au démarrage ou dans le fil de recommandations.
+J’utilise ce module sur iPhone et iPad. Je le partage avec les personnes qui utilisent couramment des applications chinoises, y compris celles qui étudient en Chine. Il cible certaines publicités au lancement de JD, Taobao et Meituan et bloque les requêtes de sites web vers des serveurs publicitaires connus.
 
-## Choisir et installer un filtre
+## Installation
 
-Pour commencer, je conseille **Lite**. Ouvrez le lien d’installation dans Safari, puis confirmez l’importation dans Loon. Vous pouvez aussi copier l’URL d’abonnement dans Loon, sous Configuration → Plugins → ＋.
+**[Installer le module tout-en-un](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx)** · [Adresse d’abonnement](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
 
-- **Lite** bloque une requête lorsque le nom d’hôte correspond exactement à une entrée de la liste publicitaire. Aucun certificat ni déchiffrement HTTPS n’est nécessaire. [Installer Lite](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [URL d’abonnement](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
-- **Inline** complète Lite en filtrant certaines publicités dans les articles des comptes officiels WeChat, sur la page d’accueil de Bilibili et au lancement de Bilibili. [Installer Inline](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-InlineAds.lpx) · [URL d’abonnement](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-InlineAds.lpx)
-- **Suite** regroupe Lite et Inline et ajoute des règles pour JD, Taobao, Meituan et Douyin. Si vous activez Suite, désactivez Lite et Inline pour éviter les doublons. Les règles Douyin ciblent les recommandations signalées comme publicitaires. Elles ont été testées sur des exemples de réponses, mais leur efficacité dans la version actuelle de l’application reste à vérifier sur un appareil. [Installer Suite](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [URL d’abonnement](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
+Ouvrez le lien dans Safari et confirmez l’importation dans Loon. Vous pouvez aussi coller l’adresse d’abonnement dans Configuration → Plugins → ＋. Le filtrage par nom d’hôte fonctionne sans certificat. Le module traite le trafic sur votre appareil, sans charger de scripts distants ni collecter de données d’utilisation.
 
-## Confidentialité et performances
+Si vous utilisez déjà l’abonnement Suite, il suffit de l’actualiser. Si vous utilisiez un autre module de blocage publicitaire de ce projet, désactivez son entrée après avoir activé le module tout-en-un pour éviter les doublons.
 
-Les trois éditions traitent le trafic sur votre appareil, sans exécuter de scripts distants ni recueillir de données d’utilisation. Dans Suite et Inline, les règles de réécriture nécessitent Loon 3.5.1 (build 978) ou une version ultérieure. Activez la réécriture et le déchiffrement HTTPS pour les hôtes indiqués, puis autorisez le certificat créé par votre propre installation de Loon. Les autres requêtes HTTPS vers ces mêmes hôtes peuvent aussi être déchiffrées. Le temps de traitement dépend de l’appareil, du réseau et de l’application. [Guide du déchiffrement dans Loon](https://nsloon.app/docs/MitM/)
+## Publicités intégrées aux applications
 
-## Dans Safari
+Pour filtrer certaines publicités dans les articles des comptes officiels WeChat ou dans le fil d’accueil de Bilibili, utilisez Loon 3.5.1 (build 978) ou ultérieur. Activez la réécriture et le déchiffrement HTTPS pour les hôtes indiqués, puis déclarez votre propre certificat Loon comme fiable sur l’appareil. D’autres requêtes vers ces hôtes peuvent aussi être déchiffrées. La connexion et le traitement des réponses prennent alors plus de temps. [Guide du déchiffrement dans Loon](https://nsloon.app/docs/MitM/)
 
-Lite et Suite bloquent aussi certaines requêtes publicitaires sur le Web, notamment des enchères PubMatic et Criteo. Pour ajouter un script facultatif, activez l’extension Userscripts dans Safari, ouvrez le lien du script, puis choisissez de l’installer dans le menu de l’extension. Autorisez son exécution sur le site concerné et rechargez la page.
+Les règles du fil de recommandations de Douyin ont été testées sur des exemples de réponses. Leur effet reste à vérifier sur appareil avec la version actuelle. Les séquences sponsorisées intégrées au montage des vidéos restent visibles.
 
-- **YouTube**. Sur le site, le script masque certains emplacements publicitaires de l’accueil et des résultats de recherche. Il tente de cliquer sur le bouton permettant de passer l’annonce dès que celui-ci devient disponible. L’application YouTube et les séquences de parrainage intégrées par le créateur restent hors de sa portée. [Installer le script YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
-- **Pornhub**. Le script masque certaines bannières latérales et certains emplacements publicitaires de la page de lecture mobile. Les publicités intégrées au flux vidéo peuvent toujours être diffusées. [Installer le script Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
-- **Récompenses et coupons**. Le guide regroupe les liens pour obtenir des points JD Beans, valider la visite quotidienne sur SMZDM (什么值得买) et trouver des coupons sur JD, Taobao et Douyin. Dans Safari, le script correspondant peut tenter de récupérer le coupon standard JD ou le coupon de boutique Taobao que vous avez choisi. Pour les pointages Taobao et les offres Douyin, utilisez la page officielle de l’offre ou l’application. [Guide des récompenses et des coupons (en chinois)](checkin/README.md)
+## Outils facultatifs pour Safari
 
-## Mises à jour et retour à une version antérieure
+Sur le site de YouTube, un script essaie de cliquer sur le bouton officiel pour ignorer l’annonce dès qu’il apparaît. Un autre masque certains emplacements publicitaires sur Pornhub. [Installer le script YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [Installer le script Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
 
-Pour suivre la version publiée sur `main`, demandez à Loon de vérifier les ressources externes chaque jour. Loon détermine l’heure de la vérification. Les fichiers copiés par USB se remplacent manuellement. Pour retrouver une ancienne version, remplacez `main` dans l’URL d’abonnement par l’identifiant complet du commit souhaité, importez la nouvelle URL et désactivez l’entrée précédente. [Historique des versions](https://github.com/lingjieheti/loon-adlite/commits/main/)
+Le guide couvre les pointages quotidiens sur JD et SMZDM et la récupération des coupons JD ou des coupons de boutiques Taobao que vous choisissez. Les offres Douyin se trouvent sur la page officielle de l’opération. [Guide des récompenses et des coupons (en chinois)](checkin/README.md)
 
-[Détail des filtres par application (en chinois)](COVERAGE.md) · [Sources par fonctionnalité (en chinois)](SOURCES.md) · [Soutenir mon travail (en anglais)](SPONSOR.en.md)
+## Mises à jour
+
+L’abonnement suit la branche `main`. Vous pouvez régler Loon pour vérifier les ressources externes chaque jour. Pour revenir à une version antérieure, remplacez `main` dans l’adresse par le hachage complet du commit voulu. [Historique des versions](https://github.com/lingjieheti/loon-adlite/commits/main/)
+
+[Détail des filtres par application (en chinois)](COVERAGE.md) · [Sources par fonctionnalité (en chinois)](SOURCES.md) · [Tests de régression hors ligne](tests/) · [Soutenir mon travail (en anglais)](SPONSOR.en.md)
