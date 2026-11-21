@@ -20,7 +20,7 @@ Bật tiện ích Userscripts trong Safari, mở liên kết của đoạn mã m
 
 - **YouTube trên web** có thể ẩn một số vị trí quảng cáo ở trang chủ và kết quả tìm kiếm. Khi nút bỏ qua quảng cáo của trình phát khả dụng, đoạn mã sẽ thử nhấn nút. Tính năng này chỉ hoạt động trên web. Các đoạn tài trợ đã ghép vào video vẫn phát. [Mở đoạn mã cho YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
 - **Quảng cáo trên web**. Lite và Suite chặn các yêu cầu gửi đến một số máy chủ đấu giá và phân phối quảng cáo. Trên Pornhub, bạn có thể cài thêm đoạn mã để ẩn các biểu ngữ ở thanh bên và một số vị trí quảng cáo trên giao diện di động. [Mở đoạn mã cho Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
-- **Điểm danh và nhận mã giảm giá**. Hướng dẫn có đường dẫn điểm danh hằng ngày để nhận điểm 京豆 trên JD, điểm danh trên SMZDM (什么值得买) và tìm mã giảm giá của JD, Taobao, Douyin. Với loại mã thông thường được hỗ trợ trên JD, bạn có thể chọn mã rồi để tiện ích thử nhận khi trang đang mở trong Safari. Với Taobao và Douyin, hãy xác nhận điểm danh hoặc nhận mã trên trang khuyến mãi chính thức hay trong ứng dụng. [Hướng dẫn điểm danh và nhận mã (tiếng Trung)](checkin/README.md)
+- **Điểm danh và nhận mã giảm giá**. Hướng dẫn có đường dẫn điểm danh hằng ngày để nhận điểm 京豆 trên JD, điểm danh trên SMZDM (什么值得买) và tìm mã giảm giá của JD, Taobao, Douyin. Bạn có thể chọn phiếu giảm giá thông thường trên JD hoặc phiếu của cửa hàng Taobao rồi để tiện ích tương ứng thử nhận khi trang đang mở trong Safari. Hãy điểm danh Taobao và nhận ưu đãi Douyin trên trang chính thức hoặc trong ứng dụng. [Hướng dẫn điểm danh và nhận mã (tiếng Trung)](checkin/README.md)
 
 ## Cập nhật và khôi phục phiên bản cũ
 

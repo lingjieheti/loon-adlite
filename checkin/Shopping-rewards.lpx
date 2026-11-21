@@ -1,13 +1,15 @@
 #!name = 京东淘宝抖音 · 签到领券
-#!desc = 每天一条本地提醒。轻点选择的官方入口，在前台签到或领取优惠。可选京东单券链接仅用于打开领取页。
+#!desc = 每天一条本地提醒。可打开京东或淘宝的指定优惠券、红包签到、淘金币和抖音商城。淘宝可选 App 或网页。
 #!author = lingjieheti
 #!loon_version = 3.5.1(983)
 #!homepage = https://github.com/lingjieheti/loon-adlite/blob/main/checkin/README.md
 
 [Argument]
-destination = select,"三平台清单","京东领券中心","京东指定优惠券","京东京豆签到","淘宝红包签到","淘宝淘金币","抖音商城领券",tag=轻点通知打开
-coupon = input,tag=京东官方单券链接,desc=选择京东指定优惠券时填写 coupon.m.jd.com 的单券网址
+destination = select,"三平台清单","京东领券中心","京东指定优惠券","京东京豆签到","淘宝红包签到","淘宝淘金币","抖音商城领券","淘宝店铺券",tag=轻点通知打开
+coupon = input,tag=京东官方单券链接,desc=选择京东指定优惠券时填写京东手机或电脑版单券网址
+taobaoCoupon = input,tag=淘宝官方店铺券链接,desc=选择淘宝店铺券时填写 taoquan.taobao.com 的单券网址
+taobaoOpen = select,"淘宝 App","网页",tag=淘宝打开方式,desc=适用于红包签到、淘金币和店铺券
 hour = select,"0 9 * * *","0 12 * * *","0 20 * * *",tag=每日提醒时间,desc=设备当地时间 9 点、12 点或 20 点
 
 [Script]
-cron ${hour} then script("https://raw.githubusercontent.com/lingjieheti/loon-adlite/fda7bdd6bfc5683effbbc140510ea7007e6591a0/checkin/shopping-reminder.js", {${destination}, ${coupon}}) with tag="签到领券", timeout=5
+cron ${hour} then script("https://raw.githubusercontent.com/lingjieheti/loon-adlite/1cecde15992180ba226e657d3155a69acae6a332/checkin/shopping-reminder.js", {${destination}, ${coupon}, ${taobaoCoupon}, ${taobaoOpen}}) with tag="签到领券", timeout=5

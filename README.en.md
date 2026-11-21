@@ -12,7 +12,7 @@ For YouTube in Safari, an optional userscript hides some ad slots on the home an
 
 Lite and Suite also block requests to selected web ad hosts, including PubMatic and Criteo auction endpoints and ad services used on Pornhub. An optional Safari script hides identifiable Pornhub sidebar banners and mobile ad slots. Open the script in Safari, install it from the Userscripts extension, then allow it on that site and reload. Ads stitched into the video can still play. For banners and ad slots across more websites, you can enable AdGuard in Safari. [Safari filtering options (Chinese)](web/README.md) · [Install the Pornhub userscript](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
 
-The rewards guide brings together JD Beans and SMZDM daily check-ins with coupon links for JD, Taobao and Douyin. On supported JD pages, you can let the Safari helper try to claim a standard coupon you select while the page is open. On Taobao and Douyin, confirm the day’s offer or check-in on the official promotion page or in the app. [Check-in and coupon guide (Chinese)](checkin/README.md)
+The rewards guide brings together JD Beans and SMZDM daily check-ins with coupon links for JD, Taobao and Douyin. In Safari, an optional helper can try to claim a standard JD coupon or a Taobao shop coupon you select. Use the official promotion page or app for Taobao check-ins and Douyin offers. [Check-in and coupon guide (Chinese)](checkin/README.md)
 
 Open an install link in Safari on your iPhone or iPad, then confirm the import in Loon. You can also copy the subscription URL into Loon under Configuration → Plugins → ＋.
 
