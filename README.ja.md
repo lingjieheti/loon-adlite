@@ -1,6 +1,6 @@
 # iPhone・iPad 用の Loon 広告ブロック
 
-[简体中文](README.md) · [English](README.en.md) · **日本語**
+[简体中文](README.md) · [English](README.en.md) · **日本語** ｜ [開発を応援する](SPONSOR.ja.md)
 
 自分の iPhone と iPad で使うために作った Loon プラグインです。主に、中国でよく使われるアプリの起動時やフィードに表示される広告を対象にしています。3 つの版はいずれも端末内で処理し、外部スクリプトの実行や利用状況の送信は行いません。
 
@@ -26,5 +26,3 @@ iPhone または iPad の Safari でインストールリンクを開き、Loon 
 以前の版に戻すには、購読 URL の `main` を使いたいコミットの完全なハッシュ値に置き換えます。その URL を Loon に追加したら、元の項目を無効にしてください。[コミット履歴](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
 [アプリ別の対応範囲と制限（簡体字中国語）](COVERAGE.md) · [ルールの出典と検証記録（簡体字中国語）](audit.html) · [オフライン回帰テスト](tests/)
-
-このプラグインが役に立ったら、よろしければ今後の開発を応援してください。[開発を応援する](SPONSOR.md)
