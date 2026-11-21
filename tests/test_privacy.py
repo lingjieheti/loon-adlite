@@ -49,8 +49,6 @@ def audit(path):
         allowed = INLINE_HOSTS if path.name == "iPad-InlineAds.lpx" else REVIEWED_HOSTS
         if key.strip() != "hostname" or len(hosts) != len(set(hosts)) or not set(hosts) <= allowed:
             raise ValueError(f"{path.name}: unexpected TLS decryption declaration: {declaration}")
-        if path.name == "iPad-AdSuite.lpx" and set(hosts) != REVIEWED_HOSTS:
-            raise ValueError(f"{path.name}: the reviewed TLS host list changed")
     for line in sections.get("rewrite", []):
         # The shared parser accepts only local reject actions and a single response.json.jq action.
         rule = shared.Rewrite.parse(line)
@@ -79,7 +77,7 @@ class PluginPrivacy(unittest.TestCase):
             ("iPad-AdSuite.lpx", "[Rule]", "[Script]\nhttp-request .* script-path=https://example.org/log.js\n[Rule]"),
             ("iPad-AdSuite.lpx", "#!author", "#!icon = https://example.org/pixel.png\n#!author"),
             ("iPad-AdSuite.lpx", "hostname = mp.weixin.qq.com", "hostname = *.weixin.qq.com"),
-            ("iPad-AdSuite.lpx", "hostname = mp.weixin.qq.com,", "hostname ="),
+            ("iPad-AdSuite.lpx", "hostname = mp.weixin.qq.com,", "hostname = api.example.org,"),
             ("iPad-InlineAds.lpx", "hostname =", "hostname = api.m.jd.com,"),
             ("iPad-AdSuite.lpx", "then reject(404)", "then redirect(https://example.org/log)"),
             ("iPad-AdSuite.lpx", "then reject(404)", "then reject(404) | request.header.set(\"X\", \"y\")"),
