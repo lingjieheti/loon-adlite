@@ -51,9 +51,9 @@ class ReleaseAuditTests(unittest.TestCase):
         with patch.object(audit_host_update, "snapshot", side_effect=AssertionError("unrelated release fetched source")):
             gate.run(self.base, head, False, report)
         self.assertEqual(report["变更文件"], ["README.md"])
-        self.assertEqual(report["手工精确域名数"], 45)
-        self.assertEqual(report["HTTPS 主机数"], 27)
-        self.assertEqual(report["复写条数"], 28)
+        self.assertEqual(report["手工精确域名数"], 46)
+        self.assertEqual(report["HTTPS 主机数"], 30)
+        self.assertEqual(report["复写条数"], 33)
         with self.assertRaises(ValueError):
             gate.run(self.base, self.base, False, {})
         with self.assertRaises(ValueError):

@@ -13,9 +13,9 @@ REVIEWED_HOSTS = INLINE_HOSTS | frozenset("""
     api3-core-c.amemv.com api3-normal-c.amemv.com api.amemv.com aweme.snssdk.com
     api.weibo.cn api.coolapk.com mop.meituan.com wmapi.meituan.com
     p0.meituan.net p1.meituan.net img.meituan.net rms.meituan.com
-    api.pinduoduo.com api.yangkeduo.com acs.m.goofish.com mapi.dianping.com
+    api.pinduoduo.com api.yangkeduo.com acs.m.goofish.com mapi.dianping.com www.dianping.com
     m5.amap.com amap-aos-info-nogw.amap.com edith.xiaohongshu.com
-    rec.xiaohongshu.com api.zhihu.com
+    rec.xiaohongshu.com api.zhihu.com cards.iqiyi.com t7z.cupid.iqiyi.com
 """.split())
 PROFILES = {
     "iPad-AdSuite.lpx": {"rule", "rewrite", "mitm"},
@@ -63,7 +63,7 @@ class PluginPrivacy(unittest.TestCase):
     def test_every_published_plugin_has_only_its_reviewed_permissions(self):
         self.assertEqual({p.relative_to(shared.ROOT).as_posix() for p in shared.ROOT.rglob("*.lpx")},
                          set(PROFILES))
-        self.assertEqual(len(REVIEWED_HOSTS), 27)
+        self.assertEqual(len(REVIEWED_HOSTS), 30)
         for name in PROFILES:
             with self.subTest(name=name):
                 audit(shared.ROOT / name)
