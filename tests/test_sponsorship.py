@@ -40,6 +40,6 @@ class SponsorshipTests(unittest.TestCase):
                 expected = (pages - {page}) | {readme} | PAYMENT_LINKS
                 expected.update(QR_BASE + name for name in QR_HASHES)
                 self.assertFalse(expected - links, f"Missing links: {expected - links}")
-                self.assertEqual(re.findall(r"```text\n([^\n]+)\n```", body), [TRON_ADDRESS])
+                self.assertEqual(re.findall(r"^`([^`\n]+)`$", body, flags=re.MULTILINE), [TRON_ADDRESS])
                 self.assertNotIn("![", body)
                 self.assertNotIn("<img", body.lower())

@@ -20,9 +20,7 @@
 
 このアドレスは **TRON（TRC20）ネットワークの USDT** に対応しています。受取先の入金条件は、**1 回につき 0.01 USDT を超える額**です。
 
-```text
-TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE
-```
+`TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE`
 
 [USDT アドレスの QR コードを表示](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/usdt-tron.png)
 

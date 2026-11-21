@@ -20,9 +20,7 @@ If these filters have spared you a few ads, you’re welcome to leave a tip to s
 
 This address accepts **USDT on TRON (TRC20)**. The receiving platform requires each deposit to be **greater than 0.01 USDT**.
 
-```text
-TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE
-```
+`TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE`
 
 [View the USDT address QR code](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/usdt-tron.png)
 

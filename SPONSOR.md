@@ -20,9 +20,7 @@
 
 这个地址接收 **TRON（TRC20）网络的 USDT**。收款平台要求单笔金额**大于 0.01 USDT**。
 
-```text
-TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE
-```
+`TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE`
 
 [查看 USDT 地址二维码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/usdt-tron.png)
 
