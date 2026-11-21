@@ -1,6 +1,6 @@
 # 常用 App 去广告的覆盖范围
 
-iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 73 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 78 个。域名拦截无需证书。懒人版另有 43 条原生复写，并列出 39 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 76 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 81 个。域名拦截无需证书。懒人版另有 46 条原生复写，并列出 39 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
 
 ## 网页广告
 
@@ -12,6 +12,24 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 73 条固�
 离线测试核对上述广告主机的精确匹配，并检查主域、共享 CDN、相似主机和正常视频路径。当前缺少这些广告位在 iPad 上的实机命中记录，也未测量启用前后的吞吐量。[域名回归测试](tests/test_suite.py)
 
 **开源规则如何搭配**。2026-11-21 比对的 HaGeZi Multi LIGHT 快照含 91,706 个不同域名。项目更新前的 43 个广告主机中，21 个与该清单完全相同，另有 11 个落在它列出的父域之下。这个数字反映清单重叠程度。Loon 订阅只保留选定的完整主机；需要处理普通网页里的横幅和空位时，可以在 Safari 里选用 AdGuard 的基础和中文过滤器，让浏览器应用页面规则和网站例外。[对比用的插件版本](https://github.com/lingjieheti/loon-adlite/blob/ae273c03c32c98f7dafe938aed4e05fdcfd9045a/iPad-AdLite.lpx) · [HaGeZi 固定快照](https://github.com/hagezi/dns-blocklists/blob/6033fe872ee360ff34da5a9e826558030938fc7e/wildcard/light-onlydomains.txt) · [Safari 可选设置](web/README.md#普通网页仍有横幅或广告空位)
+
+## 微信与 QQ 广告监测
+
+**微信公众文章。** 懒人版复用 `mp.weixin.qq.com` 的本机 HTTPS 解密。规则依据第三方仓库留存的旧版微信文章页面脚本，只在指定路径和参数匹配时，在设备上直接应答。
+
+| 匹配的请求 | 处理方式 |
+| --- | --- |
+| `/mp/ad_report` 的 `action=see_report` | 对带广告标识的已知像素请求在本机返回小图片，涵盖滚动至广告特定位置及广告可见 500、1000、2000 毫秒的上报。[可见位置与时长](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/index42f400.js#L1617-L1627) |
+| `/mp/advertisement_report` 的 `action=extra_report` | 对已识别的附加上报在本机返回空 JSON 对象。这条路径用于记录点击时间或递交累积的曝光时长。[点击计时](https://github.com/stellarkey/912_project/blob/688e74dabb40b4ffd1ca47a9d8a72495c77b6ddb/1%20%E6%8B%9B%E7%94%9F%E4%BF%A1%E6%81%AF/%21%E6%8B%9B%E7%94%9F%E6%A6%82%E5%86%B5/%E3%80%90%E9%95%9C%E5%83%8F%E3%80%91%E7%8E%8B%E9%81%93%E5%9C%A8%E7%BA%BF/%E7%8E%8B%E9%81%93%E5%9C%A8%E7%BA%BF_files/report42f400.js#L227-L242) · [曝光计时](https://github.com/stellarkey/912_project/blob/688e74dabb40b4ffd1ca47a9d8a72495c77b6ddb/1%20%E6%8B%9B%E7%94%9F%E4%BF%A1%E6%81%AF/%21%E6%8B%9B%E7%94%9F%E6%A6%82%E5%86%B5/%E3%80%90%E9%95%9C%E5%83%8F%E3%80%91%E7%8E%8B%E9%81%93%E5%9C%A8%E7%BA%BF/%E7%8E%8B%E9%81%93%E5%9C%A8%E7%BA%BF_files/report42f400.js#L291-L307) |
+| `/mp/advertisement_report` 的 `report_type=1` | 对带有广告与跟踪标识的主曝光请求，在本机返回 `{"ret":0}`。公开页面把这个值视为上报成功，可避免它将同一次曝光重新入队。[曝光回调](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/index42f400.js#L1484-L1526) |
+
+主点击上报（`report_type=2`）、广告落地页、投诉和「阅读原文」（`report_type=3`）继续按原流程处理。已有文章广告列表过滤继续处理已知广告字段。同份页面脚本还会通过原生桥接接口 `JSAPI.invoke("adDataReport")` 另行报告曝光。该调用未给出原生客户端的网络目的地，其覆盖情况和当前版本的实际命中均待验证。[原生桥接调用](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/index42f400.js#L1485-L1495) · [广告点击流程](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/index42f400.js#L1638-L1689) · [阅读原文流程](https://github.com/zhangdaiscott/jeewx/blob/dc6755e3d3793e4eb15ad99307a850881f0ea2ea/jeewx/src/main/webapp/plug-in/weixin/core/wx-article/appmsg1ef0d1.js#L25-L42)
+
+**QQ 空间及腾讯广告 SDK。** 轻量版和懒人版按完整域名拦截 `rpt.gdt.qq.com` 的广告曝光报告和 `sdkreport.e.qq.com` 的广告 SDK 上报。QQ 空间的公开抓包记录识别出了曝光路径 `/creative_view`，另一份移动端记录还列出 SDK 的 `/link_event`。其他 App 若请求相同主机，也会命中这两条规则。QQ 当前客户端的实际命中仍待验证。[QQ 空间抓包规则](https://github.com/Aioneas/Surge/blob/1e69025a373d31153a46f8e48facf898eb27ac14/Module/qqzone.adblock.aioneas.sgmodule#L9-L22) · [曝光与 SDK 上报路径](https://github.com/Aioneas/Surge/blob/1e69025a373d31153a46f8e48facf898eb27ac14/Module/qqzone.adblock.aioneas.sgmodule#L49-L54) · [另一份移动端记录](https://github.com/xudazhu1/QuantumultX-/blob/e01472c5954b1eeb7291a68a84ba310b1eb8e582/qmkg.conf#L5-L6)
+
+同样按完整域名拦截 `t.gdt.qq.com`。腾讯发布的 iOS 转化 SDK 使用该主机的 `/conv/sdk/spa/conv`，应用通过这条路径从设备上报广告转化。广告主服务器之间的归因回传不经过设备上的 Loon，仍可发生。[腾讯 iOS SDK 接入说明](https://qzonestyle.gtimg.cn/open_proj/gdt_gw/cms/uploads/ios-sdk-v1.4.pdf) · [官方 SDK 下载](https://imgcache.qq.com/qzone/biz/gdt/dev/sdk/ios/release/GDT_iOS_Track_SDK.zip) · [腾讯转化回传说明](https://qzonestyle.gtimg.cn/open_proj/gdt_gw/cms/uploads/conversion-api2-1108-.pdf)
+
+上述三个主机的所有路径均受域名规则约束，包括使用 `?ADTAG=` 的请求。EasyList China 为 `qq.com` 网站列有这项通用放行。插件保留聊天、推送、登录和支付的共用主机，以及有具体路径放行记录的 `c.gdt.qq.com`、`v.gdt.qq.com`。广告主配置的第三方点击监测仍可能生效。[网页放行规则](https://github.com/easylist/easylistchina/blob/560a345168f36ca2bfbbf3280b0037451d6e3c80/easylistchina.txt#L15813-L15820) · [点击与统计路径的例外](https://github.com/xinggsf/Adblock-Plus-Rule/blob/65eb7d27b0716e6c92c9fddb8bc316aadc048e75/rule.txt#L264-L265) · [腾讯关于点击监测的说明](https://tencentads.com/Faqlist/Detail/397)
 
 ## 抖音主 App
 

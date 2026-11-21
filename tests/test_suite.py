@@ -22,7 +22,19 @@ URL_PATTERN = r"\$\{url\} ~= /((?:\\.|[^/\\])*)/(i?)"
 MIME_PATTERN = r"\$\{response\.header\['Content-Type'\]\} ~= /((?:\\.|[^/\\])*)/(i?)"
 HOST = re.compile(r"(?:[a-z0-9]+(?:-+[a-z0-9]+)*\.)+[a-z]{2,}")
 
+# Only this reviewed endpoint may receive an inline JSON acknowledgement without upstream I/O.
+WECHAT_IMPRESSION_ACTION = 'response.body.mock("json", `{"ret":0}`, 200)'
+WECHAT_IMPRESSION_MOCK = (
+    r'response if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/advertisement_report\?report_type=1'
+    r'&tid=[A-Za-z0-9_-]+&aid=[A-Za-z0-9_-]+(?:&gh_id=[^&#;]*)?&adver_group_id=[^&#;]*&apurl=[^&#;]+'
+    r'(?:&(?:__biz|ascene|pos_type|exp_id|exp_value|r|ad_sign_data|ad_sign_k1|ad_sign_k2|ad_sign_md5|uin|key|'
+    r'pass_ticket|wxtoken|devicetype|clientversion|appmsg_token|x5|f)=[^&#;]*)*$/ && ${request.method} == "GET" then '
+    + WECHAT_IMPRESSION_ACTION
+)
+
 REQUEST_CASES = {
+    "https://mp.weixin.qq.com/mp/ad_report?action=see_report&aid=314&tid=demo&seepos=2&report_type=0": "reject_img(200)",
+    "https://mp.weixin.qq.com/mp/advertisement_report?action=extra_report&x5=0&f=json": "reject_dict(200)",
     "https://cdn-xyk-app.bankofbeijing.com.cn/cdn/resource/image/advertise/2026/banner.jpg": "reject_img(200)",
     "https://static.95508.com/mmg/ciop/sysabbr/cmep/images/popupads/brand1.png": "reject_img(200)",
     "https://app.dewu.com/api/v1/app/advertisement": "reject(404)",
@@ -51,6 +63,8 @@ REQUEST_CASES = {
 XHS = "https://edith.xiaohongshu.com/api/sns/v6/homefeed"
 ZHIHU = "https://api.zhihu.com/topstory/recommend"
 RESPONSE_URLS = (
+    ("https://mp.weixin.qq.com/mp/advertisement_report?report_type=1&tid=demo&aid=314&gh_id=&adver_group_id=7"
+     "&apurl=https%3A%2F%2Fexample.org&pos_type=1&ad_sign_data=example&devicetype=iOS&clientversion=1&x5=0&f=json"),
     "https://api.pinduoduo.com/search?page=1&q=books",
     "https://tiebac.baidu.com/tiebaads/commonbatch?adcmd=1",
     "https://app.bilibili.com/x/v2/splash/list",
@@ -110,6 +124,7 @@ class Rewrite:
     action: str
     jq: str = ""
     mime: re.Pattern = None
+    method: str = ""
 
     @classmethod
     def parse(cls, line):
@@ -120,7 +135,9 @@ class Rewrite:
         if not match:
             raise ValueError(f"Invalid URL expression: {pieces[0]}")
         rule = cls(phase, compile_regex(match), action)
-        if phase == "request":
+        if line == WECHAT_IMPRESSION_MOCK:
+            rule.method = "GET"
+        elif phase == "request":
             if len(pieces) != 1 or action not in {"reject(404)", "reject_dict(200)", "reject_img(200)"}:
                 raise ValueError(f"Unsupported request rule: {line}")
         elif phase == "response":
@@ -139,10 +156,13 @@ class Rewrite:
             raise ValueError(f"Unknown phase: {phase}")
         return rule
 
-    def matches(self, url, status=200, mime="application/json"):
-        return bool(self.url.search(url)) and (
-            self.phase == "request" or (status == 200 and (self.mime is None or bool(self.mime.search(mime))))
-        )
+    def matches(self, url, status=200, mime="application/json", method="GET"):
+        if not self.url.search(url) or (self.method and self.method != method):
+            return False
+        if self.jq:
+            return status == 200 and (self.mime is None or bool(self.mime.search(mime)))
+        # Request rejections and the reviewed response mock complete before upstream headers exist.
+        return True
 
 
 class AdSuite(unittest.TestCase):
@@ -165,6 +185,9 @@ class AdSuite(unittest.TestCase):
         if matches:
             rule = matches[0]
             self.assertEqual(rule.phase, "response", url)
+            if rule.action == WECHAT_IMPRESSION_ACTION:
+                self.assertEqual(json.loads(rule.action.split("`")[1]), expected)
+                return
             for _ in range(2):
                 ran = subprocess.run(
                     [self.jq, "-c", rule.jq], input=json.dumps(result),
@@ -192,7 +215,8 @@ class AdSuite(unittest.TestCase):
         }
         self.assertTrue({f"DOMAIN,{host},REJECT" for host in original_hosts}.issubset(lite["rule"]))
         inline = read_sections(ROOT / "iPad-InlineAds.lpx")["rewrite"]
-        self.assertEqual(len(inline), 4)
+        self.assertEqual(len(inline), 7)
+        self.assertEqual(sum(bool(Rewrite.parse(line).jq) for line in inline), 4)
         self.assertTrue(set(inline).issubset(self.sections["rewrite"]))
 
     def test_web_ad_hosts_and_normal_web_traffic(self):
@@ -240,7 +264,7 @@ class AdSuite(unittest.TestCase):
             self.assertEqual(len(self.matches(url)), 1, url)
         for rule in self.rules:
             self.assertTrue(any(rule.matches(u) for u in urls), rule.url.pattern)
-            if rule.phase == "response":
+            if rule.jq:
                 witness = next(u for u in urls if rule.matches(u))
                 self.check_body(witness, None, None)
                 self.assertFalse(rule.matches(witness, status=204))
@@ -249,6 +273,12 @@ class AdSuite(unittest.TestCase):
                     self.assertTrue(rule.matches(witness, mime="Application/JSON; charset=UTF-8"))
                     for mime in ("text/html", "application/jsonp", "application/grpc", "image/jpeg"):
                         self.assertFalse(rule.matches(witness, mime=mime))
+            elif rule.action == WECHAT_IMPRESSION_ACTION:
+                witness = next(u for u in urls if rule.matches(u))
+                self.assertTrue(rule.matches(witness, status=None, mime=None, method="GET"))
+                for method in ("HEAD", "OPTIONS", "POST", "PUT", "DELETE"):
+                    self.assertFalse(rule.matches(witness, method=method))
+                self.check_body(witness, None, {"ret": 0})
 
     def test_shopping_responses(self):
         self.assertEqual(len(self.shopping), 45)
@@ -290,7 +320,7 @@ class AdSuite(unittest.TestCase):
 
     def test_exact_request_actions(self):
         for url, action in REQUEST_CASES.items():
-            for suffix in ("", "?test=1"):
+            for suffix in (("",) if "?" in url else ("", "?test=1")):
                 with self.subTest(url=url + suffix):
                     rule, = self.matches(url + suffix)
                     self.assertEqual((rule.phase, rule.action), ("request", action))

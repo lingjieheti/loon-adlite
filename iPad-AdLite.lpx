@@ -63,6 +63,11 @@ DOMAIN,mobads.baidu.com,REJECT
 DOMAIN,adscdn.baidu.com,REJECT
 DOMAIN,mobads-pre-config.cdn.bcebos.com,REJECT
 
+# QQ 空间与优量汇 · 广告曝光、SDK 事件与设备端转化上报
+DOMAIN,rpt.gdt.qq.com,REJECT
+DOMAIN,sdkreport.e.qq.com,REJECT
+DOMAIN,t.gdt.qq.com,REJECT
+
 # 腾讯广告与腾讯音乐
 DOMAIN,mi.gdt.qq.com,REJECT
 DOMAIN,pgdt.gtimg.cn,REJECT

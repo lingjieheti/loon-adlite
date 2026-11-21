@@ -52,10 +52,14 @@ def audit(path):
         allowed = INLINE_HOSTS if path.name == "iPad-InlineAds.lpx" else REVIEWED_HOSTS
         if key.strip() != "hostname" or len(hosts) != len(set(hosts)) or not set(hosts) <= allowed:
             raise ValueError(f"{path.name}: unexpected TLS decryption declaration: {declaration}")
-    for line in sections.get("rewrite", []):
-        # The shared parser accepts only local reject actions and a single response.json.jq action.
+    rewrite_lines = sections.get("rewrite", [])
+    if shared.WECHAT_IMPRESSION_MOCK in rewrite_lines:
+        if (path.name not in {"iPad-InlineAds.lpx", "iPad-AdSuite.lpx"}
+                or rewrite_lines.count(shared.WECHAT_IMPRESSION_MOCK) != 1):
+            raise ValueError(f"{path.name}: unexpected inline WeChat acknowledgement")
+    for line in rewrite_lines:
         rule = shared.Rewrite.parse(line)
-        if rule.phase == "response":
+        if rule.jq:
             # A quoted asset URL is data. jq string interpolation can itself contain executable filters.
             code = JQ_STRING.sub(lambda m: m[0] if r"\(" in m[0] else '""', rule.jq)
             if JQ_IO.search(code):
@@ -98,6 +102,39 @@ class PluginPrivacy(unittest.TestCase):
                 changed.read_text.return_value = original.replace(before, after, 1)
                 with self.assertRaises(ValueError):
                     audit(changed)
+
+    def test_inline_acknowledgement_is_confined_to_one_reviewed_get(self):
+        line = shared.WECHAT_IMPRESSION_MOCK
+        for before, after in (
+            (r"mp\.weixin\.qq\.com", r".*\.qq\.com"),
+            ("advertisement_report", "ad_complaint"),
+            ("report_type=1", "report_type=[0-9]+"),
+            ('${request.method} == "GET"', '${request.method} == "POST"'),
+            (' && ${request.method} == "GET"', ""),
+            ("response if", "request if"),
+            ('{"ret":0}', '{"ret":1}'),
+            ('{"ret":0}', '${request.header[\'Cookie\']}'),
+            ('"json"', '"html"'),
+            ("200)", "302)"),
+            ("response.body.mock(", "response.body.mock_file("),
+            ("200)", '200) | response.header.set("X-Loon", "1")'),
+        ):
+            with self.subTest(change=after):
+                self.assertIn(before, line)
+                with self.assertRaises(ValueError):
+                    shared.Rewrite.parse(line.replace(before, after, 1))
+
+        for name in ("iPad-AdSuite.lpx", "iPad-InlineAds.lpx", "iPad-AdLite.lpx"):
+            fixture = Mock()
+            fixture.name = name
+            original = (shared.ROOT / name).read_text(encoding="utf-8-sig")
+            if name == "iPad-AdLite.lpx":
+                fixture.read_text.return_value = original + "\n[Rewrite]\n" + line
+            else:
+                self.assertIn(line, original)
+                fixture.read_text.return_value = original.replace(line, line + "\n" + line, 1)
+            with self.subTest(plugin=name), self.assertRaises(ValueError):
+                audit(fixture)
 
     def test_informational_links_and_literal_asset_urls_are_allowed(self):
         path = shared.ROOT / "iPad-InlineAds.lpx"
