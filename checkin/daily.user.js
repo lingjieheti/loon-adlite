@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         京东与什么值得买 · 个人签到
 // @namespace    https://github.com/lingjieheti/loon-adlite
-// @version      1.0.0
+// @version      1.0.1
+// @updateURL    https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/checkin/daily.user.js
 // @description  打开专用入口时，使用当前已登录页面的官方签到按钮。
 // @match        https://www.smzdm.com/
 // @match        https://bean.jd.com/myJingBean/list
 // @run-at       document-idle
+// @inject-into  content
 // @noframes
 // @grant        none
 // ==/UserScript==

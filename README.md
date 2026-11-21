@@ -31,6 +31,10 @@
 
 上方订阅地址始终指向同一版本线。GitHub 自动检查规则和隐私权限，测试通过后才发布到 `main`。建议让 Loon 的外部资源每天自动检查一次，实际刷新时间由客户端决定。通过 USB 复制的本地文件需手动替换。
 
+每周一，仓库会对照来源清单里的 GitHub 固定文件生成一份变动报告。采纳改动前，要核对是否影响已用规则，并通过权限检查和浏览器测试。报告只在 GitHub 运行。[上游变动报告](https://github.com/lingjieheti/loon-adlite/actions/workflows/review-upstreams.yml)
+
+Safari 助手可在 Userscripts 的更新页检查、安装新版。若还在使用 1.0.0 版 YouTube 或京豆／什么值得买助手，请从本仓重新安装一次，以获得更新地址。[YouTube 助手](youtube/README.md) · [签到助手](checkin/README.md)
+
 需要回退时，可把订阅地址中的 `main` 换成某次提交的完整编号，导入后停用原条目。[提交历史](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[按 App 查看覆盖与限制](COVERAGE.md) · [规则来源核查报告](audit.html) · [离线回归测试](tests/)
+[按 App 查看覆盖与限制](COVERAGE.md) · [逐项查看上游来源与适配](SOURCES.md) · [规则来源核查报告](audit.html) · [离线回归测试](tests/)

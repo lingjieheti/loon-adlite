@@ -33,4 +33,4 @@ iPhone または iPad の Safari でインストールリンクを開き、Loon 
 
 以前の版に戻すには、購読 URL の `main` を使いたいコミットの完全なハッシュ値に置き換えます。その URL を Loon に追加したら、元の項目を無効にしてください。[コミット履歴](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[アプリ別の対応範囲と制限（簡体字中国語）](COVERAGE.md) · [ルールの出典と検証記録（簡体字中国語）](audit.html) · [オフライン回帰テスト](tests/)
+[アプリ別の対応範囲と制限（簡体字中国語）](COVERAGE.md) · [機能別の参照元（簡体字中国語）](SOURCES.md) · [ルールの出典と検証記録（簡体字中国語）](audit.html) · [オフライン回帰テスト](tests/)

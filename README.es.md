@@ -28,4 +28,4 @@ Lite y Suite también bloquean algunas solicitudes de publicidad en páginas web
 
 Las suscripciones siguen la edición publicada en `main`. Puedes configurar Loon para que revise los recursos externos a diario. La aplicación decide la hora exacta. Los archivos copiados por USB se sustituyen manualmente. Para recuperar una versión anterior, sustituye `main` en la URL de suscripción por el identificador completo del commit que quieras, importa esa URL y desactiva la entrada anterior. [Historial de versiones](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Cobertura y límites por aplicación (en chino)](COVERAGE.md) · [Apoyar mi trabajo (en inglés)](SPONSOR.en.md)
+[Cobertura y límites por aplicación (en chino)](COVERAGE.md) · [Fuentes por función (en chino)](SOURCES.md) · [Apoyar mi trabajo (en inglés)](SPONSOR.en.md)

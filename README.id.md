@@ -26,4 +26,4 @@ Aktifkan ekstensi Userscripts di Safari, buka tautan skrip yang diinginkan, lalu
 
 URL langganan mengikuti pembaruan di cabang `main`. Anda bisa mengatur Loon untuk memeriksa sumber daya eksternal setiap hari. Waktu pembaruan ditentukan oleh Loon. Jika Anda menyalin berkas lewat USB, gantilah secara manual saat memperbarui. Untuk kembali ke versi lama, ganti `main` pada URL langganan dengan hash lengkap dari commit yang dipilih, impor URL tersebut, lalu nonaktifkan entri sebelumnya. [Riwayat perubahan](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Cakupan dan batasan per aplikasi (bahasa Mandarin)](COVERAGE.md) · [Dukung proyek ini (bahasa Inggris)](SPONSOR.en.md)
+[Cakupan dan batasan per aplikasi (bahasa Mandarin)](COVERAGE.md) · [Sumber tiap fitur (bahasa Mandarin)](SOURCES.md) · [Dukung proyek ini (bahasa Inggris)](SPONSOR.en.md)

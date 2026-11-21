@@ -26,4 +26,4 @@ Bật tiện ích Userscripts trong Safari, mở liên kết của đoạn mã m
 
 Địa chỉ đăng ký lấy bản cập nhật từ nhánh `main`. Bạn có thể đặt Loon kiểm tra tài nguyên bên ngoài hằng ngày. Thời điểm làm mới do Loon quyết định. Nếu đã chép tệp qua USB, hãy tự thay tệp khi cập nhật. Để quay lại bản cũ, thay `main` trong địa chỉ đăng ký bằng mã băm đầy đủ của lần lưu (commit) bạn muốn dùng, nhập địa chỉ đó rồi tắt mục cũ. [Lịch sử thay đổi](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Phạm vi lọc theo ứng dụng (tiếng Trung)](COVERAGE.md) · [Ủng hộ tác giả (tiếng Anh)](SPONSOR.en.md)
+[Phạm vi lọc theo ứng dụng (tiếng Trung)](COVERAGE.md) · [Nguồn tham khảo theo tính năng (tiếng Trung)](SOURCES.md) · [Ủng hộ tác giả (tiếng Anh)](SPONSOR.en.md)
