@@ -22,7 +22,7 @@ Lite et Suite bloquent aussi certaines requêtes publicitaires sur le Web, notam
 
 - **YouTube**. Sur le site, le script masque certains emplacements publicitaires de l’accueil et des résultats de recherche. Il tente de cliquer sur le bouton permettant de passer l’annonce dès que celui-ci devient disponible. L’application YouTube et les séquences de parrainage intégrées par le créateur restent hors de sa portée. [Installer le script YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
 - **Pornhub**. Le script masque certaines bannières latérales et certains emplacements publicitaires de la page de lecture mobile. Les publicités intégrées au flux vidéo peuvent toujours être diffusées. [Installer le script Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
-- **JD et SMZDM (什么值得买)**. Une fois que vous avez ouvert la page dédiée dans Safari et que vous êtes connecté, un script peut cliquer sur le bouton de récompense quotidienne. Un rappel JD est aussi disponible pour Loon. [Configurer les récompenses quotidiennes (en chinois)](checkin/README.md)
+- **Récompenses et coupons**. Le guide regroupe les liens pour obtenir des points JD Beans, valider la visite quotidienne sur SMZDM (什么值得买) et trouver des coupons sur JD, Taobao et Douyin. Sur les pages JD prises en charge, vous pouvez choisir un coupon standard et laisser le script tenter de le récupérer pendant que la page est ouverte dans Safari. Sur Taobao et Douyin, confirmez votre participation ou récupérez le coupon sur la page officielle de l’offre ou dans l’application. [Guide des récompenses et des coupons (en chinois)](checkin/README.md)
 
 ## Mises à jour et retour à une version antérieure
 
