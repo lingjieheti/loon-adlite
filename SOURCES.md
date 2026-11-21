@@ -24,6 +24,10 @@ GitHub 每天北京时间 11:27 排期比对本页和覆盖说明（COVERAGE.md�
 
 **许可与使用方式**　所引快照中，Biliverse 和 Prebid.js 标注 Apache-2.0，v2ray、app2smile 和 UserC23 标注 MIT，AdGuardFilters、NobyDa 和 fmz200 标注 GPL-3.0。Choler 的该版本未查到仓库级许可。表内也链接了公开的接口样例、个人使用项目和附有转载限制的资料。本文引用其观测位置，插件中没有引入这些项目的脚本文件。后续如复制代码或过滤表，应按该文件具体版本的授权和署名要求处理。[Biliverse 许可](https://github.com/Biliverse/ADBlock/blob/b0051916843f269d4b377aaf177f0d9e7b12e393/LICENSE) · [app2smile 许可](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/LICENSE.md) · [fmz200 许可](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/LICENSE) · [ZenmoFeiShi 使用说明](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/README.md#L7) · [Belcheck 使用说明](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/README.md#L7-L18)
 
+常用国产 App 的广告主机逐项核对了 App 专用规则与域名分类。生活、资讯、教育和音频类规则都只选择完整主机名。易车的同一主机上有需要放行的城市和广告回调路径，故本次保留其网络请求。使用者可在覆盖表查到每个广告位或广告主机的固定出处。[国产 App 独立广告主机](COVERAGE.md#国产-app-的独立广告主机) · [易车路径例外](https://github.com/easylist/easylistchina/blob/560a345168f36ca2bfbbf3280b0037451d6e3c80/easylistchina.txt#L15438-L15439)
+
+生活和资讯 App 的主机分类另与 anti-AD 的 MIT 许可快照及 vokins/ad 的 GPL-2.0 许可快照核对。两份上游整表均无需装入 Loon。[anti-AD 许可](https://github.com/privacy-protection-tools/anti-AD/blob/c1d0a1ddb1a5d048f104e2a7eac991b43c3cca8f/LICENSE) · [vokins/ad 许可](https://github.com/vokins/ad/blob/5f177915e12fbaed055dd2ef79f56b97f689ac58/LICENSE)
+
 ## Safari 网页助手
 
 | 功能 | 采用的依据与本地适配 |

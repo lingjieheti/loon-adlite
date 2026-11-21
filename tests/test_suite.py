@@ -51,6 +51,7 @@ REQUEST_CASES = {
 XHS = "https://edith.xiaohongshu.com/api/sns/v6/homefeed"
 ZHIHU = "https://api.zhihu.com/topstory/recommend"
 RESPONSE_URLS = (
+    "https://api.pinduoduo.com/search?page=1&q=books",
     "https://tiebac.baidu.com/tiebaads/commonbatch?adcmd=1",
     "https://app.bilibili.com/x/v2/splash/list",
     "https://api3-core-c.amemv.com/aweme/v1/feed",

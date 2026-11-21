@@ -24,6 +24,35 @@ DOMAIN,ad.line-scdn.net,REJECT
 DOMAIN,a.adtng.com,REJECT
 DOMAIN,ads.trafficjunky.net,REJECT
 
+# 拼多多广告联盟 · 第三方 App 的视频推广素材
+DOMAIN,video-dsp.pddpic.com,REJECT
+
+# 墨迹天气 · 独立广告接口与开屏
+DOMAIN,ad.api.moji.com,REJECT
+DOMAIN,adlaunch.moji.com,REJECT
+
+# 虎扑、百词斩、澎湃新闻、七猫小说、虎嗅
+DOMAIN,adx.hupu.com,REJECT
+DOMAIN,advertise.baicizhan.com,REJECT
+DOMAIN,advertise.baicizhan.org,REJECT
+DOMAIN,adpai.thepaper.cn,REJECT
+DOMAIN,cdn-new-ad.wtzw.com,REJECT
+DOMAIN,api-ad-product.huxiu.com,REJECT
+
+# 喜马拉雅、酷狗音乐、蜻蜓 FM · 广告服务与素材
+DOMAIN,adse.ximalaya.com,REJECT
+DOMAIN,adse.wsa.ximalaya.com,REJECT
+DOMAIN,ads.service.kugou.com,REJECT
+DOMAIN,adserviceretry.kugou.com,REJECT
+DOMAIN,ad.qingting.fm,REJECT
+DOMAIN,ad-cdn.qingting.fm,REJECT
+
+# 凤凰新媒体、网易有道词典、讯飞输入法 · 独立广告服务
+DOMAIN,api.newad.ifeng.com,REJECT
+DOMAIN,impservice.dictapp.youdao.com,REJECT
+DOMAIN,dsp-impr2.youdao.com,REJECT
+DOMAIN,bj.imp.voiceads.cn,REJECT
+
 # 百度地图 · 百度信息流广告投放与配置
 DOMAIN,afd.baidu.com,REJECT
 DOMAIN,afdconf.baidu.com,REJECT
