@@ -42,6 +42,7 @@ REQUEST_CASES = {
 XHS = "https://edith.xiaohongshu.com/api/sns/v6/homefeed"
 ZHIHU = "https://api.zhihu.com/topstory/recommend"
 RESPONSE_URLS = (
+    "https://app.bilibili.com/x/v2/splash/list",
     "https://api3-core-c.amemv.com/aweme/v1/feed",
     "https://api3-normal-c.amemv.com/aweme/v2/feed",
     "https://api.amemv.com/aweme/v1/feed",
@@ -164,7 +165,7 @@ class AdSuite(unittest.TestCase):
         domains = read_sections(ROOT / "iPad-AdLite.lpx")["rule"]
         inline = read_sections(ROOT / "iPad-InlineAds.lpx")["rewrite"]
         self.assertEqual(len(domains), 22)
-        self.assertEqual(len(inline), 3)
+        self.assertEqual(len(inline), 4)
         self.assertTrue(set(domains).issubset(self.sections["rule"]))
         self.assertTrue(set(inline).issubset(self.sections["rewrite"]))
 
@@ -206,12 +207,58 @@ class AdSuite(unittest.TestCase):
             with self.subTest(case=idx, url=case["url"]):
                 self.check_body(case["url"], case["input"], case["expected"])
 
+    def test_taobao_splash_material_url(self):
+        api = "mtop.taobao.wireless.home.splash.awesome.get"
+        url = f"https://guide-acs.m.taobao.com/gw/{api}/1.0/"
+        valid = (
+            "https://img.alicdn.com/imgextra/i1/asset.jpg_800x800.jpg",
+            "//gw.alicdn.com/tfs/asset%20name.jpg?quality=80&from=app#preview",
+            "HTTP://cdn.example:8080/video.mp4", "https://cdn.example.?asset=1",
+            "http://192.0.2.4/asset", "https://[2001:db8::1]:443/asset",
+            "//[::ffff:192.0.2.4]/asset",
+        )
+        unknown = (
+            None, 12, [], "", " ", "#", "about:blank", "data:image/png,placeholder",
+            "https://", "//", "///img", "https:///asset", "//?asset=x", "https://#fragment",
+            "/∕/cdn.example/asset", "https:// cdn.example/asset", "https://cdn.example/a b",
+            "https://cdn.example/a\n", "https://cdn.example\\@other.example/asset",
+            "//./asset", "//../asset", "//user@/asset", "//user@cdn.example/asset", "//cdn..example/asset",
+            "//-cdn.example/asset", "//cdn-.example/asset", "//:443/asset",
+            "//cdn.example:/asset", "//cdn.example:port/asset", "//cdn.example:65536/asset",
+            "//999.1.1.1/asset", "//[broken/asset", "//[1:::2]/asset", "//[1:2:3]/asset",
+        )
+        keep = [{"imgUrl": value, "link": "https://example.com/coupon"} for value in unknown]
+        keep.append({"link": "https://gw.alicdn.com/landing"})
+        creatives = [{"videoUrl": value} for value in valid]
+        creatives.append({"imgUrl": valid[0], "videoUrl": "placeholder"})
+
+        def envelope(items):
+            section = {"bizData": {"taobao-splash": {"data": items}}}
+            return {"api": api, "v": "1.0", "ret": ["SUCCESS::调用成功"],
+                    "data": {"containers": {"splash_home_base": {"base": {"sections": [section]}}}}}
+
+        self.check_body(url, envelope([*keep[:4], *creatives, *keep[4:]]), envelope(keep))
+
     def test_exact_request_actions(self):
         for url, action in REQUEST_CASES.items():
             for suffix in ("", "?test=1"):
                 with self.subTest(url=url + suffix):
                     rule, = self.matches(url + suffix)
                     self.assertEqual((rule.phase, rule.action), ("request", action))
+
+    def test_mtop_nested_business_error_passes_through(self):
+        splash = {"bizData": {"taobao-splash": {"data": [{"imgUrl": "https://gw.alicdn.com/ad.jpg"}]}}}
+        endpoints = {
+            "mtop.taobao.wireless.home.splash.awesome.get":
+                {"containers": {"splash_home_base": {"base": {"sections": [splash]}}}},
+            "mtop.cainiao.adx.flyad.getad": {"creative": {"id": BIG_ID}},
+        }
+        for api, data in endpoints.items():
+            url = f"https://guide-acs.m.taobao.com/gw/{api}/1.0/"
+            for flags in ({"success": False}, {"errmsg": "business error", "status": "1"}):
+                payload = {"api": api, "v": "1.0", "ret": ["SUCCESS::调用成功"], "data": {**data, **flags}}
+                with self.subTest(api=api, flags=flags):
+                    self.check_body(url, payload, payload)
 
     def test_checkout_coupons_playback_navigation_and_similar_urls(self):
         urls = [
@@ -241,6 +288,18 @@ class AdSuite(unittest.TestCase):
             with self.subTest(url=url):
                 self.assertNotIn(urlsplit(url).hostname, blocked)
                 self.assertEqual(self.matches(url), [])
+
+    def test_jd_ambiguous_operation_names_preserve_business_requests(self):
+        prefix = "https://api.m.jd.com/client.action?"
+        for operation in ("start", "welcomeHome"):
+            regular = f"functionId={operation}"
+            for second in ("function%49d=submitOrder", "%66unctionId=getShopCoupon", "functionId"):
+                for query in (regular + "&" + second, second + "&" + regular):
+                    with self.subTest(query=query):
+                        self.assertEqual(self.matches(prefix + query), [])
+            for query in (regular, regular + "&next=functionId%3DgetShopCoupon",
+                          "body=%7B%22path%22%3A%22foo%22%7D&" + regular):
+                self.assertEqual(len(self.matches(prefix + query)), 1, query)
 
     def test_xiaohongshu_homefeed(self):
         keep = [

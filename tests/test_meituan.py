@@ -119,6 +119,18 @@ class Meituan(unittest.TestCase):
                     rule, = self.matches(url + suffix)
                     self.assertEqual((rule.phase, rule.action), ("request", expected))
 
+    def test_restaurant_flags_and_multiline_ids(self):
+        original = [{"adSiteId": "adunit-1234"}, {"adSiteId": "adunit-1234\n"}, {"adSiteId": "adunit-x\ncoupon"}]
+        body = {"code": 200, "success": True, "data": {"adSiteList": original, "menu": 99}}
+        clean = {**body, "data": {"adSiteList": original[1:], "menu": 99}}
+        flags = dict.fromkeys(("systemError", "badRequest", "notFound", "conflict"), False)
+        self.check_body(MINI, {**body, **flags}, {**clean, **flags})
+        for key in flags:
+            for value in (True, "false", 0, None):
+                contradictory = {**body, **flags, key: value}
+                with self.subTest(flag=key, value=value):
+                    self.check_body(MINI, contradictory, contradictory)
+
     def test_meals_coupons_payment_and_nearby_paths_are_kept(self):
         normal = [
             MAIN + "Extra", DELIVERY + "/child", MINI + "Config",

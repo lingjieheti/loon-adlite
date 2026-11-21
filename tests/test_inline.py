@@ -19,6 +19,7 @@ PLUGIN = Path(__file__).resolve().parents[1] / "iPad-InlineAds.lpx"
 WX_AD = "https://mp.weixin.qq.com/mp/getappmsgad"
 WX_EXT = "https://mp.weixin.qq.com/mp/getappmsgext"
 APP_FEED = "https://app.bilibili.com/x/v2/feed/index"
+APP_SPLASH = "https://app.bilibili.com/x/v2/splash/list"
 WEB_FEED = "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd"
 BIG_ID = 123456789012345678901234567891
 
@@ -76,7 +77,7 @@ class InlineAds(unittest.TestCase):
         self.assertEqual(json.dumps(self.rewrite(url, result), sort_keys=True), wanted)
 
     def test_url_scope(self):
-        for url in (WX_AD, WX_EXT, APP_FEED, WEB_FEED):
+        for url in (WX_AD, WX_EXT, APP_FEED, APP_SPLASH, WEB_FEED):
             for suffix in ("", "?a=1&b=2"):
                 with self.subTest(url=url + suffix):
                     self.assertEqual(len(self.matching_rules(url + suffix)), 1)
@@ -92,6 +93,11 @@ class InlineAds(unittest.TestCase):
             "https://mp.weixin.qq.com/cgi-bin/bizlogin",
             "https://mp.weixin.qq.com/s?next=/mp/getappmsgad",
             "https://app.bilibili.com/x/v2/feed/index/story",
+            "https://app.bilibili.com/x/v2/splash/show",
+            "https://app.bilibili.com/x/v2/splash/brand/list",
+            "https://app.bilibili.com/x/v2/splash/event/list2",
+            "https://api.bilibili.com/x/v2/splash/list",
+            "https://app.bilibili.com/x/v2/splash/listing?mobi_app=ipad",
             "https://api.bilibili.com/x/player/wbi/playurl",
             "https://api.bilibili.com/x/web-interface/index/top/feed/rcmd",
         ):
@@ -106,19 +112,19 @@ class InlineAds(unittest.TestCase):
             {entry.strip() for entry in hosts[0].split(",")},
             {urlsplit(url).hostname for url in (WX_AD, APP_FEED, WEB_FEED)},
         )
-        for url in (WX_AD, WX_EXT, APP_FEED, WEB_FEED):
+        for url in (WX_AD, WX_EXT, APP_FEED, APP_SPLASH, WEB_FEED):
             (_, _, condition), = self.matching_rules(url)
             self.assertRegex(condition, r"&&\s*\$\{response\.status\}\s*==\s*200(?:\s|$)")
-            if url in (APP_FEED, WEB_FEED):
-                header = re.search(
-                    r"\$\{response\.header\['Content-Type'\]\}\s*~=\s*/((?:\\.|[^/\\])*)/i", condition,
-                )
-                self.assertIsNotNone(header)
-                mime = re.compile(header[1], re.I)
-                for good in ("application/json", "Application/JSON; charset=utf-8"):
-                    self.assertRegex(good, mime)
-                for bad in ("text/html", "application/grpc", "application/jsonp"):
-                    self.assertNotRegex(bad, mime)
+            header = re.search(
+                r"\$\{response\.header\['Content-Type'\]\}\s*~=\s*/((?:\\.|[^/\\])*)/i", condition,
+            )
+            self.assertIsNotNone(header)
+            mime = re.compile(header[1], re.I)
+            for good in ("application/json", "Application/JSON; charset=utf-8"):
+                self.assertRegex(good, mime)
+            for bad in ("text/html; charset=UTF-8", "application/grpc", "application/jsonp",
+                        "text/javascript", "text/plain", "application/octet-stream", ""):
+                self.assertNotRegex(bad, mime)
 
     def test_wechat_preserves_article_fields(self):
         source = {
@@ -136,6 +142,7 @@ class InlineAds(unittest.TestCase):
 
     def test_wechat_unknown_shapes_and_errors(self):
         examples = [
+            {"base_resp": {"exportkey_token": "", "ret": -2}},
             {"base_resp": {"ret": 1}, "advertisement_num": 1, "advertisement_info": [1]},
             {"appmsgstat": {"ret": 13}, "advertisement_num": 1, "advertisement_info": [1]},
             {"ret": -1, "advertisement_num": 1, "advertisement_info": [1]},
@@ -196,15 +203,56 @@ class InlineAds(unittest.TestCase):
         expected = {"code": 0, "data": {"item": preserved, "other": BIG_ID}}
         self.check_result(WEB_FEED, source, expected)
 
+    def test_splash_commercial_material_and_same_response_references(self):
+        # Fields in the published splash/list response, including the ad flag and cm_mark.
+        ad = {"id": 9460, "card_type": 39, "source": 929, "is_ad": True, "cm_mark": 1, "is_ad_loc": True}
+        keep = [
+            {"id": 12, "thumb": "season.png", "logo_url": "logo.png"},
+            {"id": 13, "is_ad_loc": True, "ad_cb": "receipt", "cm_mark": 1},
+            {"id": 14, "is_ad": True, "cm_mark": 0}, {"id": 15, "is_ad": 1, "cm_mark": 1},
+            {"id": 16, "is_ad": True, "cm_mark": "1"}, {"id": 17, "is_ad": True},
+            {"is_ad": True, "cm_mark": 1}, {"id": False, "is_ad": True, "cm_mark": 1},
+            {"id": "18", "is_ad": True, "cm_mark": 1}, {"id": 1.5, "is_ad": True, "cm_mark": 1},
+            {"id": BIG_ID, "is_ad": True, "cm_mark": 1}, None, ["unknown"],
+        ]
+        schedule = [{"id": 12, "probability": 50}, {"id": "9460"}, {"next": BIG_ID}, None]
+        retained = [12, "9460", False, 999, None, {"id": 9460}]
+        data = {"list": [*keep[:2], ad, *keep[2:]], "show": [schedule[0], {"id": 9460}, *schedule[1:]],
+                "keep_ids": [9460, *retained], "min_interval": 14400, "pull_interval": 900,
+                "max_time": 4, "splash_request_id": "request", "other": {"list": [ad], "id": BIG_ID}}
+        source = {"code": 0, "message": "0", "ttl": 1, "data": data}
+        expected = {**source, "data": {**data, "list": keep, "show": schedule, "keep_ids": retained}}
+        self.check_result(APP_SPLASH + "?mobi_app=ipad&platform=ios", source, expected)
+        # The full published example has a null cache list and no display schedule.
+        for refs in ({}, {"keep_ids": None}, {"show": {"id": 9460}, "keep_ids": "9460"}):
+            self.check_result(APP_SPLASH, {"code": 0, "data": {"list": [ad], **refs}},
+                              {"code": 0, "data": {"list": [], **refs}})
+
+    def test_splash_never_removes_a_shared_or_unknown_display_reference(self):
+        ad = {"id": 1031, "is_ad": True, "cm_mark": 1}
+        for material_id in (1031, 1031.0, "1031", "1031.00", "01031"):
+            organic = {"id": material_id, "thumb": "illustration.png"}
+            for rows in ([ad, organic], [organic, ad]):
+                data = {"list": rows, "show": [{"id": 1031}, {"id": 27}], "keep_ids": [1031, 27]}
+                self.check_result(APP_SPLASH, {"code": 0, "data": data},
+                                  {"code": 0, "data": {**data, "list": [organic]}})
+        refs = {"show": [{"id": 1031, "ad_cb": "receipt"}], "keep_ids": [1031]}
+        for fields in (refs, {**refs, "list": None}, {**refs, "list": [{"id": 1031, "is_ad_loc": True}]}):
+            unchanged = {"code": 0, "data": fields}
+            self.check_result(APP_SPLASH, unchanged, unchanged)
+
     def test_bilibili_errors_and_changed_shapes(self):
         for url, key, ad in (
             (APP_FEED, "items", {"card_type": "cm_v2", "card_goto": "ad_av"}),
             (WEB_FEED, "item", {"goto": "ad"}),
+            (APP_SPLASH, "list", {"id": 9460, "is_ad": True, "cm_mark": 1}),
         ):
             wrong_key = "item" if key == "items" else "items"
             for payload in (
                 {"code": -101, "data": {key: [ad]}},
                 {"code": "0", "data": {key: [ad]}},
+                {"code": 0, "success": False, "data": {key: [ad]}},
+                {"code": 0, "error": {"code": 403}, "data": {key: [ad]}},
                 {"data": {key: [ad]}},
                 {"code": 0, "data": {wrong_key: [ad]}},
                 {"code": 0, "data": {key: {"unexpected": ad}}},

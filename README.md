@@ -5,7 +5,7 @@
 iPhone 和 iPad 共用一份订阅 `iPad-AdSuite.lpx`。原订阅地址指向本仓库 `main` 分支的设备，在 Loon 刷新原插件即可。之前导入的是固定提交或本地文件时，请用上方链接导入一次，启用后关闭旧条目。两台设备可各自从同一地址安装。
 
 1. 在设备上用 Safari 打开上方链接，在 Loon 确认并启用「常用 App 去广告」。如未唤起 Loon，在「配置 → 插件 → ＋」粘贴[订阅原始地址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)。
-2. 使用分流模式即可启用 **39 条精确域名规则**。要启用 **27 条原生复写**，需使用 Loon 3.5.1 (978) 或更新版，在该设备开启复写和 HTTPS 解密，并信任自己的 Loon CA。已有证书的设备可沿用当前配置。[Loon 解密文档](https://nsloon.app/docs/MitM/) · [Apple 证书信任设置](https://support.apple.com/zh-cn/102390)
+2. 使用分流模式即可启用 **39 条精确域名规则**。要启用 **28 条原生复写**，需使用 Loon 3.5.1 (978) 或更新版，在该设备开启复写和 HTTPS 解密，并信任自己的 Loon CA。已有证书的设备可沿用当前配置。[Loon 解密文档](https://nsloon.app/docs/MitM/) · [Apple 证书信任设置](https://support.apple.com/zh-cn/102390)
 3. 如果还装有下方的基础版或内嵌版，启用合并版后可将它们关闭，避免重复匹配。
 
 ## 覆盖与使用体验
@@ -41,15 +41,16 @@ iPhone 和 iPad 共用一份订阅 `iPad-AdSuite.lpx`。原订阅地址指向本
 
 | 使用场景 | 处理内容 | 保留内容 |
 | --- | --- | --- |
-| 微信公众号文章 | 清空广告接口或阅读互动接口返回的广告列表，并把对应计数归零 | 正文、阅读数、点赞和其他互动字段 |
+| 微信公众号文章 | 仅在 JSON 响应中清空广告接口或阅读互动接口返回的广告列表，并把对应计数归零 | 正文、阅读数、点赞和其他互动字段 |
 | 哔哩哔哩 App 首页 | 根据卡片类型和跳转类型共同识别广告卡，移除混排横幅中标记为广告的子项 | 普通视频、直播、活动横幅和未知卡片，保持原顺序 |
+| 哔哩哔哩 App 开屏 | 从开屏列表中移除带两项商业标记及有效素材编号的广告，清理仅指向这些广告的数值引用 | 默认品牌图、活动接口、其他素材和缓存设置 |
 | 哔哩哔哩网页首页 | 移除推荐列表中明确标注为广告的卡片 | 带广告位元数据的普通视频和分页信息 |
 
 在设备上用 Safari 点「安装内嵌广告插件」，确认导入并启用「iPad 内嵌广告过滤」。已有基础版可以继续使用。若链接未唤起 Loon，可在「配置 → 插件 → ＋」粘贴[内嵌插件原始地址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-InlineAds.lpx)。
 
 **使用条件**　Loon 3.5.1 (978) 或更新版，已开启复写和 HTTPS 解密，并在该设备上信任自己的 Loon CA。如果设备还没有 CA，可使用 Loon 官方证书工具在本机生成，再按系统提示安装和信任。[Loon 证书工具](https://nsloon.app/certificate-tool/) · [Apple 证书信任说明](https://support.apple.com/zh-cn/102390)
 
-**解密范围**　这个插件只声明 `mp.weixin.qq.com`、`app.bilibili.com`、`api.bilibili.com` 三个完整主机名。开启后 Loon 可以在设备上解密发往这三个主机的 HTTPS 流量，包括同主机的其他请求；只有四个指定接口会触发正文过滤。域名范围与其他已启用插件及主配置叠加。停用此插件可撤回它添加的规则和主机。[Loon MitM 说明](https://nsloon.app/docs/MitM/) · [原生复写文档](https://nsloon.app/docs/Rewrite/rewrite_v2/)
+**解密范围**　这个插件只声明 `mp.weixin.qq.com`、`app.bilibili.com`、`api.bilibili.com` 三个完整主机名。开启后 Loon 可以在设备上解密发往这三个主机的 HTTPS 流量，包括同主机的其他请求；只有五个指定接口中符合条件的 JSON 响应会触发正文过滤。域名范围与其他已启用插件及主配置叠加。停用此插件可撤回它添加的规则和主机。[Loon MitM 说明](https://nsloon.app/docs/MitM/) · [原生复写文档](https://nsloon.app/docs/Rewrite/rewrite_v2/)
 
 **实际验证**　刷新 B 站首页，确认推荐翻页和普通视频播放正常；打开原先含平台广告的公众号文章，确认阅读和互动正常。Loon 请求记录中的主机和路径可用来判断当前客户端是否走了这些接口。广告投放会轮换，一次没有广告不足以说明规则命中。接口改为其他路径或二进制格式时，覆盖范围会变化。视频画面中已经录入的口播、作者直接写入正文的推广及服务端拼接的视频贴片仍可能出现。这一版没有 iPad 真机命中率或速度降幅数据。
 
