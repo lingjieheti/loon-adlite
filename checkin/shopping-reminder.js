@@ -36,7 +36,8 @@ function taobaoCouponEntry(raw) {
     if (!sellerId || !activityId) return null;
     const officialUrl = base + "?sellerId=" + sellerId + "&activityId=" + activityId;
     if (settings.taobaoOpen === "网页") {
-        return officialUrl + "#loon-coupon=" + sellerId + "." + activityId;
+        // The official page parses the whole URL. Keep our fragment out of the last activity ID.
+        return officialUrl + "&#loon-coupon=" + sellerId + "." + activityId;
     }
     return openTaobao(officialUrl);
 }
