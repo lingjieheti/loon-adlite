@@ -1,6 +1,14 @@
 # 常用 App 去广告的覆盖范围
 
-本页对应 2026-11-21 的「常用 App 去广告」。iPhone 与 iPad 使用同一订阅文件 `iPad-AdSuite.lpx`，共 39 条精确域名规则、28 条原生复写和 27 个精确 HTTPS 解密主机。轻量版与合并版共用这 39 条域名规则。需要处理开屏配置或信息流响应时，可按场景选用合并版或内嵌版。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
+本页对应 2026-11-21 的「常用 App 去广告」。iPhone 与 iPad 使用同一订阅文件 `iPad-AdSuite.lpx`。合并版和轻量版共用 43 条精确域名规则。合并版另有 28 条原生复写和 27 个精确 HTTPS 解密主机。需要处理开屏配置或信息流响应时，可按场景选用合并版或内嵌版。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
+
+## 网页广告
+
+- **普通网页**。Loon 会拒绝发往 `hbopenbid.pubmatic.com` 和 `grid-bidder.criteo.com` 的请求。Prebid.js 的 PubMatic 和 Criteo 适配器分别使用这两台主机参与网页广告竞价。这两条规则可在经过 Loon 的浏览器中生效，无需 HTTPS 解密或逐页执行脚本。广告位也可能向其他广告商发起竞价。[PubMatic 适配器](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/pubmaticBidAdapter.js#L25) · [Criteo 适配器](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/criteoBidAdapter.js#L27)
+- **Pornhub 网页**。Loon 另拦 `a.adtng.com` 和 `ads.trafficjunky.net` 这两台被维护者列为广告投放的主机。TrafficJunky 公布了 Pornhub 的广告位类型，实际投放会随地区和页面变化。站点主域和共享媒体 CDN 保留，页面内嵌广告、同源投放及拼入正片的片段仍可能出现。[域名清单](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/category-ads#L74-L81) · [TrafficJunky 广告位说明](https://www.trafficjunky.com/advertiser/ad-formats)
+- **Safari 页面清理**。可选助手通过站点专用 CSS 隐藏部分侧栏、移动播放页广告容器及明确标记的投放元素。它可以清掉部分广告占位，无法识别已经拼进视频的广告。该功能需用支持用户脚本的扩展单独安装。[网页助手](web/pornhub.user.js)
+
+离线测试核对四个主机的精确匹配，并检查主域、共享 CDN、相似主机和正常视频路径。当前缺少这些广告位在 iPad 上的实机命中记录，也未测量启用前后的吞吐量。[域名回归测试](tests/test_suite.py)
 
 ## 抖音主 App
 
