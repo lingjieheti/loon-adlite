@@ -22,7 +22,7 @@
 
 - **YouTube 網頁版**可隱藏部分首頁和搜尋廣告位，並在官方「略過廣告」按鈕可用時嘗試點選。這個工具僅適用於 Safari 網頁版。[安裝 YouTube 腳本](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
 - **Pornhub 網頁版**可隱藏部分側欄橫幅和行動版播放頁廣告位。與正片合併在同一條影音串流裡的廣告仍可能播放。[安裝網頁腳本](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
-- **每日簽到**會在 Safari 開啟京東或「什麼值得買」指定頁面時嘗試簽到，也可另外啟用 Loon 的京東提醒。[簽到設定（簡體中文）](checkin/README.md)
+- **簽到與領券**。可從同一頁前往京東領京豆、到「什麼值得買」每日簽到。在 Safari 開啟指定的京東一般優惠券頁面後，也可選擇讓助手嘗試領券。淘寶和抖音的簽到或領券活動，請在官方活動頁或 App 內確認。[簽到與領券指南（簡體中文）](checkin/README.md)
 
 ## 更新與回復舊版
 

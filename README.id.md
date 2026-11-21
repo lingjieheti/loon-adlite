@@ -20,7 +20,7 @@ Aktifkan ekstensi Userscripts di Safari, buka tautan skrip yang diinginkan, lalu
 
 - **YouTube di Safari**. Skrip menyembunyikan sebagian slot iklan di beranda dan hasil pencarian. Saat tombol Lewati Iklan di pemutar tersedia, skrip mencoba mengekliknya. Fitur ini khusus untuk situs web YouTube. Segmen sponsor yang menyatu dengan video tetap diputar. [Skrip YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
 - **Iklan web**. Lite dan Suite memblokir permintaan ke beberapa host lelang dan penayangan iklan. Skrip khusus Pornhub juga dapat menyembunyikan banner di bilah samping dan slot iklan seluler yang dapat dikenali. [Skrip Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
-- **Check-in harian JD dan 什么值得买 (SMZDM)**. Setelah Anda masuk ke akun lewat Safari dan membuka halaman khususnya, skrip mencoba menekan tombol check-in. Tersedia pula pengingat JD yang bisa diaktifkan terpisah di Loon. [Panduan check-in (bahasa Mandarin)](checkin/README.md)
+- **Check-in dan kupon**. Panduan ini memuat tautan check-in harian untuk mengumpulkan JD Beans dan check-in di SMZDM (什么值得买), serta tautan kupon JD, Taobao, dan Douyin. Untuk kupon reguler JD yang didukung, Anda dapat memilih kupon lalu meminta skrip mencoba mengklaimnya selagi halaman terbuka di Safari. Di Taobao dan Douyin, konfirmasikan check-in atau klaim kupon di halaman promo resmi atau di aplikasi. [Panduan check-in dan kupon (bahasa Mandarin)](checkin/README.md)
 
 ## Pembaruan dan cara kembali ke versi lama
 
