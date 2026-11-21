@@ -8,7 +8,7 @@
 
 처음이라면 **Lite**로 시작하세요. iPhone 또는 iPad의 Safari에서 설치 링크를 열고 Loon에서 가져오기를 확인하세요. 구독 주소를 복사해 Loon의 구성 → 플러그인 → ＋에 붙여 넣어도 됩니다.
 
-- **Lite**는 정확히 일치하는 광고 호스트 43곳으로 가는 요청을 차단합니다. 인증서 설치나 HTTPS 복호화가 필요 없습니다. [Lite 설치](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [구독 주소](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
+- **Lite**는 요청의 호스트 이름이 광고 목록의 항목과 정확히 일치할 때 차단합니다. 인증서 설치나 HTTPS 복호화가 필요 없습니다. [Lite 설치](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [구독 주소](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
 - **Inline**은 Lite와 함께 쓸 수 있습니다. 위챗 공식 계정 글의 광고, 빌리빌리 홈 피드의 광고 카드, 앱 실행 시 나오는 빌리빌리 광고 일부를 걸러냅니다. [Inline 설치](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-InlineAds.lpx) · [구독 주소](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-InlineAds.lpx)
 - **Suite**에는 Lite와 Inline의 모든 규칙에 더해 징둥, 타오바오, 메이퇀, 더우인(抖音) 전용 규칙이 들어 있습니다. Suite를 사용하면 중복 적용을 피하도록 나머지 두 버전은 꺼 주세요. 더우인 추천 피드의 광고 표시는 샘플로 테스트했으며, 현행 앱에서의 차단 효과는 실기기 검증이 필요합니다. [Suite 설치](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [구독 주소](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
 

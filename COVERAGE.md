@@ -1,14 +1,17 @@
 # 常用 App 去广告的覆盖范围
 
-本页对应 2026-11-21 的「常用 App 去广告」。iPhone 与 iPad 使用同一订阅文件 `iPad-AdSuite.lpx`。合并版和轻量版共用 43 条精确域名规则。合并版另有 28 条原生复写和 27 个精确 HTTPS 解密主机。需要处理开屏配置或信息流响应时，可按场景选用合并版或内嵌版。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
+本页对应 2026-11-21 的「常用 App 去广告」。iPhone 与 iPad 使用同一订阅文件 `iPad-AdSuite.lpx`。合并版和轻量版共用 45 条精确域名规则。合并版另有 28 条原生复写和 27 个精确 HTTPS 解密主机。需要处理开屏配置或信息流响应时，可按场景选用合并版或内嵌版。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
 
 ## 网页广告
 
-- **普通网页**。Loon 会拒绝发往 `hbopenbid.pubmatic.com` 和 `grid-bidder.criteo.com` 的请求。Prebid.js 的 PubMatic 和 Criteo 适配器分别使用这两台主机参与网页广告竞价。这两条规则可在经过 Loon 的浏览器中生效，无需 HTTPS 解密或逐页执行脚本。广告位也可能向其他广告商发起竞价。[PubMatic 适配器](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/pubmaticBidAdapter.js#L25) · [Criteo 适配器](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/criteoBidAdapter.js#L27)
-- **Pornhub 网页**。Loon 另拦 `a.adtng.com` 和 `ads.trafficjunky.net` 这两台被维护者列为广告投放的主机。TrafficJunky 公布了 Pornhub 的广告位类型，实际投放会随地区和页面变化。站点主域和共享媒体 CDN 保留，页面内嵌广告、同源投放及拼入正片的片段仍可能出现。[域名清单](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/category-ads#L74-L81) · [TrafficJunky 广告位说明](https://www.trafficjunky.com/advertiser/ad-formats)
+- **网页竞价广告**。Loon 拦截 PubMatic、Criteo 和 TripleLift 的指定竞价主机。新增的 `tlx.3lift.com` 用于 Prebid 的浏览器竞价，AdAway 也收录了这个完整主机名。同一广告位可能向其他广告商询价。[PubMatic](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/pubmaticBidAdapter.js#L25) · [Criteo](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/criteoBidAdapter.js#L27) · [TripleLift](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/tripleliftBidAdapter.js#L10) · [AdAway](https://github.com/AdAway/adaway.github.io/blob/f39ba0a523564447dfa94e40327c1a14c02304dc/hosts.txt#L81)
+- **百度联盟展示广告**。AMP 的百度广告组件从 `dup.baidustatic.com` 加载广告脚本，EasyList China 也将其列为广告主机，因此两版均精确拦截该主机。另一个广告主机 `cpro.baidustatic.com` 有四个网站的指定脚本放行例外，因此留给能识别来源网页和路径的浏览器过滤器处理。[AMP 百度广告组件](https://github.com/ampproject/amphtml/blob/29d4f68e5a1017ed5d63e3086b219b4b25a41332/ads/vendors/baidu.js#L16-L35) · [EasyList China 主机规则](https://github.com/easylist/easylistchina/blob/7efab892b13dc99ed81f1995887a9c0f79510362/easylistchina.txt#L7928) · [网站例外](https://github.com/easylist/easylistchina/blob/7efab892b13dc99ed81f1995887a9c0f79510362/easylistchina.txt#L15828-L15829)
+- **Pornhub 网页**。Loon 另拦 `a.adtng.com` 和 `ads.trafficjunky.net`。页面内嵌广告、同源投放及拼入正片的片段仍可能出现。这两条全局规则也会影响其他网站。EasyList 允许 `hanime.tv` 的部分嵌入框架访问 `adtng.com/get/`；若框架实际使用 `a.adtng.com`，Loon 的域名拦截仍会生效。尚未验证该站的实际播放影响。[域名清单](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/category-ads#L74-L81) · [TrafficJunky 广告位](https://www.trafficjunky.com/advertiser/ad-formats) · [EasyList 框架例外](https://github.com/easylist/easylist/blob/68a1b6472a6954f713eb62f3919ca7b8301f5ab4/easylist/easylist_allowlist.txt#L489)
 - **Safari 页面清理**。可选助手通过站点专用 CSS 隐藏部分侧栏、移动播放页广告容器及明确标记的投放元素。它可以清掉部分广告占位，无法识别已经拼进视频的广告。该功能需用支持用户脚本的扩展单独安装。[网页助手](web/pornhub.user.js)
 
-离线测试核对四个主机的精确匹配，并检查主域、共享 CDN、相似主机和正常视频路径。当前缺少这些广告位在 iPad 上的实机命中记录，也未测量启用前后的吞吐量。[域名回归测试](tests/test_suite.py)
+离线测试核对上述广告主机的精确匹配，并检查主域、共享 CDN、相似主机和正常视频路径。当前缺少这些广告位在 iPad 上的实机命中记录，也未测量启用前后的吞吐量。[域名回归测试](tests/test_suite.py)
+
+**开源规则如何搭配**。2026-11-21 比对的 HaGeZi Multi LIGHT 快照含 91,706 个不同域名。项目更新前的 43 个广告主机中，21 个与该清单完全相同，另有 11 个落在它列出的父域之下。这个数字反映清单重叠程度。Loon 订阅只保留选定的完整主机；需要处理普通网页里的横幅和空位时，可以在 Safari 里选用 AdGuard 的基础和中文过滤器，让浏览器应用页面规则和网站例外。[对比用的插件版本](https://github.com/lingjieheti/loon-adlite/blob/ae273c03c32c98f7dafe938aed4e05fdcfd9045a/iPad-AdLite.lpx) · [HaGeZi 固定快照](https://github.com/hagezi/dns-blocklists/blob/6033fe872ee360ff34da5a9e826558030938fc7e/wildcard/light-onlydomains.txt) · [Safari 可选设置](web/README.md#普通网页仍有横幅或广告空位)
 
 ## 抖音主 App
 

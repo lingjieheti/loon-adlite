@@ -17,7 +17,7 @@ Safari で YouTube を見る場合は、ホームや検索結果の一部の広�
 iPhone または iPad の Safari でインストールリンクを開き、Loon で読み込みを確定します。購読 URL をコピーして、Loon のプラグイン一覧の「＋」から追加することもできます。
 
 - **統合版**は、軽量版とインライン広告版の全ルールに、京東・淘宝・美団などのアプリ向けルールを加えたものです。統合版を使う場合は、ほかの 2 つを無効にしてください。[統合版をインストール](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [購読 URL](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
-- **軽量版**は、通信処理の負荷を抑えたい方向けです。統合版と共通の広告ホスト名 43 件に完全一致する通信をブロックします。HTTPS の復号や証明書のインストールは不要です。[軽量版をインストール](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [購読 URL](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
+- **軽量版**は、通信処理の負荷を抑えたい方向けです。接続先のホスト名が広告リストの項目と完全に一致した場合にブロックします。このリストは統合版と共通です。HTTPS の復号や証明書のインストールは不要です。[軽量版をインストール](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [購読 URL](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
 
 ## インライン広告版
 
