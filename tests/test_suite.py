@@ -35,6 +35,7 @@ REQUEST_CASES = {
     "https://acs.m.goofish.com/gw/mtop.taobao.idlecommerce.splash.ads/1.0/": "reject_dict(200)",
     "https://acs.m.goofish.com/gw/mtop.taobao.idlecommerce.splash.async.ads/1.0/": "reject_dict(200)",
     "https://mapi.dianping.com/mapi/operating/loadsplashconfig": "reject(404)",
+    "https://www.dianping.com/ajax/brandad?cityId=1": "reject_dict(200)",
     "https://m5.amap.com/ws/shield/dsp/app/startup/init": "reject_dict(200)",
     "https://amap-aos-info-nogw.amap.com/ws/aos/alimama/splash_screen_rt": "reject(404)",
 }
@@ -55,6 +56,10 @@ RESPONSE_URLS = (
     "https://wmapi.meituan.com/api/v7/loadInfo",
     "https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement",
     XHS, XHS.replace("edith", "rec"), ZHIHU,
+    "https://api.pinduoduo.com/api/alexa/homepage/hub",
+    "https://cards.iqiyi.com/views_home/3.0/qy_home",
+    "https://cards.iqiyi.com/views_search/3.0/search",
+    "https://t7z.cupid.iqiyi.com/mixer",
     "https://mp.weixin.qq.com/mp/getappmsgad", "https://mp.weixin.qq.com/mp/getappmsgext",
     "https://app.bilibili.com/x/v2/feed/index",
     "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd",

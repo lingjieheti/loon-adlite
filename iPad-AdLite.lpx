@@ -1,7 +1,7 @@
 #!name = iPad 轻量去广告
 #!desc = 仅按完整主机名拦截部分网页与 App 广告。激励广告可能无法领取，可随时停用。
 #!author = lingjieheti
-#!date = 2026-11-21
+#!date = 2026-11-22
 
 [Rule]
 # Google AdMob / Ad Manager
@@ -53,6 +53,9 @@ DOMAIN,dsp-x.jd.com,REJECT
 
 # 美团
 DOMAIN,mads.meituan.com,REJECT
+
+# 大众点评 · 独立广告接口
+DOMAIN,ad.api.dianping.com,REJECT
 
 # 网易云音乐
 DOMAIN,iadmusicmat.music.126.net,REJECT

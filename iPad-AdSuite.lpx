@@ -2,7 +2,7 @@
 #!desc = iPhone 和 iPad 共用。域名拦截无需证书。为指定主机开启 HTTPS 解密后，还可过滤部分开屏和信息流广告。使用 Loon 原生规则。
 #!author = lingjieheti
 #!loon_version = 3.5.1(978)
-#!date = 2026-11-21
+#!date = 2026-11-22
 
 [Rule]
 # Google AdMob / Ad Manager
@@ -54,6 +54,9 @@ DOMAIN,dsp-x.jd.com,REJECT
 
 # 美团
 DOMAIN,mads.meituan.com,REJECT
+
+# 大众点评 · 独立广告接口
+DOMAIN,ad.api.dianping.com,REJECT
 
 # 网易云音乐
 DOMAIN,iadmusicmat.music.126.net,REJECT
@@ -162,17 +165,32 @@ response if ${url} ~= /^https:\/\/rms\.meituan\.com\/api\/v1\/rmsmina\/c\/queryW
 # 拼多多 · 开屏广告配置
 request if ${url} ~= /^https:\/\/api\.(?:pinduoduo|yangkeduo)\.com\/api\/cappuccino\/splash\/?(?:\?|$)/ then reject(404)
 
+# 拼多多 · 首页推荐模块中的明确广告标记
+response if ${url} ~= /^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub(?:\/refresh)?\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and ((has("success") | not) or .success == true) and ((has("code") | not) or .code == 0 or .code == 200) and (.error_code == null or .error_code == 0) and (.error_msg == null or .error_msg == "") and .error == null and (.result | type) == "object" and (.result.module_order | type) == "array" then .result.module_order |= map(select(if type == "object" then .module_name != "ad_module" else true end)) else . end`)
+
 # 闲鱼 · 两个开屏广告接口
 request if ${url} ~= /^https:\/\/acs\.m\.goofish\.com\/gw\/mtop\.taobao\.idlecommerce\.splash\.(?:async\.)?ads(?:\/[0-9]+\.[0-9]+)?\/?(?:\?|$)/ then reject_dict(200)
 
 # 大众点评 · 开屏配置
 request if ${url} ~= /^https:\/\/mapi\.dianping\.com\/mapi\/operating\/loadsplashconfig\/?(?:\?|$)/ then reject(404)
 
+# 大众点评 · 网页城市首页顶部品牌广告
+request if ${url} ~= /^https:\/\/www\.dianping\.com\/ajax\/brandad(?:\?|$)/ then reject_dict(200)
+
 # 高德地图 · 启动广告配置
 request if ${url} ~= /^https:\/\/m5\.amap\.com\/ws\/shield\/dsp\/app\/startup\/init\/?(?:\?|$)/ then reject_dict(200)
 
 # 高德地图 · 阿里妈妈开屏广告
 request if ${url} ~= /^https:\/\/amap-aos-info-nogw\.amap\.com\/ws\/aos\/alimama\/splash_screen_rt\/?(?:\?|$)/ then reject(404)
+
+# 爱奇艺 · 首页明确标记的两类广告卡
+response if ${url} ~= /^https:\/\/cards\.iqiyi\.com\/views_home\/3\.0\/qy_home(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and .stackTrace == null and ((has("code") | not) or .code == 0 or .code == "0") and ((has("success") | not) or .success == true) and (.cards | type) == "array" then .cards |= map(select(if type == "object" then .alias_name != "ad_mobile_flow" and .alias_name != "ad_trueview" else true end)) else . end`)
+
+# 爱奇艺 · 搜索列表中的明确广告卡
+response if ${url} ~= /^https:\/\/cards\.iqiyi\.com\/views_search\/3\.0\/(?:hot_query_)?search(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def ad: .strategy_com_id as $id | ["ad_mobile_flow", "hot_query_search_top_ad", "search_mid_text_ad", "search_small_card_ad"] | index($id) != null; if type == "object" and .error == null and .stackTrace == null and ((has("code") | not) or .code == 0 or .code == "0") and ((has("success") | not) or .success == true) and (.cards | type) == "array" then .cards |= map(select(if type == "object" and (.strategy_com_id | type) == "string" then ad | not else true end)) else . end`)
+
+# 爱奇艺 · 焦点图和内容卡中已核对的两种视频广告位
+response if ${url} ~= /^https:\/\/t7z\.cupid\.iqiyi\.com\/mixer(?:\?(?:(?!(?i:cb|callback|jsonp|jsoncallback)(?:[=&]|$))[A-Za-z0-9_-]+(?:=[^&#;]*)?(?:&|$))*)?$/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def roll_slot: type == "object" and .type == 0 and .duration == 0 and .startTime == 0 and (.adZoneId == "1000000000406" or .adZoneId == "1000000000822") and (.ads | type) == "array" and (.ads | length) > 0 and all(.ads[]; type == "object" and .templateType == "roll" and .creativeType == "roll" and .orderItemType == 11 and .timePosition == "1"); if type == "object" and .errorCode == 0 and .error == null and .serverError == "" and .midrollPoints == {} and (.adSlots | type) == "array" then .adSlots |= map(select(roll_slot | not)) else . end`)
 
 # 小红书 · 首页带非空广告信息的推广条目
 response if ${url} ~= /^https:\/\/(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v[0-9]+\/homefeed\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and ((.code == 0 and ((has("success") | not) or .success == true)) or ((has("code") | not) and .success == true)) and (.data | type) == "array" then .data |= map(select(if type == "object" and (.ads_info | type) == "object" then (.ads_info | length) == 0 else true end)) else . end`)
@@ -181,4 +199,4 @@ response if ${url} ~= /^https:\/\/(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v[0
 response if ${url} ~= /^https:\/\/api\.zhihu\.com\/topstory\/recommend\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and ((has("code") | not) or .code == 0) and ((has("success") | not) or .success == true) and (.data | type) == "array" then .data |= map(select(if type == "object" then .type != "feed_advert" else true end)) else . end`)
 
 [MitM]
-hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com, api.m.jd.com, bdsp-x.jd.com, guide-acs.m.taobao.com, api3-core-c.amemv.com, api3-normal-c.amemv.com, api.amemv.com, aweme.snssdk.com, api.weibo.cn, api.coolapk.com, mop.meituan.com, wmapi.meituan.com, p0.meituan.net, p1.meituan.net, img.meituan.net, rms.meituan.com, api.pinduoduo.com, api.yangkeduo.com, acs.m.goofish.com, mapi.dianping.com, m5.amap.com, amap-aos-info-nogw.amap.com, edith.xiaohongshu.com, rec.xiaohongshu.com, api.zhihu.com
+hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com, api.m.jd.com, bdsp-x.jd.com, guide-acs.m.taobao.com, api3-core-c.amemv.com, api3-normal-c.amemv.com, api.amemv.com, aweme.snssdk.com, api.weibo.cn, api.coolapk.com, mop.meituan.com, wmapi.meituan.com, p0.meituan.net, p1.meituan.net, img.meituan.net, rms.meituan.com, api.pinduoduo.com, api.yangkeduo.com, acs.m.goofish.com, mapi.dianping.com, www.dianping.com, m5.amap.com, amap-aos-info-nogw.amap.com, edith.xiaohongshu.com, rec.xiaohongshu.com, api.zhihu.com, cards.iqiyi.com, t7z.cupid.iqiyi.com
