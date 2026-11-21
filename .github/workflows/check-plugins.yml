@@ -53,6 +53,15 @@ jobs:
             echo "PUSH_BASE=$PREVIOUS" >> "$GITHUB_ENV"
           fi
 
+      - name: Audit the release and record its security scope
+        env:
+          RELEASE_BASE: ${{ inputs.release_base || github.event.pull_request.base.sha || env.PUSH_BASE }}
+          MANAGED_CANDIDATE: ${{ inputs.candidate }}
+        run: |
+          args=(--base "$RELEASE_BASE" --head HEAD)
+          if [[ -n "$MANAGED_CANDIDATE" ]]; then args+=(--managed); fi
+          python3 -B .github/scripts/audit_release.py "${args[@]}"
+
       - name: Test published plugins
         env:
           JQ: ${{ runner.temp }}/jq
