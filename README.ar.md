@@ -1,35 +1,35 @@
-# قواعد حجب الإعلانات التي أستخدمها مع Loon على iPhone وiPad
+# إضافة Loon الشاملة لحجب الإعلانات على iPhone وiPad
 
 [简体中文](README.md) · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · **العربية**
 
 <div dir="rtl" lang="ar">
 
-أستخدم هذه القواعد على أجهزتي، وأشاركها مع من يعتمدون على التطبيقات الصينية في حياتهم اليومية، بمن فيهم الطلاب الدوليون والمقيمون في الصين. تحجب القواعد بعض الإعلانات التي تظهر عند فتح التطبيقات أو أثناء تصفّحها، مثل تطبيقات التسوّق JD وTaobao وتطبيق توصيل الطعام Meituan. تعالج إضافات Loon الثلاث الاتصال على جهازك، ولا تجمع بيانات الاستخدام أو تشغّل سكربتات عن بُعد.
+أستخدم هذه الإضافة على أجهزتي وأشاركها مع من يستخدمون التطبيقات الصينية بانتظام، بمن فيهم الطلاب الدوليون المقيمون في الصين. تستهدف بعض الإعلانات التي تظهر عند فتح JD وTaobao وMeituan، وتحجب طلبات مواقع الويب المتجهة إلى خوادم إعلانية معروفة.
 
-## اختيار النسخة وتثبيتها
+## التثبيت
 
-افتح رابط التثبيت في Safari ثم أكّد استيراد الإضافة في Loon. ويمكنك أيضاً نسخ رابط الاشتراك، وفتح قسم الإضافات (Plugins) ضمن إعدادات Loon (Configuration)، ثم الضغط على زر الإضافة (+) ولصق الرابط.
+**[تثبيت الإضافة الشاملة](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx)** · [رابط الاشتراك](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
 
-- **النسخة الخفيفة (Lite)** مناسبة للبدء. تحجب الطلب عندما يطابق اسم المضيف تماماً أحد الأسماء الواردة في قائمة خوادم الإعلانات، من دون تثبيت شهادة أو فك تشفير HTTPS. [تثبيت Lite](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [رابط الاشتراك](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
-- **نسخة الإعلانات المضمّنة (Inline)** يمكن إضافتها إلى Lite لحجب بعض الإعلانات داخل مقالات حسابات WeChat الرسمية، وفي الصفحة الرئيسية لتطبيق Bilibili وعند فتحه. [تثبيت Inline](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-InlineAds.lpx) · [رابط الاشتراك](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-InlineAds.lpx)
-- **النسخة الشاملة (Suite)** تجمع قواعد النسختين وتضيف قواعد لتطبيقات منها JD وTaobao وMeituan وDouyin. عند اختيارها عطّل النسختين الأخريين لتجنّب تكرار القواعد. تستهدف قواعد Douyin المنشورات الموسومة بأنها إعلانات في صفحة التوصيات. اختُبرت هذه القواعد على عيّنات، وما زال أداؤها في الإصدار الحالي من التطبيق بحاجة إلى اختبار على جهاز فعلي. [تثبيت Suite](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [رابط الاشتراك](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
+افتح رابط التثبيت في Safari وأكّد الاستيراد في Loon. يمكنك أيضاً لصق رابط الاشتراك في Configuration → Plugins → ＋. يعمل الحجب بحسب اسم المضيف من دون شهادة. تُعالَج الطلبات على جهازك، ولا تحمّل الإضافة سكربتات عن بُعد ولا تجمع بيانات الاستخدام.
 
-تتطلّب قواعد إعادة الكتابة في Inline وSuite إصدار Loon 3.5.1 (البناء 978) أو أحدث. فعّل إعادة الكتابة وفك تشفير HTTPS للمضيفين المحدّدين وامنح الثقة لشهادة Loon الخاصة بك على الجهاز. يمكن أن يشمل فك التشفير طلبات أخرى إلى المضيف نفسه. يختلف الوقت الإضافي الذي يستغرقه إنشاء اتصال TLS ومعالجة الاستجابة باختلاف الجهاز والشبكة والتطبيق. [دليل Loon لفك التشفير](https://nsloon.app/docs/MitM/)
+إذا كنت مشتركاً في نسخة Suite، يكفي تحديث اشتراكك الحالي. وإذا كنت تستخدم إضافة أخرى من هذا المشروع لحجب الإعلانات، فعطّل الإدخال القديم بعد تفعيل الإضافة الشاملة حتى لا تتكرر القواعد.
+
+## الإعلانات المضمّنة في التطبيقات
+
+لتصفية بعض الإعلانات داخل مقالات حسابات WeChat الرسمية أو في الصفحة الرئيسية لتطبيق Bilibili، استخدم Loon 3.5.1 (البناء 978) أو أحدث. فعّل إعادة الكتابة وفك تشفير HTTPS للمضيفين المذكورين، وامنح الثقة على جهازك لشهادة Loon التي أنشأتها بنفسك. قد تُفكّ أيضاً شيفرة طلبات أخرى للمضيف نفسه، ويستغرق الاتصال ومعالجة الردود وقتاً إضافياً. [دليل Loon لفك التشفير](https://nsloon.app/docs/MitM/)
+
+اختُبرت قواعد موجز التوصيات في Douyin على عيّنات من الردود. ما زال أثرها في الإصدار الحالي من التطبيق بحاجة إلى اختبار فعلي على جهاز. وتبقى مقاطع الرعاية المدمجة في الفيديو ضمن التسجيل.
 
 ## أدوات اختيارية في Safari
 
-تمنع Lite وSuite بعض طلبات إعلانات الويب، ومنها طلبات مزادات الإعلانات على PubMatic وCriteo. لاستخدام إحدى الأدوات التالية، فعّل إضافة Userscripts في Safari، وافتح رابط السكربت، ثم ثبّته من قائمة الإضافة واسمح بتشغيله على الموقع المطلوب. [تنزيل Userscripts](https://apps.apple.com/app/id1463298887)
+تحاول أداة موقع YouTube الضغط على زر تخطّي الإعلان الرسمي عند ظهوره. ويمكن لأداة منفصلة إخفاء بعض المساحات الإعلانية على موقع Pornhub. [تثبيت أداة YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [تثبيت أداة الموقع](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js) · [تنزيل Userscripts](https://apps.apple.com/app/id1463298887)
 
-- **يوتيوب**. تخفي الأداة بعض الإعلانات في الصفحة الرئيسية ونتائج البحث على الموقع، وتحاول الضغط على زر «تخطّي الإعلان» حين يصبح متاحاً. يقتصر عملها على Safari ولا يشمل تطبيق YouTube. وتبقى مقاطع الرعاية المسجّلة ضمن الفيديو. [تثبيت أداة YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
-- **موقع Pornhub**. تخفي الأداة بعض اللافتات الجانبية والمواضع الإعلانية المعروفة في صفحة المشغّل على الهاتف. قد تظل الإعلانات المدمجة في بثّ الفيديو ظاهرة. [تثبيت أداة الموقع](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
-- **المكافآت اليومية وقسائم الخصم**. يجمع الدليل روابط تسجيل الحضور اليومي لكسب نقاط JD Beans وعلى منصة SMZDM ‏(什么值得买)، وروابط القسائم في JD وTaobao وDouyin. يمكنك اختيار قسيمة عادية من JD أو قسيمة متجر من Taobao وفتحها في Safari لتجرب الأداة المخصّصة استلامها. لتسجيل الحضور في Taobao أو الاستفادة من عروض Douyin، استخدم صفحة العرض الرسمية أو التطبيق. [تثبيت الأداة](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/checkin/daily.user.js) · [دليل المكافآت والقسائم (بالصينية)](checkin/README.md)
+يشرح الدليل تسجيل الحضور اليومي في JD وSMZDM والحصول على قسائم تختارها في JD أو متاجر Taobao. ولعروض Douyin استخدم الصفحة الرسمية للفعالية. [دليل المكافآت والقسائم (بالصينية)](checkin/README.md) · [تثبيت الأداة](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/checkin/daily.user.js)
 
-## التحديث والعودة إلى إصدار سابق
+## التحديثات
 
-يتتبّع كل رابط اشتراك نسخته على فرع `main`. تمرّ القواعد بفحوص آلية على GitHub قبل نشرها. يمكنك ضبط Loon ليتحقّق من تحديثات الموارد الخارجية يومياً. يحدّد التطبيق وقت التحديث الفعلي، أمّا الملفات المنسوخة عبر USB فتحتاج إلى استبدال يدوي.
+يتابع الاشتراك فرع `main`. يمكنك ضبط Loon ليتحقق يومياً من تحديثات الموارد الخارجية. وللعودة إلى إصدار سابق، استبدل `main` في رابط الاشتراك بالمعرّف الكامل للتغيير المطلوب. [سجلّ التغييرات](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-للعودة إلى نسخة سابقة، استبدل `main` في رابط الاشتراك بالمعرّف الكامل للتغيير المطلوب على GitHub، ثم استورد الرابط وعطّل الاشتراك السابق. [سجلّ التغييرات](https://github.com/lingjieheti/loon-adlite/commits/main/)
-
-[التطبيقات المشمولة والقيود (بالصينية)](COVERAGE.md) · [مصادر كل ميزة (بالصينية)](SOURCES.md) · [دعم المشروع (بالإنجليزية)](SPONSOR.en.md)
+[التطبيقات المشمولة والقيود (بالصينية)](COVERAGE.md) · [مصادر كل ميزة (بالصينية)](SOURCES.md) · [اختبارات الانحدار دون اتصال](tests/) · [دعم المشروع (بالإنجليزية)](SPONSOR.en.md)
 
 </div>
