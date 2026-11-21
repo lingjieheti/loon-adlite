@@ -7,8 +7,8 @@
 这两条规则针对中国版抖音主 App 的推荐流和候选开屏路径。2026-11-21 查到的中国区 App Store 版本为 **41.2.0**。上游分析的是 iOS **30.3.0** 的安装包，测试使用合成响应；更早的字段实现只标注支持到 16.2.0。目前缺少 41.2.0 的 iPhone 或 iPad 广告响应和实机命中记录，实际使用的主机、路径和编码可能已经变化。抖音极速版及国际版 TikTok 另用各自客户端。[中国区 App Store](https://apps.apple.com/cn/app/id1142110895) · [30.3.0 静态证据](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L25-L53) · [旧版适配说明](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Module/douyin.sgmodule#L1-L15)
 
 - **主机范围**仅为 `api3-core-c.amemv.com`、`api3-normal-c.amemv.com`、`api.amemv.com`、`aweme.snssdk.com`。这些是共享 API 主机。开启解密后，发往这些主机的其他 HTTPS 请求也可能在本机经过 TLS 解密；插件只在指定路径执行复写。
-- **推荐信息流**仅匹配 `/aweme/v1/feed` 和 `/aweme/v2/feed`。HTTP 200 的 JSON 还须包含数值 `status_code=0` 和顶层 `aweme_list` 数组。混合列表中，只去掉直接条目里 `is_ads` 为布尔 `true` 或数值 `1` 的对象，纯广告页保留，以降低连续翻页遇到空列表的风险。普通视频、直播、带货和本地生活卡片本身均不作为广告依据，其他条目顺序、分页游标和预取字段保留。[历史广告标记](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Script/douyin.js#L27-L43)
-- **定向请求与编码**。查询中带 `aweme_id` 或 `aweme_ids` 的定向内容、分享及其他视频路径跳过处理；Protobuf、其他二进制响应和未知 JSON 结构也跳过。这样的请求仍可能携带广告。[上游数据格式边界](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L47-L65)
+- **推荐信息流**仅匹配 `/aweme/v1/feed` 和 `/aweme/v2/feed`。HTTP 200 的 JSON 须包含数值 `status_code=0` 和顶层 `aweme_list` 数组。仅当同页还含可识别的非广告作品或直播时，才过滤广告。作品取 `aweme_id`，直播取 `room_id`、`live_room.id` 或 `live_room.id_str`，这些标识须为正整数字样。过滤时只移除直接条目中 `is_ads` 为布尔 `true` 或数值 `1` 的对象。纯广告页、广告以外只有占位项的页面，以及找不到可识别作品或直播的页面均原样保留，避免翻页后只剩空白。带货和本地生活标记本身不会触发删除。其余条目的顺序、分页游标和预取字段保留。没有上述广告标记时直接返回，无需重新构造数组。[历史广告标记](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Script/douyin.js#L27-L43)
+- **定向请求与编码**。查询参数名为 `aweme_id` 或 `aweme_ids` 的定向请求跳过处理。参数名含百分号编码时也跳过，避免改动指定作品。只有参数值含编码时，普通推荐仍按上述条件过滤。分享及其他视频路径、带明确失败标记的响应、Protobuf 等二进制响应和结构未知的 JSON 均保留。[上游数据格式边界](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L47-L65)
 - **候选开屏接口**共有五个完整路径，分别为`/api/ad/v1/splash/stock`、`/api/ad/v16/splash/preload`、`/api/ad/splash/stock/realtime/v14`、`/api/ad/splash/stock/realtime/v15`、`/api/ad/splash/aweme/v15`。路径出自旧安装包；与前述四个主机的组合是基于静态配置的预防性匹配，缺少各组合的运行时捕获。拒绝请求后仍可能有本地倒计时、缓存画面或重试等待。[候选路径与证据](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Rewrite/DouyinAdClean.snippet#L9-L17)
 
 ## 美团
@@ -52,3 +52,8 @@
 ## 已完成的验证
 
 回归测试使用离线样例核对插件中的实际 URL 正则及 jq 过滤器。购物样例包含错误响应、未知结构、相似操作名、正常商品和优惠券。测试还核对原有规则、正常业务路径及主机名单。真实广告命中率、实际吞吐量和 HTTPS 解密耗时需要在启用后的 iPhone 或 iPad 上验证。在仓库根目录运行 `python -m unittest discover -s tests` 可运行整套离线回归测试。[抖音专项](tests/test_mobile.py) · [微博与酷安](tests/test_social.py) · [美团专项](tests/test_meituan.py) · [购物与常见 App 测试](tests/test_suite.py) · [原内嵌规则测试](tests/test_inline.py)
+
+## 在 iPad 上核对单条规则
+
+- **域名拦截**无需 HTTPS 解密。用 Safari 打开下方的 Google 广告脚本，再到 Loon「仪表 → 请求记录」搜索 `pagead2.googlesyndication.com`。打开刚才的记录，核对策略为 `REJECT`、规则来源为正在验证的插件。Safari 的加载错误本身无法说明由谁拦截。[打开 Google 广告脚本](https://pagead2.googlesyndication.com/tag/js/gpt.js?loon_check=1) · [Google 官方脚本地址说明](https://developers.google.com/publisher-tag/guides/general-best-practices) · [Loon 请求详情的来源字段](https://t.me/LoonNews/706)
+- **美团响应复写**适用于已启用合并版并已为该主机配置 HTTPS 解密的设备。用 Safari 打开下方的公开接口，在 Loon 请求记录中搜索 `queryWechatAdvertisement`，点开同一时间的请求，查看命中的响应复写及其来源「常用 App 去广告」。服务端也可能直接返回空的 `adSiteList`。如要核对条目变化，可仅切换本插件，在同一网络刷新接口，比对停用时出现的 `adunit-…` 广告位和启用后的结果，再恢复原状态。两次都为空则无法通过响应内容判定。[打开美团餐饮微信广告位接口](https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement)

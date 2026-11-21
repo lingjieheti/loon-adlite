@@ -101,7 +101,7 @@ class Douyin(unittest.TestCase):
             "is_ads": True,
         }
         for path in FEEDS:
-            for flags in ({"status_code": 0}, {"status_code": 0, "error_code": 0}):
+            for flags in ({"status_code": 0}, {"status_code": 0, "error_code": 0, "success": True}):
                 source = {**flags, **metadata, "aweme_list": [ads[0], *keep[:3], ads[1], *keep[3:]]}
                 expected = {**source, "aweme_list": keep}
                 with self.subTest(path=path, flags=flags):
@@ -116,6 +116,36 @@ class Douyin(unittest.TestCase):
                 with self.subTest(host=host, has_more=has_more):
                     self.check_body(url, source, source)
 
+    def test_placeholder_pages_preserved_and_only_recognized_content_permits_removal(self):
+        url = f"https://{HOSTS[0]}{FEEDS[0]}"
+        ad = {"is_ads": True, "aweme_id": "123456789"}
+        placeholders = [
+            None, False, [], {}, {"cursor": "next"}, {"k": 2}, {"id": "123"},
+            {"video": {}}, {"live_room": {}}, {"live_room": {"id": {}}},
+            {"room_id": []}, {"room_id": 0}, {"room_id": "0"}, {"room_id": "00"},
+            {"aweme_id": None}, {"aweme_id": True}, {"aweme_id": -3}, {"aweme_id": 1.5},
+            {"aweme_id": ""}, {"aweme_id": " "}, {"aweme_id": "normal"}, {"aweme_id": "934\n"},
+        ]
+        for items in ([ad, None], [ad, {"cursor": "next"}, {"k": 2}], [ad, *placeholders]):
+            source = {"status_code": 0, "aweme_list": items, "has_more": 1, "max_cursor": shared.BIG_ID}
+            with self.subTest(items=items):
+                self.check_body(url, source, source)
+        for content in ({"aweme_id": shared.BIG_ID}, {"aweme_id": "123456789"},
+                        {"room_id": "123456789"}, {"live_room": {"id": shared.BIG_ID}},
+                        {"live_room": {"id_str": "987654321"}}):
+            source = {"status_code": 0, "aweme_list": [ad, *placeholders, content], "max_cursor": shared.BIG_ID}
+            with self.subTest(content=content):
+                self.check_body(url, source, {**source, "aweme_list": [*placeholders, content]})
+
+    def test_large_ordinary_and_mixed_pages_preserve_order_and_content(self):
+        url = f"https://{HOSTS[0]}{FEEDS[0]}?count=100"
+        items = [{"aweme_id": str(shared.BIG_ID + i), "video": {"play_addr": {"url_list": [str(i)]}},
+                  "author": {"id": shared.BIG_ID - i, "is_ads": True}} for i in range(100)]
+        page = {"status_code": 0, "aweme_list": items, "has_more": 1, "max_cursor": shared.BIG_ID}
+        self.check_body(url, page, page)
+        ad = {"is_ads": 1, "aweme_id": "819923456789"}
+        self.check_body(url, {**page, "aweme_list": [*items[:48], ad, *items[48:]]}, page)
+
     def test_targeted_shares_are_preserved_and_general_queries_are_filtered(self):
         organic = {"aweme_id": str(shared.BIG_ID), "is_ads": 0}
         source = {"status_code": 0, "aweme_list": [{"is_ads": True}, organic],
@@ -123,23 +153,30 @@ class Douyin(unittest.TestCase):
         for path in FEEDS:
             base = f"https://{HOSTS[0]}{path}/"
             for query in ("aweme_id=123", "aweme_ids=123%2C456&count=1",
-                          "count=2&aweme_id=123", "offset=8&aweme_ids=123&from=share"):
+                          "count=2&aweme_id=123", "offset=8&aweme_ids=123&from=share",
+                          "aweme%5Fid=7", "count=2&%61weme_id=7", "from=share&aweme_id%73=7",
+                          "aweme_id", "count=2&aweme_ids&from=share", "count=2&aweme_id=",
+                          "count=1&cur%73or=7", "aweme_ids#fragment"):
                 with self.subTest(path=path, query=query):
+                    self.assertEqual(self.matches(base + "?" + query), [])
                     self.check_body(base + "?" + query, source, source)
             for query in ("count=10&cursor=456", "previous_aweme_id=123", "aweme_id_hint=123",
-                          "source=aweme_ids", "cursor=456&count=2"):
+                          "source=aweme_ids", "cursor=456&count=2", "cursor=%31%32",
+                          "from=aweme%5Fid%3D88", "link=%26aweme_id%3D7&count=1"):
                 with self.subTest(path=path, query=query):
                     self.check_body(base + "?" + query, source, {**source, "aweme_list": [organic]})
 
     def test_errors_missing_status_and_changed_envelopes_survive(self):
         url = f"https://{HOSTS[0]}{FEEDS[0]}"
-        mixed = [{"is_ads": True}, {"aweme_id": "normal"}]
+        mixed = [{"is_ads": True}, {"aweme_id": "782000000000001"}]
         for flags in (
             {}, {"error_code": 0}, {"status_code": None}, {"status_code": "0"},
             {"status_code": False}, {"status_code": 403, "error_code": 0},
             {"status_code": 0, "error_code": 403}, {"status_code": 0, "error_code": "0"},
             {"status_code": 0, "error_code": None}, {"status_code": 0, "error_code": False},
-            {"status_code": 0, "error": {"code": 403}},
+            {"status_code": 0, "error": {"code": 403}}, {"status_code": 0, "success": False},
+            {"status_code": 0, "success": 0}, {"status_code": 0, "success": None},
+            {"status_code": 0, "systemError": True},
         ):
             source = {**flags, "aweme_list": mixed, "max_cursor": shared.BIG_ID}
             with self.subTest(flags=flags):
