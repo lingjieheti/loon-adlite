@@ -8,7 +8,7 @@
 
 第一次使用，建議從**輕量版**開始。在 iPhone 或 iPad 的 Safari 點選安裝連結，再到 Loon 確認匯入。也可以複製訂閱網址，在 Loon 的「配置 → 插件 → ＋」中貼上。
 
-- **輕量版（Lite）** 會攔截送往 43 個指定廣告主機的連線，包括部分網頁的廣告競價請求。無需安裝憑證或開啟 HTTPS 解密。[安裝輕量版](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [訂閱網址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
+- **輕量版（Lite）** 會在完整主機名稱符合廣告清單時攔截連線，包括部分網頁的廣告競價請求。無需安裝憑證或開啟 HTTPS 解密。[安裝輕量版](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [訂閱網址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
 - **合併版（Suite）** 包含輕量版和內嵌版，另有京東、淘寶、美團及抖音等 App 的專用規則。選用後，請停用另外兩個版本。[安裝合併版](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [訂閱網址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
 - **內嵌版（Inline）** 可搭配輕量版，過濾部分微信公眾號文章廣告、嗶哩嗶哩首頁的廣告卡片及部分開啟 App 時顯示的廣告。[安裝內嵌版](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-InlineAds.lpx) · [訂閱網址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-InlineAds.lpx)
 

@@ -10,15 +10,17 @@ DOMAIN,pubads.g.doubleclick.net,REJECT
 DOMAIN,securepubads.g.doubleclick.net,REJECT
 DOMAIN,pagead2.googlesyndication.com,REJECT
 
-# 网页广告竞价（PubMatic、Criteo）
+# 网页广告竞价
 DOMAIN,hbopenbid.pubmatic.com,REJECT
 DOMAIN,grid-bidder.criteo.com,REJECT
+DOMAIN,tlx.3lift.com,REJECT
 
 # 第三方网页广告投放
 DOMAIN,a.adtng.com,REJECT
 DOMAIN,ads.trafficjunky.net,REJECT
 
 # 百度广告
+DOMAIN,dup.baidustatic.com,REJECT
 DOMAIN,mobads.baidu.com,REJECT
 DOMAIN,adscdn.baidu.com,REJECT
 DOMAIN,mobads-pre-config.cdn.bcebos.com,REJECT

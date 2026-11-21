@@ -2,6 +2,12 @@
 
 **已安装 Loon 轻量版或合并版**，刷新现有订阅即可获得网页域名规则。Loon 会拦截发往已知广告主机的请求，包括部分常见网页广告竞价及 Pornhub 上使用的第三方广告服务。新增规则只按完整主机名匹配，无需为这些网站安装证书或开启 HTTPS 解密。[版本与订阅](../README.md#安装) · [主机清单与来源](../COVERAGE.md)
 
+## 普通网页仍有横幅或广告空位
+
+平时用现有 Loon 订阅即可。经常在 Safari 看网页、还想收起页面里的广告位，可以选用开源的 **AdGuard iOS 版**。它能把页面元素规则交给 Safari 处理，这个用法无需 Loon 解密网页，也无需更换 DNS。[App Store](https://apps.apple.com/app/id1047223162) · [AdGuard iOS 源码](https://github.com/AdguardTeam/AdguardForiOS)
+
+在 iPad「设置 → App → Safari 浏览器 → 扩展」中按 AdGuard 的提示启用内容拦截器，再到 AdGuard 的「保护 → Safari 保护 → 过滤器」。从**基础过滤器**开始，常看中文网站再启用**中文过滤器**即可。两者分别源于 EasyList 和 EasyList China，已有相应过滤器时无需再订阅一份原表。这个组合只用 Safari 内容拦截；系统流量继续交给原有的 Loon 配置。[Safari 设置与过滤器](https://adguard.com/kb/zh-CN/adguard-for-ios/features/safari-protection/) · [过滤器来源](https://adguard.com/kb/zh-CN/general/ad-filtering/adguard-filters/)
+
 ## 在 Safari 隐藏 Pornhub 网页广告位
 
 1. 在 iPad 或 iPhone 上启用 Safari 的 Userscripts 扩展。如果已经使用本项目的 YouTube 或签到助手，沿用原来的脚本目录即可。[Userscripts](https://apps.apple.com/app/id1463298887)

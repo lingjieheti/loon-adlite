@@ -165,7 +165,7 @@ class AdSuite(unittest.TestCase):
         lite = read_sections(ROOT / "iPad-AdLite.lpx")
         self.assertEqual(set(lite), {"rule"})
         self.assertEqual(lite["rule"], self.sections["rule"])
-        self.assertEqual(len(set(lite["rule"])), 43)
+        self.assertEqual(len(set(lite["rule"])), 45)
         original_hosts = {
             "googleads.g.doubleclick.net", "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net",
             "pagead2.googlesyndication.com", "mobads.baidu.com", "adscdn.baidu.com",
@@ -181,7 +181,10 @@ class AdSuite(unittest.TestCase):
         self.assertTrue(set(inline).issubset(self.sections["rewrite"]))
 
     def test_web_ad_hosts_and_normal_web_traffic(self):
-        ad_hosts = ("a.adtng.com", "ads.trafficjunky.net", "hbopenbid.pubmatic.com", "grid-bidder.criteo.com")
+        ad_hosts = (
+            "a.adtng.com", "ads.trafficjunky.net", "hbopenbid.pubmatic.com",
+            "grid-bidder.criteo.com", "tlx.3lift.com", "dup.baidustatic.com",
+        )
         rules = self.sections["rule"]
         for host in ad_hosts:
             self.assertIn(f"DOMAIN,{host},REJECT", rules)
@@ -189,6 +192,8 @@ class AdSuite(unittest.TestCase):
         untouched = {
             "pornhub.com", "www.pornhub.com", "ei.phncdn.com", "ev.phncdn.com",
             "www.pubmatic.com", "www.criteo.com", "www.trafficjunky.com", "cdn.jsdelivr.net",
+            "www.triplelift.com", "www.baidu.com", "passport.baidu.com", "s.bdstatic.com",
+            "cpro.baidustatic.com", "ecomcbjs.jomodns.com",
         }
         for host in ad_hosts:
             untouched.update((host.partition(".")[2], f"sub.{host}", f"{host}.example.org"))
@@ -308,6 +313,9 @@ class AdSuite(unittest.TestCase):
             "https://api.zhihu.com/questions/123/answers",
             "https://edith.xiaohongshu.com/api/sns/v6/note/feed",
             "https://api.bilibili.com/x/player/wbi/playurl",
+            "https://passport.baidu.com/v2/?login",
+            "https://cpro.baidustatic.com/cpro/ui/c.js",
+            "https://cpro.baidustatic.com/cpro/ui/cm.js",
         ]
         for url in REQUEST_CASES:
             host = urlsplit(url).hostname
