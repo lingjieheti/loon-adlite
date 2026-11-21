@@ -39,7 +39,9 @@ jobs:
           "$RUNNER_TEMP/checkin-tests/bin/python" -m pip install --only-binary=:all: playwright==1.58.0
           "$RUNNER_TEMP/checkin-tests/bin/python" tests/checkin_browser.py
           "$RUNNER_TEMP/checkin-tests/bin/python" tests/coupon_browser.py
+          "$RUNNER_TEMP/checkin-tests/bin/python" tests/taobao_coupon_browser.py
           "$RUNNER_TEMP/checkin-tests/bin/python" tests/youtube_browser.py
           "$RUNNER_TEMP/checkin-tests/bin/python" -m playwright install --with-deps webkit
           COUPON_TEST_BROWSER=webkit "$RUNNER_TEMP/checkin-tests/bin/python" tests/coupon_browser.py
+          COUPON_TEST_BROWSER=webkit "$RUNNER_TEMP/checkin-tests/bin/python" tests/taobao_coupon_browser.py
           WEB_ADS_TEST_BROWSER=webkit "$RUNNER_TEMP/checkin-tests/bin/python" tests/web_ads_browser.py
