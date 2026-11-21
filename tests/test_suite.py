@@ -162,11 +162,22 @@ class AdSuite(unittest.TestCase):
             self.assertEqual(json.dumps(source, sort_keys=True), json.dumps(expected, sort_keys=True))
 
     def test_original_domains_and_inline_rules_are_preserved(self):
-        domains = read_sections(ROOT / "iPad-AdLite.lpx")["rule"]
+        lite = read_sections(ROOT / "iPad-AdLite.lpx")
+        self.assertEqual(set(lite), {"rule"})
+        self.assertEqual(lite["rule"], self.sections["rule"])
+        self.assertEqual(len(set(lite["rule"])), 39)
+        original_hosts = {
+            "googleads.g.doubleclick.net", "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net",
+            "pagead2.googlesyndication.com", "mobads.baidu.com", "adscdn.baidu.com",
+            "mobads-pre-config.cdn.bcebos.com", "mi.gdt.qq.com", "pgdt.gtimg.cn", "adsmind.apdcdn.tc.qq.com",
+            "ad.tencentmusic.com", "tmead.y.qq.com", "ad.zijieapi.com", "pangolin.snssdk.com",
+            "pangolin-hl.snssdk.com", "pangolin-lf.snssdk.com", "pangolin-lq.snssdk.com",
+            "ali-ad.a.yximgs.com", "tx-ad.a.yximgs.com", "hw-ot-ad.a.yximgs.com",
+            "adstrategy.biz.weibo.com", "api-ad-adapter.wps.com",
+        }
+        self.assertTrue({f"DOMAIN,{host},REJECT" for host in original_hosts}.issubset(lite["rule"]))
         inline = read_sections(ROOT / "iPad-InlineAds.lpx")["rewrite"]
-        self.assertEqual(len(domains), 22)
         self.assertEqual(len(inline), 4)
-        self.assertTrue(set(domains).issubset(self.sections["rule"]))
         self.assertTrue(set(inline).issubset(self.sections["rewrite"]))
 
     def test_hosts_and_all_rule_entry_points(self):
