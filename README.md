@@ -2,7 +2,7 @@
 
 **简体中文** · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md) ｜ [赞助我](SPONSOR.md)
 
-这是我在 iPhone 和 iPad 上自用的去广告插件，分享给日常使用中国大陆 App 的朋友，包括在华留学生。只需订阅一份约 **24 KB** 的规则，Loon 就能在本机按完整域名拦截已知广告请求。按需开启 HTTPS 解密后，还能过滤京东、淘宝、美团的部分开屏广告，以及哔哩哔哩首页的部分推广卡片。
+这是我在 iPhone 和 iPad 上自用的去广告插件，分享给日常使用中国大陆 App 的朋友，包括在华留学生。只需订阅一份约 **27 KB** 的规则，Loon 就能在本机按完整域名拦截已知广告请求。按需开启 HTTPS 解密后，还能过滤京东、淘宝、美团的部分开屏广告，以及哔哩哔哩首页的部分推广卡片。
 
 ## 安装
 

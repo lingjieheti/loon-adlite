@@ -23,6 +23,14 @@ MIME_PATTERN = r"\$\{response\.header\['Content-Type'\]\} ~= /((?:\\.|[^/\\])*)/
 HOST = re.compile(r"(?:[a-z0-9]+(?:-+[a-z0-9]+)*\.)+[a-z]{2,}")
 
 REQUEST_CASES = {
+    "https://cdn-xyk-app.bankofbeijing.com.cn/cdn/resource/image/advertise/2026/banner.jpg": "reject_img(200)",
+    "https://static.95508.com/mmg/ciop/sysabbr/cmep/images/popupads/brand1.png": "reject_img(200)",
+    "https://app.dewu.com/api/v1/app/advertisement": "reject(404)",
+    "https://p0.pipi.cn/adAdmin/promo_45.gif": "reject_img(200)",
+    "https://app.zhuanzhuan.com/zz/v2/zzlogic/getOpenScreen": "reject_dict(200)",
+    "https://api-ios.zhipin.com/api/zpCommon/user/startupAd/": "reject_dict(200)",
+    "https://homefront.qunar.com/front/splash/ad": "reject_dict(200)",
+    "https://app.variflight.com/v1/advert/": "reject(404)",
     "https://api3-core-c.amemv.com/api/ad/v16/splash/preload": "reject(404)",
     "https://wmapi.meituan.com/api/v7/openscreen": "reject_dict(200)",
     "https://wmapi.meituan.com/api/v7/startpicture": "reject_dict(200)",
@@ -43,6 +51,7 @@ REQUEST_CASES = {
 XHS = "https://edith.xiaohongshu.com/api/sns/v6/homefeed"
 ZHIHU = "https://api.zhihu.com/topstory/recommend"
 RESPONSE_URLS = (
+    "https://tiebac.baidu.com/tiebaads/commonbatch?adcmd=1",
     "https://app.bilibili.com/x/v2/splash/list",
     "https://api3-core-c.amemv.com/aweme/v1/feed",
     "https://api3-normal-c.amemv.com/aweme/v2/feed",

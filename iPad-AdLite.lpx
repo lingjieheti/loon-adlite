@@ -15,9 +15,18 @@ DOMAIN,hbopenbid.pubmatic.com,REJECT
 DOMAIN,grid-bidder.criteo.com,REJECT
 DOMAIN,tlx.3lift.com,REJECT
 
+# 米家广告 SDK、同花顺广告推荐、LINE 广告素材
+DOMAIN,sdkconfig.ad.xiaomi.com,REJECT
+DOMAIN,adm.10jqka.com.cn,REJECT
+DOMAIN,ad.line-scdn.net,REJECT
+
 # 第三方网页广告投放
 DOMAIN,a.adtng.com,REJECT
 DOMAIN,ads.trafficjunky.net,REJECT
+
+# 百度地图 · 百度信息流广告投放与配置
+DOMAIN,afd.baidu.com,REJECT
+DOMAIN,afdconf.baidu.com,REJECT
 
 # 百度广告
 DOMAIN,dup.baidustatic.com,REJECT
@@ -38,6 +47,11 @@ DOMAIN,pangolin.snssdk.com,REJECT
 DOMAIN,pangolin-hl.snssdk.com,REJECT
 DOMAIN,pangolin-lf.snssdk.com,REJECT
 DOMAIN,pangolin-lq.snssdk.com,REJECT
+
+# 下厨房百度联盟广告、美图广告投放
+DOMAIN,baidu-union-js.xiachufang.com,REJECT
+DOMAIN,baidu-union-pos.xiachufang.com,REJECT
+DOMAIN,adui.tg.meitu.com,REJECT
 
 # 快手广告素材
 DOMAIN,ali-ad.a.yximgs.com,REJECT

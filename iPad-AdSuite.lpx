@@ -16,9 +16,18 @@ DOMAIN,hbopenbid.pubmatic.com,REJECT
 DOMAIN,grid-bidder.criteo.com,REJECT
 DOMAIN,tlx.3lift.com,REJECT
 
+# 米家广告 SDK、同花顺广告推荐、LINE 广告素材
+DOMAIN,sdkconfig.ad.xiaomi.com,REJECT
+DOMAIN,adm.10jqka.com.cn,REJECT
+DOMAIN,ad.line-scdn.net,REJECT
+
 # 第三方网页广告投放
 DOMAIN,a.adtng.com,REJECT
 DOMAIN,ads.trafficjunky.net,REJECT
+
+# 百度地图 · 百度信息流广告投放与配置
+DOMAIN,afd.baidu.com,REJECT
+DOMAIN,afdconf.baidu.com,REJECT
 
 # 百度广告
 DOMAIN,dup.baidustatic.com,REJECT
@@ -39,6 +48,11 @@ DOMAIN,pangolin.snssdk.com,REJECT
 DOMAIN,pangolin-hl.snssdk.com,REJECT
 DOMAIN,pangolin-lf.snssdk.com,REJECT
 DOMAIN,pangolin-lq.snssdk.com,REJECT
+
+# 下厨房百度联盟广告、美图广告投放
+DOMAIN,baidu-union-js.xiachufang.com,REJECT
+DOMAIN,baidu-union-pos.xiachufang.com,REJECT
+DOMAIN,adui.tg.meitu.com,REJECT
 
 # 快手广告素材
 DOMAIN,ali-ad.a.yximgs.com,REJECT
@@ -99,6 +113,11 @@ DOMAIN,adsview2.qq.com,REJECT
 # END synced ad hosts
 
 [Rewrite]
+
+# 掌上京彩、发现精彩 · 静态广告目录中的图片
+request if ${url} ~= /^https:\/\/cdn-xyk-app\.bankofbeijing\.com\.cn\/cdn\/resource\/image\/advertise\/(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_.-]+\.(?:jpe?g|png|gif|webp)(?:\?|$)/ then reject_img(200)
+request if ${url} ~= /^https:\/\/static\.95508\.com\/mmg\/ciop\/sysabbr\/cmep\/images\/(?:apppopupads|popupads)\/(?:[A-Za-z0-9_-]+\/)*[A-Za-z0-9_.-]+\.(?:jpe?g|png|gif|webp)(?:\?|$)/ then reject_img(200)
+
 # 微信文章的独立广告接口及阅读互动接口。只处理声明为 JSON 且含广告列表和计数的响应，保留阅读数和评论。
 response if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/(?:getappmsgad|getappmsgext)(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def ok: type == "object" and ((has("ret") | not) or .ret == 0); if ok and (.base_resp == null or (.base_resp | ok)) and (.appmsgstat == null or (.appmsgstat | ok)) and (.advertisement_info | type) == "array" and (.advertisement_num | type) == "number" and .advertisement_num >= 0 then .advertisement_info = [] | .advertisement_num = 0 else . end`)
 
@@ -141,6 +160,9 @@ response if ${url} ~= /^https:\/\/api\.weibo\.cn\/2\/statuses\/container_timelin
 # 微博轻享版 · 独立品牌广告列表
 response if ${url} ~= /^https:\/\/api\.weibo\.cn\/2\/ad\/weibointl\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and ((has("error_code") | not) or .error_code == 0) and ((has("errno") | not) or .errno == 0) and (.errmsg == null or .errmsg == "") and ((has("success") | not) or .success == true) and ((has("ok") | not) or .ok == 1 or .ok == true) and ((has("status") | not) or .status == 0 or .status == 1) and (.data | type) == "array" then .data = [] else . end`)
 
+# 百度贴吧 · 看图模式的独立批量广告接口
+response if ${url} ~= /^https:\/\/tiebac\.baidu\.com\/tiebaads\/commonbatch\?(?:(?!(?i:adcmd|cb|callback|jsonp|jsoncallback)=)[A-Za-z0-9_-]+=[^&#;]*&)*adcmd=[A-Za-z0-9_-]+(?:&(?!(?i:adcmd|cb|callback|jsonp|jsoncallback)=)[A-Za-z0-9_-]+=[^&#;]*)*$/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and (.error_code == 0 or .errno == 0) and ((has("error_code") | not) or .error_code == 0) and ((has("errno") | not) or .errno == 0) and ((has("success") | not) or .success == true) and ((has("code") | not) or .code == 0 or .code == 200) and (.errmsg == null or .errmsg == "" or .errmsg == "success") and (.error_msg == null or .error_msg == "") and .error == null and (.res | type) == "object" and (.res.ad | type) == "array" and (.res.ad | length) > 0 and all(.res.ad[]; type == "object") then .res.ad = [] else . end`)
+
 # 酷安 · 首页的赞助卡片
 response if ${url} ~= /^https:\/\/api\.coolapk\.com\/v6\/main\/(?:dataList|indexV8)\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and ((has("error_code") | not) or .error_code == 0) and ((has("errno") | not) or .errno == 0) and (.errmsg == null or .errmsg == "") and ((has("success") | not) or .success == true) and ((has("ok") | not) or .ok == 1 or .ok == true) and ((has("status") | not) or .status == 0 or .status == 1) and (.data | type) == "array" then .data |= map(select(if type == "object" then .entityTemplate != "sponsorCard" else true end)) else . end`)
 
@@ -162,6 +184,18 @@ request if ${url} ~= /^https:\/\/img\.meituan\.net\/(?:bizad\/bizad_brandCpt_[0-
 # 美团餐饮微信小程序 · 带广告单元标识的广告位
 response if ${url} ~= /^https:\/\/rms\.meituan\.com\/api\/v1\/rmsmina\/c\/queryWechatAdvertisement\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def no_error($key): (has($key) | not) or .[$key] == false; if type == "object" and .code == 200 and .success == true and no_error("systemError") and no_error("badRequest") and no_error("notFound") and no_error("conflict") and .error == null and (.data | type) == "object" and (.data.adSiteList | type) == "array" then .data.adSiteList |= map(select(if type == "object" and (.adSiteId | type) == "string" then (.adSiteId | test("\\Aadunit-[a-zA-Z0-9_-]+\\z") | not) else true end)) else . end`)
 
+# 得物 · 开屏广告配置
+request if ${url} ~= /^https:\/\/app\.dewu\.com\/api\/v1\/app\/advertisement\/?(?:\?|$)/ then reject(404)
+
+# 猫眼 · 广告目录内的推广图
+request if ${url} ~= /^https:\/\/p0\.pipi\.cn\/(?:adAdmin|mediaplus\/maoyantong_ads_fe)\/[A-Za-z0-9_]+\.(?:gif(?:\?|$)|jpg\?imageMogr2\/quality\/|(?:jpg|png)\?imageMogr2\/thumbnail\/(?:860x0|!165x165|!1049x1169)(?:\/|&|$))/ then reject_img(200)
+
+# 转转 · 开屏广告配置
+request if ${url} ~= /^https:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzlogic\/getOpenScreen\/?(?:\?|$)/ then reject_dict(200)
+
+# BOSS 直聘 · 启动广告
+request if ${url} ~= /^https:\/\/api-ios\.zhipin\.com\/api\/zpCommon\/user\/startupAd\/?(?:\?|$)/ then reject_dict(200)
+
 # 拼多多 · 开屏广告配置
 request if ${url} ~= /^https:\/\/api\.(?:pinduoduo|yangkeduo)\.com\/api\/cappuccino\/splash\/?(?:\?|$)/ then reject(404)
 
@@ -176,6 +210,12 @@ request if ${url} ~= /^https:\/\/mapi\.dianping\.com\/mapi\/operating\/loadsplas
 
 # 大众点评 · 网页城市首页顶部品牌广告
 request if ${url} ~= /^https:\/\/www\.dianping\.com\/ajax\/brandad(?:\?|$)/ then reject_dict(200)
+
+# 去哪儿 · 独立开屏广告请求
+request if ${url} ~= /^https:\/\/homefront\.qunar\.com\/front\/splash\/ad(?:\?|$)/ then reject_dict(200)
+
+# 飞常准 · 两个广告接口目录
+request if ${url} ~= /^https:\/\/app\.variflight\.com\/(?:ad|v1\/advert)\/(?:[A-Za-z0-9_-]+(?:\/[A-Za-z0-9_-]+)*\/?)?(?:\?|$)/ then reject(404)
 
 # 高德地图 · 启动广告配置
 request if ${url} ~= /^https:\/\/m5\.amap\.com\/ws\/shield\/dsp\/app\/startup\/init\/?(?:\?|$)/ then reject_dict(200)
@@ -199,4 +239,4 @@ response if ${url} ~= /^https:\/\/(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v[0
 response if ${url} ~= /^https:\/\/api\.zhihu\.com\/topstory\/recommend\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and ((has("code") | not) or .code == 0) and ((has("success") | not) or .success == true) and (.data | type) == "array" then .data |= map(select(if type == "object" then .type != "feed_advert" else true end)) else . end`)
 
 [MitM]
-hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com, api.m.jd.com, bdsp-x.jd.com, guide-acs.m.taobao.com, api3-core-c.amemv.com, api3-normal-c.amemv.com, api.amemv.com, aweme.snssdk.com, api.weibo.cn, api.coolapk.com, mop.meituan.com, wmapi.meituan.com, p0.meituan.net, p1.meituan.net, img.meituan.net, rms.meituan.com, api.pinduoduo.com, api.yangkeduo.com, acs.m.goofish.com, mapi.dianping.com, www.dianping.com, m5.amap.com, amap-aos-info-nogw.amap.com, edith.xiaohongshu.com, rec.xiaohongshu.com, api.zhihu.com, cards.iqiyi.com, t7z.cupid.iqiyi.com
+hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com, api.m.jd.com, bdsp-x.jd.com, guide-acs.m.taobao.com, api3-core-c.amemv.com, api3-normal-c.amemv.com, api.amemv.com, aweme.snssdk.com, api.weibo.cn, api.coolapk.com, mop.meituan.com, wmapi.meituan.com, p0.meituan.net, p1.meituan.net, img.meituan.net, rms.meituan.com, api.pinduoduo.com, api.yangkeduo.com, acs.m.goofish.com, mapi.dianping.com, www.dianping.com, m5.amap.com, amap-aos-info-nogw.amap.com, edith.xiaohongshu.com, rec.xiaohongshu.com, api.zhihu.com, cards.iqiyi.com, t7z.cupid.iqiyi.com, cdn-xyk-app.bankofbeijing.com.cn, static.95508.com, app.dewu.com, p0.pipi.cn, app.zhuanzhuan.com, api-ios.zhipin.com, homefront.qunar.com, app.variflight.com, tiebac.baidu.com
