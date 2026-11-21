@@ -1,6 +1,6 @@
 # My Loon ad filters for iPhone and iPad
 
-[简体中文](README.md) · **English** · [日本語](README.ja.md) | [Support my work](SPONSOR.en.md)
+[简体中文](README.md) · [繁體中文](README.zh-Hant.md) · **English** · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md) | [Support my work](SPONSOR.en.md)
 
 These are the Loon filters I use on my own iPhone and iPad. They’re for anyone who uses mainland Chinese apps in daily life, from local users to international students and others living or working in China. They cover apps like JD (京东) and Taobao (淘宝) for shopping, and Meituan (美团) for food delivery.
 
