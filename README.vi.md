@@ -26,6 +26,8 @@ Hướng dẫn bao gồm điểm danh JD và SMZDM, cùng cách nhận phiếu g
 
 ## Cập nhật
 
+Mỗi tuần, GitHub đối chiếu các tên miền quảng cáo đã được xét duyệt. Khi danh sách thay đổi và vượt qua kiểm thử, bản mới được tự động đăng tại cùng địa chỉ đăng ký. Các quy tắc lọc quảng cáo bên trong Bilibili và JD được xét duyệt riêng.
+
 Địa chỉ đăng ký theo nhánh `main`. Bạn có thể đặt Loon kiểm tra tài nguyên bên ngoài hằng ngày. Để quay lại bản cũ, thay `main` trong địa chỉ bằng mã băm đầy đủ của lần sửa đổi mong muốn. [Lịch sử thay đổi](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Phạm vi lọc theo ứng dụng (tiếng Trung)](COVERAGE.md) · [Nguồn tham khảo theo tính năng (tiếng Trung)](SOURCES.md) · [Kiểm thử hồi quy ngoại tuyến](tests/) · [Ủng hộ tác giả (tiếng Anh)](SPONSOR.en.md)
+[Phạm vi lọc theo ứng dụng (tiếng Trung)](COVERAGE.md) · [Nguồn tham khảo theo tính năng (tiếng Trung)](SOURCES.md) · [Kiểm thử hồi quy ngoại tuyến](tests/) · [Ủng hộ tác giả (tiếng Anh)](SPONSOR.en.md) · [Kiểm tra bảo mật (tiếng Trung)](SECURITY-AUDIT.md)

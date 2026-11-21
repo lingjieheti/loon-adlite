@@ -15,8 +15,9 @@ PAYMENT_LINKS = {
     "https://www.paypal.com/qrcodes/p2pqrc/8CZSV4VY73PB2",
 }
 TRON_ADDRESS = "TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE"
-# These images were decoded and checked against the maintainer's original payment codes.
+# Pin the approved images, including the owner's pixel-identical WeChat tip code.
 QR_HASHES = {
+    "wechat-appreciation.jpg": "8103d081c29728175495dc070c08954dd701c66c14e4843a125b38c9bc903808",
     "paypal.png": "507ba236f084b1e3b0c31a67c8696a0f4ca013fae53fbd6bd4f4218dc047c9ae",
     "usdt-tron.png": "5e40b0665731164843190e0202a79dbdff7024e22aa9b9c13d969aeac93f20ac",
 }

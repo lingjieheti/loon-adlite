@@ -26,6 +26,8 @@ Le guide couvre les pointages quotidiens sur JD et SMZDM et la récupération de
 
 ## Mises à jour
 
+Chaque semaine, GitHub vérifie une sélection de domaines publicitaires. Si la liste change et que les tests réussissent, la mise à jour est publiée automatiquement à la même adresse d’abonnement. Les règles de filtrage au sein d’applications comme Bilibili et JD font l’objet d’une vérification distincte.
+
 L’abonnement suit la branche `main`. Vous pouvez régler Loon pour vérifier les ressources externes chaque jour. Pour revenir à une version antérieure, remplacez `main` dans l’adresse par le hachage complet du commit voulu. [Historique des versions](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Détail des filtres par application (en chinois)](COVERAGE.md) · [Sources par fonctionnalité (en chinois)](SOURCES.md) · [Tests de régression hors ligne](tests/) · [Soutenir mon travail (en anglais)](SPONSOR.en.md)
+[Détail des filtres par application (en chinois)](COVERAGE.md) · [Sources par fonctionnalité (en chinois)](SOURCES.md) · [Tests de régression hors ligne](tests/) · [Soutenir mon travail (en anglais)](SPONSOR.en.md) · [Audit de sécurité (en chinois)](SECURITY-AUDIT.md)

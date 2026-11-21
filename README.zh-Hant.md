@@ -26,6 +26,8 @@ YouTube 網頁助手可在官方「略過廣告」按鈕出現時嘗試點擊。
 
 ## 更新
 
+GitHub 每週核對一組經審核的廣告網域，有變動且通過測試時，就會自動發佈到同一個訂閱網址。嗶哩嗶哩、京東等 App 的內嵌廣告規則另行審核。
+
 訂閱網址跟隨 `main`。可將 Loon 的外部資源設為每天檢查更新。如需回到舊版，將訂閱網址的 `main` 改為該次提交的完整編號。 [提交紀錄](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[各 App 的涵蓋範圍（簡體中文）](COVERAGE.md) · [各功能的上游來源（簡體中文）](SOURCES.md) · [離線回歸測試](tests/) · [贊助這個專案（簡體中文）](SPONSOR.md)
+[各 App 的涵蓋範圍（簡體中文）](COVERAGE.md) · [各功能的上游來源（簡體中文）](SOURCES.md) · [離線回歸測試](tests/) · [贊助這個專案（簡體中文）](SPONSOR.md) · [安全稽核](SECURITY-AUDIT.md)

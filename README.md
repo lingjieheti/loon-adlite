@@ -26,6 +26,8 @@ YouTube 网页助手可在官方「跳过广告」按钮出现时尝试点击。
 
 ## 更新
 
+GitHub 每周核对一组已审核的广告域名，清单有变化且测试通过时，自动发布到同一个订阅地址。哔哩哔哩、京东等 App 的内嵌广告规则单独审核。 [自动更新记录](https://github.com/lingjieheti/loon-adlite/actions/workflows/sync-ad-hosts.yml)
+
 订阅地址跟随 `main`。在 Loon 把外部资源设为每天检查，即可随客户端刷新获取新版。回退时可把订阅地址中的 `main` 替换为目标提交的完整编号。 [提交历史](https://github.com/lingjieheti/loon-adlite/commits/main/) · [上游变动报告](https://github.com/lingjieheti/loon-adlite/actions/workflows/review-upstreams.yml)
 
-[按 App 查看覆盖与限制](COVERAGE.md) · [逐项查看上游来源与适配](SOURCES.md) · [规则来源核查报告](audit.html) · [离线回归测试](tests/)
+[按 App 查看覆盖与限制](COVERAGE.md) · [逐项查看上游来源与适配](SOURCES.md) · [规则来源核查报告](audit.html) · [离线回归测试](tests/) · [安全审计](SECURITY-AUDIT.md)

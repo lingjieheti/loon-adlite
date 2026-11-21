@@ -4,6 +4,10 @@
 
 このプラグインが役に立ったら、よろしければ今後のメンテナンスを応援してください。ありがとうございます。
 
+## WeChat で応援する
+
+WeChat の「スキャン」でコードを読み取れます。同じ端末で開いている場合は、画像を保存し、「スキャン」で写真から選んでください。 [WeChat の応援用コードを表示](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/wechat-appreciation.jpg)
+
 ## PayPal
 
 [PayPal の支払い画面を開く](https://www.paypal.com/qrcodes/p2pqrc/8CZSV4VY73PB2) · [PayPal の受け取り用 QR コード](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/paypal.png)

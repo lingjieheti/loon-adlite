@@ -26,6 +26,8 @@ YouTube 웹 도우미는 공식 광고 건너뛰기 버튼이 나타나면 클�
 
 ## 업데이트
 
+GitHub는 매주 검토된 광고 호스트 목록을 대조하고, 변경 사항이 테스트를 통과하면 같은 구독 주소에 자동으로 배포합니다. 빌리빌리와 징둥 등의 앱 내부 광고 규칙은 별도로 검토합니다.
+
 구독 주소는 `main`을 따릅니다. Loon의 외부 리소스 업데이트 확인 주기를 하루로 설정할 수 있습니다. 이전 버전으로 돌아가려면 구독 주소의 `main`을 원하는 커밋의 전체 해시로 바꾸세요. [커밋 기록](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[앱별 적용 범위와 제한(중국어)](COVERAGE.md) · [기능별 출처(중국어)](SOURCES.md) · [오프라인 회귀 테스트](tests/) · [후원하기(영어)](SPONSOR.en.md)
+[앱별 적용 범위와 제한(중국어)](COVERAGE.md) · [기능별 출처(중국어)](SOURCES.md) · [오프라인 회귀 테스트](tests/) · [후원하기(영어)](SPONSOR.en.md) · [보안 감사(중국어)](SECURITY-AUDIT.md)

@@ -5,6 +5,14 @@ on:
     branches: [main]
   push:
     branches: [main]
+  workflow_call:
+    inputs:
+      candidate:
+        type: string
+        required: true
+      release_base:
+        type: string
+        required: true
 
 permissions:
   contents: read
@@ -17,6 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ref: ${{ inputs.candidate || github.sha }}
           fetch-depth: 0 # Resolve and compare the scripts pinned by Loon reminders, offline.
           persist-credentials: false
 
@@ -47,7 +56,7 @@ jobs:
       - name: Test published plugins
         env:
           JQ: ${{ runner.temp }}/jq
-          RELEASE_BASE: ${{ github.event.pull_request.base.sha || env.PUSH_BASE }}
+          RELEASE_BASE: ${{ inputs.release_base || github.event.pull_request.base.sha || env.PUSH_BASE }}
         run: python3 -B -m unittest discover -s tests -v
 
       - name: Test the Safari helpers with simulated pages
