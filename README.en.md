@@ -8,6 +8,8 @@ The filters block some ads at launch or in feeds, depending on the app. If you�
 
 ## Installation
 
+For YouTube in Safari, an optional userscript hides some ad slots on the home and search pages and tries to click the player’s Skip Ad button when it becomes available. It runs only on the website. In Safari with Userscripts enabled, open the script and choose Install from the extension menu. [Install the YouTube userscript](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
+
 For daily check-ins on JD and SMZDM, there is a separate Safari helper and an optional JD reminder for Loon. The helper runs when its dedicated page is open. [Check-in setup (Chinese)](checkin/README.md)
 
 Open an install link in Safari on your iPhone or iPad, then confirm the import in Loon. You can also copy the subscription URL into Loon under Configuration → Plugins → ＋.
