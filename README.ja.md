@@ -1,6 +1,6 @@
 # iPhone・iPad 用の Loon 広告ブロック
 
-[简体中文](README.md) · [English](README.en.md) · **日本語** ｜ [開発を応援する](SPONSOR.ja.md)
+[简体中文](README.md) · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · **日本語** · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md) ｜ [開発を応援する](SPONSOR.ja.md)
 
 自分の iPhone と iPad で使うために作った Loon プラグインです。中国本土のアプリを普段から使う方や、留学や仕事で中国に暮らす方に向けて公開しています。買い物で使う京東（JD）や淘宝（Taobao）、出前を頼むときの美団（Meituan）などが対象です。
 
