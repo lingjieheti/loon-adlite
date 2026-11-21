@@ -8,6 +8,8 @@
 
 ## インストール
 
+Safari で YouTube を見る場合は、ホームや検索結果の一部の広告枠を隠し、スキップできるようになったら公式ボタンを押す専用スクリプトも使えます。対象はブラウザ版です。Safari で Userscripts を有効にし、次のリンクを開いて拡張機能のメニューからインストールしてください。[YouTube 用スクリプトを開く](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
+
 京東と「什么值得买」のチェックインには、対象ページを Safari で開いたときに動く専用スクリプトがあります。Loon の京東リマインダーも任意で追加できます。[設定方法（中国語）](checkin/README.md)
 
 iPhone または iPad の Safari でインストールリンクを開き、Loon で読み込みを確定します。購読 URL をコピーして、Loon のプラグイン一覧の「＋」から追加することもできます。
