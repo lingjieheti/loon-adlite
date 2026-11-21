@@ -1,16 +1,36 @@
 # iPad 轻量去广告
 
-用 22 条完整主机名规则拦截一部分网页和 App 广告。插件约 1.1 KiB，所有规则都在一个可直接阅读的文件里。使用 Loon 已有的分流功能即可，无需安装证书、启用 HTTPS 解密或执行脚本。
+基础插件按 22 个完整主机名拦截广告请求，约 1.1 KiB。另有一个可选的内嵌广告插件，针对与正常内容一起下发的广告，使用 Loon 原生 JSON 复写。两者可一起使用，均不加载远程脚本。
 
-[在 iPad 上用 Loon 安装](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [查看插件原文](iPad-AdLite.lpx)
+[安装基础插件](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [安装内嵌广告插件](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-InlineAds.lpx) · [基础插件原文](iPad-AdLite.lpx) · [内嵌插件原文](iPad-InlineAds.lpx)
 
-## 安装与验证
+## 内嵌广告插件
+
+| 使用场景 | 处理内容 | 保留内容 |
+| --- | --- | --- |
+| 微信公众号文章 | 清空广告接口或阅读互动接口返回的广告列表，并把对应计数归零 | 正文、阅读数、点赞和其他互动字段 |
+| 哔哩哔哩 App 首页 | 根据卡片类型和跳转类型共同识别广告卡，移除混排横幅中标记为广告的子项 | 普通视频、直播、活动横幅和未知卡片，保持原顺序 |
+| 哔哩哔哩网页首页 | 移除推荐列表中明确标注为广告的卡片 | 带广告位元数据的普通视频和分页信息 |
+
+在 iPad 上用 Safari 点「安装内嵌广告插件」，确认导入并启用「iPad 内嵌广告过滤」。已有基础版可以继续使用。若链接未唤起 Loon，可在「配置 → 插件 → ＋」粘贴[内嵌插件原始地址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-InlineAds.lpx)。
+
+**使用条件**　Loon 3.5.1 (978) 或更新版，已开启复写和 HTTPS 解密，并在 iPad 上信任自己的 Loon CA。如果设备还没有 CA，可使用 Loon 官方证书工具在本机生成，再按系统提示安装和信任。[Loon 证书工具](https://nsloon.app/certificate-tool/) · [Apple 证书信任说明](https://support.apple.com/zh-cn/102390)
+
+**解密范围**　这个插件只声明 `mp.weixin.qq.com`、`app.bilibili.com`、`api.bilibili.com` 三个完整主机名。开启后 Loon 可以在设备上解密发往这三个主机的 HTTPS 流量，包括同主机的其他请求；只有四个指定接口会触发正文过滤。域名范围与其他已启用插件及主配置叠加。停用此插件可撤回它添加的规则和主机。[Loon MitM 说明](https://nsloon.app/docs/MitM/) · [原生复写文档](https://nsloon.app/docs/Rewrite/rewrite_v2/)
+
+**实际验证**　刷新 B 站首页，确认推荐翻页和普通视频播放正常；打开原先含平台广告的公众号文章，确认阅读和互动正常。Loon 请求记录中的主机和路径可用来判断当前客户端是否走了这些接口。广告投放会轮换，一次没有广告不足以说明规则命中。接口改为其他路径或二进制格式时，覆盖范围会变化。视频画面中已经录入的口播、作者直接写入正文的推广及服务端拼接的视频贴片仍可能出现。这一版没有 iPad 真机命中率或速度降幅数据。
+
+本地回归直接从插件读取 URL 匹配条件及 jq 表达式，覆盖正常条目、错误响应、未知字段、大整数和重复执行。使用 Python 3 并将 jq 1.8.2 放入 PATH 后，在仓库根目录运行 `python tests/test_inline.py`。这些测试使用离线样例。[回归测试](tests/test_inline.py)
+
+字段依据可对照 [B 站 App 与网页推荐处理](https://github.com/Biliverse/ADBlock/blob/b0051916843f269d4b377aaf177f0d9e7b12e393/src/process/Response.mjs)、[B 站误拦记录](https://github.com/Biliverse/ADBlock/blob/b0051916843f269d4b377aaf177f0d9e7b12e393/src/class/ADBlock.mjs#L123-L131)、[公众号独立广告入口](https://github.com/ihxperfect/loon-plugin/blob/54de749e8401b405883c16d1938d3385a70ee67f/startingad.plugin)和[公众号阅读互动响应示例](https://github.com/wnma3mz/wechat_articles_spider/blob/f8b31196e88045d079901812ea064ad4953d62a6/docs/%E4%BD%BF%E7%94%A8%E7%9A%84%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E6%8E%A5%E5%8F%A3.md#L161-L176)。
+
+## 基础插件安装与验证
 
 1. 在装有 Loon 的 iPad 上用 Safari 打开上方安装链接，确认添加，并在 Loon 的「配置 → 插件」中启用「iPad 轻量去广告」。此链接跟随本仓库的 main 分支。
 2. 如果安装链接没有唤起 Loon，在「配置 → 插件 → ＋」中粘贴[插件原始地址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)。也可以把文件保存到「iCloud 云盘 → Loon → Plugins」，再在插件页填写完整文件名 `iPad-AdLite.lpx`。任选一种安装方式即可。
 3. 在 Loon 运行并使用分流模式时，用 Safari 访问 `https://pagead2.googlesyndication.com/`。打开 Loon 请求记录，查看该主机命中的规则和拒绝策略。已有广告规则也可能拒绝它，单凭网页打不开无法确认是本插件命中。
 
-## 覆盖范围与使用取舍
+## 基础插件覆盖范围
 
 覆盖 Google 广告、百度广告、腾讯广告与腾讯音乐、字节与穿山甲、快手广告素材，以及微博和 WPS 的部分广告接口。插件只比较完整主机名，命中后交给 Loon 的 REJECT 策略处理。规则没有通配符、IP 段、远程脚本、远程子规则、DNS 指定或代理节点。
 
