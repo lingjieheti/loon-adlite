@@ -1,6 +1,6 @@
 # 常用 App 去广告的覆盖范围
 
-iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件含 46 条固定的精确域名规则，另有一小组随上游增减的广告主机。33 条原生复写用于处理特定 App 的广告接口。[当前域名清单](iPad-AdSuite.lpx) 域名拦截无需证书。部分开屏和信息流广告需要 HTTPS 解密，插件为此列出了 30 个完整主机名。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 54 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 59 个。域名拦截无需证书。懒人版另有 42 条原生复写，并列出 39 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
 
 ## 网页广告
 
@@ -46,6 +46,35 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件含 46 条固�
 | 闲鱼 | 同步和异步开屏广告。 | 按方法名匹配，保留购物网关的其他请求。[闲鱼](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/xianyu_splash_ad_block.plugin#L30-L40) |
 | 大众点评 | App 已知开屏配置；直连 `ad.api.dianping.com` 的广告请求；城市首页桌面网页版的顶部品牌广告位。 | 网页广告位需为 `www.dianping.com` 开启 HTTPS 解密。核对公开网页脚本后，用两个城市的公开请求验证了广告位接口，当时均未返回广告素材。App 如经共用网关或直连 IP 投放，精确域名规则可能无法命中。[美团对广告域名的说明](https://tech.meituan.com/2017/03/17/shark-sdk.html) · [点评网页广告组件](https://www.dpfile.com/app/dpindex-new-static/static/index.min.8f40fd44cb44a7195d5502a5a2831516.js) · [App 开屏配置](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partD/DianPing.lpx#L17-L25) |
 | 高德地图、铁路 12306 | 高德的两条启动广告接口，铁路 12306 的独立广告主机 | 路线、导航、查票和购票接口不在名单中。App 自带的开屏倒计时可能继续显示。[高德地图](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partG/AutoNavi.lpx#L27-L36) · [铁路 12306](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/part1/12306.lpx#L14-L22) |
+
+## 更多常用 App 的广告位
+
+下表前六项在轻量版和懒人版中均可使用，无需安装证书。它们按完整域名生效，其他 App 若请求同一广告主机也会被拦截。
+
+| App | 拦截位置 | 来源 |
+| --- | --- | --- |
+| 米家 | 小米广告 SDK 的配置主机 `sdkconfig.ad.xiaomi.com`。其他渠道提供的推广卡仍可能出现。 | [米家规则](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Mijia.lpx#L13-L18) · [广告域名表](https://github.com/TG-Twilight/AWAvenue-Ads-Rule/blob/3b96f6337ee05400d5be302f7e9bdd5188839b82/Filters/AWAvenue-Ads-Rule-Loon.module#L771) |
+| 同花顺系 App | 拦截 `adm.10jqka.com.cn` 的广告请求。公开记录来自同花顺 iFinD，其他版本须实际访问同一主机才会命中。 | [iFinD 广告主机](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partT/iFinD.lpx#L13-L19) |
+| LINE | 广告素材主机 `ad.line-scdn.net`。 | [LINE 规则](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partL/Line.lpx#L30-L34) · [AdGuard 移动广告清单](https://github.com/AdguardTeam/AdguardFilters/blob/1256f5db2a6fe797fc93960ab904e1930f7aeef5/MobileFilter/sections/adservers.txt#L348) |
+| 百度地图 | 百度信息流的广告投放与配置主机 `afd.baidu.com`、`afdconf.baidu.com`。 | [地图广告规则](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partB/BaiduMaps.lpx#L15-L19) · [百度域名分类](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/baidu#L91-L92) |
+| 下厨房 | 百度联盟的脚本与广告位主机 `baidu-union-js.xiachufang.com`、`baidu-union-pos.xiachufang.com`。 | [下厨房广告主机](https://github.com/zirawell/R-Store/blob/a4f3b10d6038d77ae3e1ff68bd19a49071ebabd3/Rule/QuanX/Adblock/App/X/%E4%B8%8B%E5%8E%A8%E6%88%BF/snippet/xiachufang.snippet#L12-L17) |
+| 美图秀秀 | 广告服务主机 `adui.tg.meitu.com`。 | [美图秀秀广告主机](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partM/MeituXiuxiu.lpx#L16-L19) |
+
+以下广告位由懒人版的原生复写处理。开启 HTTPS 解密后，同一主机的其他流量也可能在本机被解密。表中列出复写实际匹配的路径或字段。
+
+| App | 拦截位置与范围 | 来源 |
+| --- | --- | --- |
+| 百度贴吧 | 看图模式的批量广告接口 `tiebac.baidu.com/tiebaads/commonbatch`。查询中须有一个明确的 `adcmd`。只在成功 JSON 的 `res.ad` 是非空对象数组时清空它。帖子、图片列表和 JSONP 回调保持原样。 | [上游路径](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/module/tieba.sgmodule#L10-L15) · [响应字段](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/tieba-json.js#L17-L35) |
+| 得物 | `app.dewu.com/api/v1/app/advertisement` 开屏广告配置。 | [得物开屏](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partD/DeWu.lpx#L13-L15) |
+| 猫眼 | `p0.pipi.cn` 的 `/adAdmin/` 和 `/mediaplus/maoyantong_ads_fe/` 两个广告目录。仅匹配 GIF 或带指定质量、尺寸参数的 JPG、PNG。 | [广告图片目录](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partM/MaoYan.lpx#L13-L15) · [文件格式与参数](https://github.com/zirawell/R-Store/blob/a4f3b10d6038d77ae3e1ff68bd19a49071ebabd3/Rule/QuanX/Adblock/App/M/%E7%8C%AB%E7%9C%BC/snippet/pipi.snippet#L13-L15) |
+| 转转 | `app.zhuanzhuan.com/zz/v2/zzlogic/getOpenScreen` 开屏配置。 | [转转开屏](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partZ/ZhuanZhuan.lpx#L15-L21) |
+| BOSS 直聘 | `api-ios.zhipin.com/api/zpCommon/user/startupAd` 启动广告。 | [iOS 启动广告接口](https://github.com/zirawell/R-Store/blob/a4f3b10d6038d77ae3e1ff68bd19a49071ebabd3/Rule/QuanX/Adblock/App/B/Boss%E7%9B%B4%E8%81%98/snippet/boss.snippet#L13-L15) |
+| 去哪儿 | `homefront.qunar.com/front/splash/ad` 独立开屏广告请求。 | [去哪儿开屏](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partQ/Qunar.lpx#L14-L16) |
+| 飞常准 | `app.variflight.com` 上的 `/ad/` 和 `/v1/advert/` 两个广告目录，只匹配普通路径段。 | [飞常准广告目录](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partF/VariFlight.lpx#L19-L22) |
+| 北京银行信用卡「掌上京彩」 | 静态主机 `cdn-xyk-app.bankofbeijing.com.cn` 的 `/cdn/resource/image/advertise/` 中，以 JPG、JPEG、PNG、GIF 或 WebP 为扩展名的图片。 | [广告图片目录](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partB/ZhangShangJingCai.lpx#L12-L14) |
+| 广发信用卡「发现精彩」 | 静态主机 `static.95508.com` 的 `/mmg/ciop/sysabbr/cmep/images/` 下，限 `apppopupads/`、`popupads/` 两个目录和上述图片格式。 | [弹窗广告目录](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partF/FaXianJingCai.lpx#L14-L15) |
+
+公开规则与离线样本可用于核对匹配范围。这些广告位在当前 iPhone、iPad 版本上的实际命中和启动耗时还待验证。广告素材如已缓存，首次重新打开 App 时仍可能显示。
 
 ## 内容和影音
 
