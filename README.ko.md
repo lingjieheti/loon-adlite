@@ -26,4 +26,4 @@ Safari에서 Userscripts 확장 프로그램을 켠 뒤 원하는 스크립트 �
 
 구독 주소는 선택한 버전의 `main` 브랜치를 따릅니다. Loon에서 외부 리소스를 매일 확인하도록 설정할 수 있으며, 실제 갱신 시점은 Loon이 결정합니다. USB로 복사한 파일은 직접 교체하세요. 이전 버전으로 돌아가려면 구독 주소의 `main`을 원하는 커밋의 전체 해시로 바꿔 가져온 다음 기존 항목을 끄세요. [커밋 기록](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[앱별 적용 범위와 제한(중국어)](COVERAGE.md) · [후원하기(영어)](SPONSOR.en.md)
+[앱별 적용 범위와 제한(중국어)](COVERAGE.md) · [기능별 출처(중국어)](SOURCES.md) · [후원하기(영어)](SPONSOR.en.md)
