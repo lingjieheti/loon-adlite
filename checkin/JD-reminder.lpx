@@ -1,0 +1,6 @@
+#!name = 京东签到提醒
+#!desc = 每天上午 9 点提醒一次。轻点通知进入「我的京豆」，可配合 Safari 网页助手或手动签到。
+#!author = lingjieheti
+
+[Script]
+cron "0 9 * * *" script-path=https://raw.githubusercontent.com/lingjieheti/loon-adlite/3283299c3635f7e906d8d059d7b260a931bce282/checkin/jd-reminder.js,tag=京东签到提醒,timeout=5

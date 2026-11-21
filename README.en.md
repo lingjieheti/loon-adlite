@@ -6,6 +6,8 @@ I use these Loon plugins to filter ads that appear when an app opens or while I 
 
 ## Installation
 
+For daily check-ins on JD and SMZDM, there is a separate Safari helper and an optional JD reminder for Loon. The helper runs when its dedicated page is open. [Check-in setup (Chinese)](checkin/README.md)
+
 Open an install link in Safari on your iPhone or iPad, then confirm the import in Loon. You can also copy the subscription URL into Loon under Configuration → Plugins → ＋.
 
 - **Suite** includes both Lite and Inline, plus rules for apps such as JD, Taobao, Meituan and Douyin. If you use Suite, disable the other two plugins to avoid applying the same rules twice. [Install Suite](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [Subscription URL](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
