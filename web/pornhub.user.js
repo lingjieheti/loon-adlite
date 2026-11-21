@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pornhub 网页广告位过滤
 // @namespace    https://github.com/lingjieheti/loon-adlite
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js
 // @description  在本站隐藏部分侧栏横幅、移动播放页广告位和独立广告投放元素。
 // @match        https://*.pornhub.com/*
@@ -20,6 +20,8 @@
 
     const style = document.createElement("style");
     style.id = "loon-adlite-ph-ad-slots";
+    // Placement identifiers from The EasyList authors and AdGuard Filters:
+    // https://github.com/lingjieheti/loon-adlite/blob/main/SOURCES.md
     style.textContent = `
         .sideAds,
         #mobileContainer .watchpageAd,

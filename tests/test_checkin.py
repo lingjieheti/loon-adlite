@@ -1,10 +1,8 @@
 """Exercise the optional reminders without Loon, a network, or an account."""
 
-import hashlib
 import json
 from pathlib import Path
 import re
-import shutil
 import subprocess
 import unittest
 from urllib.parse import quote
@@ -67,26 +65,33 @@ def run_reminder(script, settings):
 
 
 class CheckinTests(unittest.TestCase):
+    def assert_pinned_reminder(self, directive, template, filename):
+        path = f"checkin/{filename}"
+        url = rf"{re.escape(RAW_REPO)}/([0-9a-f]{{40}})/{re.escape(path)}"
+        before, after = template.split("<script-url>")
+        match = re.fullmatch(re.escape(before) + url + re.escape(after), directive)
+        self.assertIsNotNone(match, f"Expected the reviewed {path} from an immutable repository URL: {directive}")
+        revision = match[1]
+        git = ["git", "-C", str(CHECKIN.parent)]
+        self.assertEqual(subprocess.check_output([*git, "cat-file", "-t", revision], text=True).strip(), "commit")
+        subprocess.run([*git, "merge-base", "--is-ancestor", revision, "HEAD"], check=True)
+
+        # hash-object applies Git's checkout line-ending rules, including on Windows.
+        # ls-tree checks the referenced commit contains this exact blob as a regular file.
+        self.assertFalse((CHECKIN / filename).is_symlink())
+        local_blob = subprocess.check_output([*git, "hash-object", f"--path={path}", path], text=True).strip()
+        pinned = subprocess.check_output([*git, "ls-tree", revision, "--", path], text=True).strip()
+        self.assertRegex(pinned, rf"^100(?:644|755) blob {local_blob}\t{re.escape(path)}$",
+                         f"The reviewed {path} differs from the script published at {revision}")
+
     def test_plugin_schedules_only_the_pinned_reminder(self):
         plugin = (CHECKIN / "JD-reminder.lpx").read_text(encoding="utf-8")
         directives = [line.strip() for line in plugin.splitlines() if line.strip() and not line.lstrip().startswith("#")]
         self.assertEqual(len(directives), 2)
         self.assertEqual(directives[0], "[Script]")
-        rule = re.fullmatch(
-            rf'cron "0 9 \* \* \*" script-path={re.escape(RAW_REPO)}/([0-9a-f]{{40}})/checkin/jd-reminder\.js'
-            r'(?:,(?:tag=[^,]+|timeout=\d+))*',
-            directives[1],
+        self.assert_pinned_reminder(
+            directives[1], 'cron "0 9 * * *" script-path=<script-url>,tag=京东签到提醒,timeout=5', "jd-reminder.js",
         )
-        self.assertIsNotNone(rule, directives[1])
-        # A full local checkout can verify the resolved revision without a network call.
-        # Release validation checks the raw URL separately for shallow CI checkouts.
-        if (CHECKIN.parent / ".git").exists() and shutil.which("git"):
-            git = ["git", "-C", str(CHECKIN.parent)]
-            shallow = subprocess.check_output([*git, "rev-parse", "--is-shallow-repository"], text=True)
-            if shallow.strip() == "false":
-                pinned = subprocess.check_output([*git, "show", f"{rule[1]}:checkin/jd-reminder.js"])
-                local = (CHECKIN / "jd-reminder.js").read_text(encoding="utf-8")
-                self.assertEqual(pinned.decode("utf-8").replace("\r\n", "\n"), local)
 
     def test_reminder_posts_one_notification_then_finishes(self):
         (notification, done), = run_reminder("jd-reminder.js", [None])
@@ -109,13 +114,12 @@ class CheckinTests(unittest.TestCase):
         self.assertTrue(taobao_coupon.startswith("taobaoCoupon = input,tag="))
         self.assertEqual(taobao_open.partition(",tag=")[0], 'taobaoOpen = select,"淘宝 App","网页"')
         self.assertEqual(hours.partition(",tag=")[0], 'hour = select,"0 9 * * *","0 12 * * *","0 20 * * *"')
-        revision = "2782eb0a01ae7082ca28b7cf0af5fe17711ac902"
-        self.assertEqual(script, 'cron ${hour} then script("' + RAW_REPO + "/" + revision
-                         + '/checkin/shopping-reminder.js", {${destination}, ${coupon}, ${taobaoCoupon}, ${taobaoOpen}})'
-                         + ' with tag="签到领券", timeout=5')
-        # Digest of the pinned file, also verifiable in a shallow checkout.
-        local = (CHECKIN / "shopping-reminder.js").read_text(encoding="utf-8").encode()
-        self.assertEqual(hashlib.sha256(local).hexdigest(), "ffb707d95504f09a696389f993750b39ef13d615943de07f0bb6ef4c75006e4c")
+        self.assert_pinned_reminder(
+            script,
+            'cron ${hour} then script("<script-url>", {${destination}, ${coupon}, ${taobaoCoupon}, ${taobaoOpen}})'
+            ' with tag="签到领券", timeout=5',
+            "shopping-reminder.js",
+        )
 
     def test_shopping_notifications_and_selected_coupon(self):
         cases = [({"destination": key}, key, url) for key, url in DESTINATIONS.items()]

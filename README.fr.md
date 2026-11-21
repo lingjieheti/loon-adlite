@@ -28,4 +28,4 @@ Lite et Suite bloquent aussi certaines requêtes publicitaires sur le Web, notam
 
 Pour suivre la version publiée sur `main`, demandez à Loon de vérifier les ressources externes chaque jour. Loon détermine l’heure de la vérification. Les fichiers copiés par USB se remplacent manuellement. Pour retrouver une ancienne version, remplacez `main` dans l’URL d’abonnement par l’identifiant complet du commit souhaité, importez la nouvelle URL et désactivez l’entrée précédente. [Historique des versions](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Détail des filtres par application (en chinois)](COVERAGE.md) · [Soutenir mon travail (en anglais)](SPONSOR.en.md)
+[Détail des filtres par application (en chinois)](COVERAGE.md) · [Sources par fonctionnalité (en chinois)](SOURCES.md) · [Soutenir mon travail (en anglais)](SPONSOR.en.md)

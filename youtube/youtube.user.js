@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         YouTube 网页广告助手
 // @namespace    https://github.com/lingjieheti/loon-adlite
-// @version      1.0.0
+// @version      1.0.1
+// @updateURL    https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js
 // @description  收起列表中的独立广告位，并在播放器允许跳过时尝试点击一次。
 // @match        https://www.youtube.com/*
 // @match        https://m.youtube.com/*
 // @noframes
+// @inject-into  content
 // @run-at       document-idle
 // @grant        none
 // ==/UserScript==
@@ -15,6 +17,8 @@
     if (window.top !== window.self ||
         !["https://www.youtube.com", "https://m.youtube.com"].includes(location.origin)) return;
 
+    // Placement identifiers adapted from The EasyList authors (https://easylist.to/).
+    // Source and license: https://github.com/lingjieheti/loon-adlite/blob/main/SOURCES.md
     const listRules = {
         "/": "#contents > ytd-rich-item-renderer > ytd-ad-slot-renderer, ytd-rich-item-renderer > #content > ytd-ad-slot-renderer, ytm-rich-item-renderer > ad-slot-renderer",
         "/results": "ytd-item-section-renderer > .ytd-item-section-renderer > ytd-ad-slot-renderer, lazy-list > ad-slot-renderer",
