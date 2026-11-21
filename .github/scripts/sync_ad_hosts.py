@@ -1,11 +1,10 @@
 """Sync a small reviewed set of exact ad hosts from v2ray/domain-list-community (MIT)."""
-import base64
 from hashlib import sha1
-import json
+import os
 from pathlib import Path
 import re
+import subprocess
 import tempfile
-from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -25,35 +24,49 @@ RULE = re.compile(r"DOMAIN,([a-z0-9.-]+),REJECT")
 MAX_FILE = 256 * 1024
 
 
-def github(path):
-    url = f"https://api.github.com/repos/{REPOSITORY}/{path}"
-    request = Request(url, headers={"User-Agent": "loon-adlite-rule-sync", "Accept": "application/vnd.github+json"})
-    with urlopen(request, timeout=20) as response:
-        if response.geturl() != url:
-            raise ValueError("Unexpected upstream redirect")
-        data = response.read(MAX_FILE + 1)
-    if len(data) > MAX_FILE:
-        raise ValueError("Upstream response too large")
-    return json.loads(data)
+def git(directory, *args, timeout=15):
+    # This public fetch must not inherit checkout credentials, URL rewrites or Git object overrides.
+    env = {k: v for k, v in os.environ.items() if not k.upper().startswith(("GIT_", "GH_", "GITHUB_"))}
+    env.update(GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1", GIT_TERMINAL_PROMPT="0",
+               GIT_ALLOW_PROTOCOL="https", GIT_NO_REPLACE_OBJECTS="1")
+    return subprocess.check_output(["git", "-C", str(directory), "-c", "credential.helper=",
+                                    "-c", "http.followRedirects=false", "-c", "fetch.fsckObjects=true", *args],
+                                   env=env, timeout=timeout)
+
+
+def read_snapshot(repo, commit):
+    if not OID.fullmatch(commit):
+        raise ValueError("Invalid upstream commit")
+    paths = {"data/" + name: name for name in CANDIDATES}
+    entries = git(repo, "ls-tree", "-z", commit, "--", *paths)
+    files = {}
+    for entry in filter(None, entries.split(b"\0")):
+        meta, _, path_bytes = entry.partition(b"\t")
+        path = path_bytes.decode("ascii")
+        regular = re.fullmatch(rb"100644 blob ([a-f0-9]{40})", meta)
+        if path not in paths or not regular:
+            raise ValueError(f"Expected a regular upstream file: {path}")
+        blob = regular[1].decode("ascii")
+        size = int(git(repo, "cat-file", "-s", blob))
+        if not 0 < size <= MAX_FILE:
+            raise ValueError(f"Invalid size for {path}")
+        data = git(repo, "cat-file", "blob", blob)
+        digest = sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
+        if len(data) != size or digest != blob:
+            raise ValueError(f"Invalid Git blob for {path}")
+        files[paths[path]] = data.decode("utf-8")
+    if set(files) != set(CANDIDATES):
+        raise ValueError("Required upstream files are missing")
+    return files
 
 
 def snapshot():
-    reference = github("git/ref/heads/master")
-    commit = reference["object"]["sha"]
-    if reference["ref"] != "refs/heads/master" or reference["object"]["type"] != "commit" or not OID.fullmatch(commit):
-        raise ValueError("Invalid upstream ref")
-    files = {}
-    for category in CANDIDATES:
-        path = "data/" + category
-        item = github(f"contents/{path}?ref={commit}")
-        if item["path"] != path or item["type"] != "file" or item["encoding"] != "base64":
-            raise ValueError(f"Unexpected source record for {path}")
-        data = base64.b64decode(item["content"].replace("\n", ""), validate=True)
-        digest = sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
-        if not data or len(data) != item["size"] or len(data) > MAX_FILE or digest != item["sha"]:
-            raise ValueError(f"Invalid Git blob for {path}")
-        files[category] = data.decode("utf-8")
-    return commit, files
+    with tempfile.TemporaryDirectory() as directory:
+        git(directory, "init", "--bare", "--quiet", "--object-format=sha1", "--template=")
+        git(directory, "fetch", "--quiet", "--depth=1", "--no-tags", "--no-recurse-submodules",
+            f"https://github.com/{REPOSITORY}.git", "refs/heads/master:refs/heads/upstream", timeout=90)
+        commit = git(directory, "rev-parse", "--verify", "refs/heads/upstream^{commit}").decode("ascii").strip()
+        return commit, read_snapshot(directory, commit)
 
 
 def selected(files):

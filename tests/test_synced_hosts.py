@@ -1,7 +1,6 @@
 """Verify the compiled plugin rules and exercise update, withdrawal and failed snapshots offline."""
-import base64
-from hashlib import sha1
 from pathlib import Path
+import subprocess
 from tempfile import TemporaryDirectory
 import sys
 import unittest
@@ -88,26 +87,62 @@ class SyncTests(unittest.TestCase):
             sync.update(self.root, NEXT, SNAPSHOT)
         self.assertEqual(before, self.copies())
 
-    def test_git_contents_integrity_and_immutable_urls(self):
-        def github(path):
-            if path == "git/ref/heads/master":
-                return {"ref": "refs/heads/master", "object": {"sha": FIRST, "type": "commit"}}
-            name, query = path.split("?", 1)
-            self.assertEqual(query, "ref=" + FIRST)
-            dataset = name.split("/")[-1]
-            data = SNAPSHOT[dataset].encode()
-            digest = sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest()
-            return {"path": "data/" + dataset, "type": "file", "encoding": "base64", "size": len(data),
-                    "sha": digest, "content": base64.b64encode(data).decode()}
+    def git_fixture(self, mode="100644", jd=SNAPSHOT["jd"].encode()):
+        # Construct Git objects directly so symlink tests also run on Windows without link privileges.
+        repo = self.root / "upstream.git"
+        repo.mkdir(exist_ok=True)
 
-        with patch.object(sync, "github", side_effect=github):
-            self.assertEqual(sync.snapshot(), (FIRST, SNAPSHOT))
+        def write(*args, payload=b""):
+            command = ["git", "-C", str(repo), "-c", "user.name=Test", "-c", "user.email=test@example.org",
+                       "-c", "commit.gpgSign=false", *args]
+            return subprocess.check_output(command, input=payload).strip()
 
-        def corrupted(path):
-            item = github(path)
-            if path.startswith("contents/"):
-                item["sha"] = "0" * 40
-            return item
+        write("init", "--bare", "--quiet", "--object-format=sha1", "--template=")
+        entries = []
+        for name, contents in SNAPSHOT.items():
+            if name == "jd" and jd is None:
+                continue
+            oid = write("hash-object", "-w", "--stdin", payload=jd if name == "jd" else contents.encode())
+            entry_mode = mode if name == "jd" else "100644"
+            entries.append(entry_mode.encode() + b" blob " + oid + b"\t" + name.encode() + b"\n")
+        data = write("mktree", payload=b"".join(entries))
+        tree = write("mktree", payload=b"040000 tree " + data + b"\tdata\n")
+        commit = write("commit-tree", tree.decode(), "-m", "fixture").decode()
+        write("update-ref", "refs/heads/master", commit)
+        return repo, commit
 
-        with patch.object(sync, "github", side_effect=corrupted), self.assertRaises(ValueError):
-            sync.snapshot()
+    def test_anonymous_shallow_snapshot_reads_pinned_regular_blobs(self):
+        source, commit = self.git_fixture()
+        real_git = sync.git
+
+        def offline_git(directory, *args, **kwargs):
+            if args[0] == "fetch":
+                self.assertIn("--depth=1", args)
+                self.assertIn("--no-tags", args)
+                self.assertEqual(args[-2:], ("https://github.com/v2ray/domain-list-community.git",
+                                             "refs/heads/master:refs/heads/upstream"))
+                # Only the test substitutes a file transport for the public HTTPS source.
+                return subprocess.check_output(["git", "-C", directory, *args[:-2], source.as_uri(), args[-1]])
+            return real_git(directory, *args, **kwargs)
+
+        with patch.object(sync, "git", side_effect=offline_git):
+            self.assertEqual(sync.snapshot(), (commit, SNAPSHOT))
+        self.git_fixture(jd=b"jd.com\nchanged.example @ads")
+        self.assertEqual(sync.read_snapshot(source, commit), SNAPSHOT)
+
+    def test_refuses_symlinks_missing_oversized_and_changed_git_blobs(self):
+        for mode, payload in (("120000", b"../../elsewhere"), ("100755", b"script"),
+                              ("100644", None), ("100644", b""), ("100644", b"x" * (sync.MAX_FILE + 1))):
+            with self.subTest(mode=mode, size=len(payload) if payload is not None else None):
+                repo, commit = self.git_fixture(mode, payload)
+                with self.assertRaises(ValueError):
+                    sync.read_snapshot(repo, commit)
+        repo, commit = self.git_fixture()
+        real_git = sync.git
+
+        def damaged_git(directory, *args):
+            data = real_git(directory, *args)
+            return b"X" + data[1:] if args[:2] == ("cat-file", "blob") else data
+
+        with patch.object(sync, "git", side_effect=damaged_git), self.assertRaisesRegex(ValueError, "Git blob"):
+            sync.read_snapshot(repo, commit)
