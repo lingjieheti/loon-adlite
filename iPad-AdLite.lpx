@@ -1,0 +1,39 @@
+#!name = iPad 轻量去广告
+#!desc = 仅按完整主机名拦截部分网页与 App 广告。激励广告可能无法领取，可随时停用。
+#!author = lingjieheti
+#!date = 2026-11-21
+
+[Rule]
+# Google AdMob / Ad Manager
+DOMAIN,googleads.g.doubleclick.net,REJECT
+DOMAIN,pubads.g.doubleclick.net,REJECT
+DOMAIN,securepubads.g.doubleclick.net,REJECT
+DOMAIN,pagead2.googlesyndication.com,REJECT
+
+# 百度广告
+DOMAIN,mobads.baidu.com,REJECT
+DOMAIN,adscdn.baidu.com,REJECT
+DOMAIN,mobads-pre-config.cdn.bcebos.com,REJECT
+
+# 腾讯广告与腾讯音乐
+DOMAIN,mi.gdt.qq.com,REJECT
+DOMAIN,pgdt.gtimg.cn,REJECT
+DOMAIN,adsmind.apdcdn.tc.qq.com,REJECT
+DOMAIN,ad.tencentmusic.com,REJECT
+DOMAIN,tmead.y.qq.com,REJECT
+
+# 字节跳动与穿山甲
+DOMAIN,ad.zijieapi.com,REJECT
+DOMAIN,pangolin.snssdk.com,REJECT
+DOMAIN,pangolin-hl.snssdk.com,REJECT
+DOMAIN,pangolin-lf.snssdk.com,REJECT
+DOMAIN,pangolin-lq.snssdk.com,REJECT
+
+# 快手广告素材
+DOMAIN,ali-ad.a.yximgs.com,REJECT
+DOMAIN,tx-ad.a.yximgs.com,REJECT
+DOMAIN,hw-ot-ad.a.yximgs.com,REJECT
+
+# 微博与 WPS 广告接口
+DOMAIN,adstrategy.biz.weibo.com,REJECT
+DOMAIN,api-ad-adapter.wps.com,REJECT
