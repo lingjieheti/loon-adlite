@@ -2,7 +2,7 @@ name: Sync reviewed ad hosts
 
 on:
   schedule:
-    - cron: '17 4 * * 1'
+    - cron: '17 4 * * *'
   workflow_dispatch:
 
 permissions: {}
@@ -23,20 +23,27 @@ jobs:
       contents: write
     outputs:
       candidate: ${{ steps.build.outputs.candidate }}
+      upstream: ${{ steps.source.outputs.upstream_sha }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      - name: Generate and inspect the two subscriptions
+      - name: Read and verify the upstream snapshot
+        id: source
+        run: python3 -B .github/scripts/sync_ad_hosts.py
+
+      - name: Inspect the two subscriptions
         id: build
+        env:
+          UPSTREAM: ${{ steps.source.outputs.upstream_sha }}
         run: |
-          python3 -B .github/scripts/sync_ad_hosts.py
+          [[ "$UPSTREAM" =~ ^[0-9a-f]{40}$ ]]
           git add -- iPad-AdLite.lpx iPad-AdSuite.lpx
           git diff --exit-code
           git diff --cached --check
           if git diff --cached --quiet; then
-            echo 'Reviewed hosts are up to date.' >> "$GITHUB_STEP_SUMMARY"
+            echo 'The host list is unchanged. The read-only audit will verify this snapshot against the published subscriptions.' >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
           diff <(printf '%s\n' iPad-AdLite.lpx iPad-AdSuite.lpx) <(git diff --cached --name-only)
@@ -44,7 +51,7 @@ jobs:
               -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
               commit -m 'Sync reviewed ad hosts'
           candidate=$(git rev-parse HEAD)
-          python3 -B .github/scripts/audit_host_update.py "$GITHUB_SHA" "$candidate"
+          python3 -B .github/scripts/audit_host_update.py "$GITHUB_SHA" "$candidate" --upstream "$UPSTREAM"
           echo "candidate=$candidate" >> "$GITHUB_OUTPUT"
 
       - name: Make the exact candidate available to the read-only tests
@@ -55,15 +62,19 @@ jobs:
           gh auth setup-git
           git push --force-with-lease="$CANDIDATE_REF:" origin "HEAD:$CANDIDATE_REF"
 
+      - name: Record unsuccessful preparation
+        if: failure()
+        run: echo 'Upstream preparation failed. No subscription was published. See the failed step for details.' >> "$GITHUB_STEP_SUMMARY"
+
   validate:
     needs: prepare
-    if: needs.prepare.outputs.candidate != ''
     permissions:
       contents: read
     uses: ./.github/workflows/check-plugins.yml
     with:
-      candidate: ${{ needs.prepare.outputs.candidate }}
+      candidate: ${{ needs.prepare.outputs.candidate || github.sha }}
       release_base: ${{ github.sha }}
+      upstream: ${{ needs.prepare.outputs.upstream }}
 
   publish:
     needs: [prepare, validate]
@@ -75,6 +86,7 @@ jobs:
       contents: write
     env:
       CANDIDATE: ${{ needs.prepare.outputs.candidate }}
+      UPSTREAM: ${{ needs.prepare.outputs.upstream }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -89,7 +101,7 @@ jobs:
           gh auth setup-git
           git fetch --no-tags origin "$CANDIDATE_REF"
           test "$(git rev-parse FETCH_HEAD)" = "$CANDIDATE"
-          python3 -B .github/scripts/audit_host_update.py "$GITHUB_SHA" "$CANDIDATE"
+          python3 -B .github/scripts/audit_host_update.py "$GITHUB_SHA" "$CANDIDATE" --upstream "$UPSTREAM"
           conclusion=failure
           if [[ "$VALIDATION" == success ]]; then conclusion=success; fi
           # The reusable workflow's jobs are attached to the scheduled run's base SHA.

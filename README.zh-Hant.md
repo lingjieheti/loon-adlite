@@ -22,11 +22,9 @@
 
 YouTube 網頁助手可在官方「略過廣告」按鈕出現時嘗試點擊。另有助手可隱藏 Pornhub 的部分廣告版位。 [安裝 YouTube 腳本](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [安裝網頁腳本](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
 
-可在京東和什麼值得買簽到，也可嘗試領取自己選定的京東優惠券或淘寶店舖券。抖音活動請到官方頁面操作。 [簽到與領券指南（簡體中文）](checkin/README.md)
-
 ## 更新
 
-GitHub 每週核對一組經審核的廣告網域，有變動且通過測試時，就會自動發佈到同一個訂閱網址。嗶哩嗶哩、京東等 App 的內嵌廣告規則另行審核。
+GitHub 每天比對上游廣告網域，每次都執行安全稽核。已審核的網域清單有變動，且通過稽核與所有測試後，才會自動發佈到原訂閱網址。嗶哩嗶哩、京東等 App 的內嵌廣告規則來源也每天比對，需要調整的規則會先經過專項安全稽核。
 
 訂閱網址跟隨 `main`。可將 Loon 的外部資源設為每天檢查更新。如需回到舊版，將訂閱網址的 `main` 改為該次提交的完整編號。 [提交紀錄](https://github.com/lingjieheti/loon-adlite/commits/main/)
 

@@ -22,11 +22,9 @@ Aturan untuk beranda rekomendasi Douyin telah diuji dengan sampel respons. Hasil
 
 Alat untuk situs YouTube mencoba menekan tombol Lewati Iklan resmi saat tombolnya muncul. Alat terpisah dapat menyembunyikan beberapa slot iklan di Pornhub. [Skrip YouTube](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [Skrip Pornhub](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
 
-Panduan mencakup check-in harian di JD dan SMZDM serta cara mengambil kupon JD atau kupon toko Taobao yang Anda pilih. Gunakan halaman promo resmi untuk penawaran Douyin. [Panduan check-in dan kupon (bahasa Mandarin)](checkin/README.md)
-
 ## Pembaruan
 
-Setiap minggu, GitHub memeriksa daftar host iklan yang telah ditinjau. Jika daftarnya berubah dan lolos pengujian, pembaruan otomatis terbit di URL langganan yang sama. Perubahan filter iklan dalam aplikasi seperti Bilibili dan JD ditinjau secara terpisah.
+GitHub mencocokkan daftar host iklan dengan sumbernya setiap hari dan menjalankan audit keamanan pada setiap pemeriksaan. Perubahan pada daftar host yang disetujui otomatis terbit di URL langganan yang sama setelah lolos audit dan seluruh pengujian. Sumber aturan untuk iklan dalam aplikasi seperti Bilibili dan JD juga diperiksa setiap hari. Perubahan pada aturan tersebut menjalani peninjauan keamanan tersendiri sebelum diterbitkan.
 
 Alamat langganan mengikuti cabang `main`. Atur Loon untuk memeriksa sumber daya eksternal setiap hari. Untuk kembali ke versi lama, ganti `main` pada alamat langganan dengan hash lengkap commit yang diinginkan. [Riwayat perubahan](https://github.com/lingjieheti/loon-adlite/commits/main/)
 

@@ -22,11 +22,9 @@
 
 YouTube 웹 도우미는 공식 광고 건너뛰기 버튼이 나타나면 클릭을 시도합니다. 별도 도우미로 Pornhub의 일부 광고 영역을 숨길 수도 있습니다. [YouTube 스크립트](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [Pornhub 스크립트](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
 
-징둥·선머즈더마이 출석 체크와 직접 고른 징둥 쿠폰·타오바오 상점 쿠폰 수령을 지원합니다. 더우인 행사는 공식 페이지에서 참여하세요. [출석 체크 및 쿠폰 안내(중국어)](checkin/README.md)
-
 ## 업데이트
 
-GitHub는 매주 검토된 광고 호스트 목록을 대조하고, 변경 사항이 테스트를 통과하면 같은 구독 주소에 자동으로 배포합니다. 빌리빌리와 징둥 등의 앱 내부 광고 규칙은 별도로 검토합니다.
+GitHub는 매일 광고 호스트 목록을 원본과 대조하고 매번 보안 감사를 수행합니다. 승인된 호스트 목록이 바뀌면 감사와 모든 테스트를 통과한 뒤에만 기존 구독 주소로 자동 배포합니다. 빌리빌리와 징둥 등 앱 내 광고 필터의 원본도 매일 확인하며, 필터를 수정할 때는 배포 전에 별도 보안 검토를 거칩니다.
 
 구독 주소는 `main`을 따릅니다. Loon의 외부 리소스 업데이트 확인 주기를 하루로 설정할 수 있습니다. 이전 버전으로 돌아가려면 구독 주소의 `main`을 원하는 커밋의 전체 해시로 바꾸세요. [커밋 기록](https://github.com/lingjieheti/loon-adlite/commits/main/)
 

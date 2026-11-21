@@ -12,9 +12,6 @@ ROOT = Path(__file__).resolve().parents[1]
 PROJECT = "https://github.com/lingjieheti/loon-adlite"
 UPDATE_BASE = "https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/"
 MATCHES = {
-    "checkin/daily.user.js": ["https://bean.jd.com/myJingBean/list", "https://www.smzdm.com/"],
-    "checkin/jd-coupon.user.js": ["https://coupon.m.jd.com/coupons/show.action*"],
-    "checkin/taobao-coupon.user.js": ["https://market.m.taobao.com/apps/aliyx/coupon/detail.html*"],
     "web/pornhub.user.js": ["https://*.pornhub.com/*"],
     "youtube/youtube.user.js": ["https://m.youtube.com/*", "https://www.youtube.com/*"],
 }
@@ -102,7 +99,7 @@ class SafariPermissions(unittest.TestCase):
                 require_version_bump(path, previous, current)
 
     def test_new_unchanged_and_updated_versions(self):
-        path = "checkin/jd-coupon.user.js"
+        path = "youtube/youtube.user.js"
         old = f"{OPEN}\n// @version 1.9.0\n{CLOSE}\n"
         require_version_bump(path, None, old)
         require_version_bump(path, old, old)
@@ -112,13 +109,13 @@ class SafariPermissions(unittest.TestCase):
                 require_version_bump(path, old, old.replace("1.9.0", version) + "doWork();")
 
     def test_unreviewed_headers_are_rejected(self):
-        path = "checkin/jd-coupon.user.js"
+        path = "youtube/youtube.user.js"
         source = (ROOT / path).read_text(encoding="utf-8")
         check_header(path, source)
         for directive in (
             "// @grant GM_xmlhttpRequest", "\t@require https://example.org/latest.js",
             "// @resource tracking https://example.org/pixel", "// @connect *",
-            "// @include https://*/*", "// @match https://coupon.m.jd.com/*",
+            "// @include https://*/*", "// @match https://accounts.google.com/*",
             "// @downloadURL https://example.org/helper.user.js",
             "// @updateURL " + UPDATE_BASE + path, "// @noframes",
         ):
@@ -126,7 +123,7 @@ class SafariPermissions(unittest.TestCase):
                 check_header(path, source.replace(CLOSE, directive + "\n" + CLOSE, 1))
         for before, after in (
             (UPDATE_BASE, "https://raw.githubusercontent.com/example/fork/main/"),
-            (UPDATE_BASE + path, UPDATE_BASE + "checkin/another.user.js"),
+            (UPDATE_BASE + path, UPDATE_BASE + "youtube/another.user.js"),
             ("// @inject-into  content", "// @inject-into  page"),
             ("// @noframes\n", ""),
             (CLOSE, CLOSE + "\n" + OPEN + "\n// @grant GM_openInTab\n" + CLOSE),

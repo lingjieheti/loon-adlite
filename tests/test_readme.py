@@ -19,8 +19,6 @@ class ReadmeTests(unittest.TestCase):
         required = {"README.md"} | {f"README.{lang}.md" for lang in LANGUAGES}
         self.assertEqual(required.difference(page.name for page in pages), set())
         self.assertTrue((ROOT / "iPad-AdSuite.lpx").is_file())
-        rewards = {path.relative_to(ROOT).as_posix() for path in (ROOT / "checkin").glob("*.lpx")}
-        reward_links = rewards | {RAW + path for path in rewards}
 
         for page in pages:
             with self.subTest(page=page.name):
@@ -28,12 +26,12 @@ class ReadmeTests(unittest.TestCase):
                 imports = []
                 for link in re.findall(r"\]\(([^\s()]+)\)", contents):
                     url = urlsplit(link)
+                    self.assertNotIn("checkin/", url.path)
                     if url.path == "/openloon/import":
                         self.assertEqual(url._replace(query="", fragment="").geturl(), IMPORT)
                         targets = parse_qs(url.query, keep_blank_values=True).get("plugin", [])
                         self.assertEqual(len(targets), 1, link)
-                        if targets[0] not in reward_links:
-                            imports.append(targets[0])
-                    elif url.path.endswith(".lpx") and link not in reward_links:
+                        imports.append(targets[0])
+                    elif url.path.endswith(".lpx"):
                         self.assertEqual(link, SUBSCRIPTION)
                 self.assertEqual(imports, [SUBSCRIPTION])

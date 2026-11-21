@@ -2,9 +2,9 @@
 
 每个功能先查已有实现，再核对目标 App 或网页上的具体接口、字段和控件。下表区分了采用的规则、做过的本地适配，以及仅用于对照的资料。
 
-GitHub Actions 每周一检查京东、腾讯和优酷分类的广告域名。每次从同一个上游提交读取三份文件，只取带有 `@ads` 标记且符合本仓筛选条件的完整主机名。订阅只写入精确匹配的域名规则。每次变更都会运行插件、隐私和浏览器测试，通过后自动发布到 `main`。域名清单没有变化时沿用现有版本。插件生成区内记录所用上游提交，便于核对。App 内嵌广告的 HTTPS 主机和响应复写由维护者另行审核。[自动更新记录](https://github.com/lingjieheti/loon-adlite/actions/workflows/sync-ad-hosts.yml) · [筛选条件](.github/scripts/sync_ad_hosts.py) · [京东](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/jd) · [腾讯](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/tencent) · [优酷](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/youku) · [上游 MIT 许可](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/LICENSE)
+GitHub Actions 每天北京时间 12:17 排期检查京东、腾讯和优酷的广告域名。同步程序核对上游 MIT 许可，只选择指定分类中带有 `@ads` 标记、且在本仓已审核名单中的完整主机名。每轮审计都从同一上游提交重新计算名单，对照两份订阅，并运行插件、隐私和浏览器测试。有变化且通过全部检查时才自动发布到 `main`。名单未变时保留原订阅，运行摘要会记录本次核对的上游版本。App 内嵌广告的 HTTPS 主机和响应复写由维护者另行审核。[自动更新记录](https://github.com/lingjieheti/loon-adlite/actions/workflows/sync-ad-hosts.yml) · [筛选条件](.github/scripts/sync_ad_hosts.py) · [京东](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/jd) · [腾讯](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/tencent) · [优酷](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/youku) · [上游 MIT 许可](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/LICENSE)
 
-GitHub 每周一北京时间 11:27 排期检查本页直接列出的 GitHub 固定文件。报告比较文件内容，列出与上游默认分支已有差异的项目。官网、Gist 和链接到其他手册的二级来源，仍需随功能更新人工核对。维护时先对照许可、设备权限和相关测试，再将选中的改动合入发布分支。[查看历次比对](https://github.com/lingjieheti/loon-adlite/actions/workflows/review-upstreams.yml)
+GitHub 每天北京时间 11:27 排期比对本页和覆盖说明（COVERAGE.md）引用的固定版本 GitHub 文件。报告列出已变化、已移除和未能核对的文件，供维护者逐项复核。官网、Gist 等其他来源随功能更新人工核对。维护时先对照许可、设备权限和相关测试，再将选中的改动合入发布分支。[查看历次比对](https://github.com/lingjieheti/loon-adlite/actions/workflows/review-upstreams.yml)
 
 ## Loon 去广告插件
 
@@ -31,15 +31,4 @@ GitHub 每周一北京时间 11:27 排期检查本页直接列出的 GitHub 固�
 
 上述广告位规则来自 The EasyList authors 和 AdGuard。EasyList 对其自有规则提供 GPL-3.0-or-later 或 CC BY-SA 3.0-or-later 双重许可，本项目适配的 EasyList 规则片段采用 GPLv3 选项。所引 AdGuardFilters 版本使用 GPLv3，仓库附有许可原文。[EasyList 许可与署名](https://easylist.to/pages/licence.html) · [AdGuardFilters 许可](https://github.com/AdguardTeam/AdguardFilters/blob/3e12a9344bec9b7591af533217e7a15cf9ade5b3/LICENSE) · [随附的 GPLv3 文本](licenses/GPL-3.0.txt)
 
-五个网页助手均从本仓的对应文件更新。Userscripts 可在扩展菜单检查和安装新版，定期检查默认关闭。已安装且没有更新地址的旧脚本需要手动安装一次新版。需要整站元素过滤时，还可选用 AdGuard for iOS。[Userscripts 更新实现](https://github.com/quoid/userscripts/blob/8b743e37dd7dfc8a510aff4e5e2ab8b1cc9210df/xcode/Ext-Safari/Functions.swift#L916-L928) · [默认更新设置](https://github.com/quoid/userscripts/blob/8b743e37dd7dfc8a510aff4e5e2ab8b1cc9210df/src/ext/shared/settings.js#L168-L191) · [AdGuard for iOS 设置](web/README.md)
-
-## 每日签到、领券与提醒
-
-| 功能 | 采用的依据与本地适配 |
-| --- | --- |
-| 京豆、什么值得买签到 | 京东使用官方卡片结构，并参考 huntingrin（MIT）记录的待签、已签状态。什么值得买使用官网签到入口。两项都在带有专用标记的已登录页面识别按钮，并按日期在本地去重。[京豆实测记录](https://github.com/huntingrin/jd-bean-claim/blob/d07d3a40a92074f73575d4cff4de0367d01aef91/SKILL.md#每日签到) · [京东卡片配置](https://storage.360buyimg.com/assets-fe/mybean/config-js/global.js) · [什么值得买签到说明](https://zhiyou.smzdm.com/user/tequan/) |
-| 京东指定券 | 根据京东公开网页组件识别普通单券，按券链接去重。旧电脑版券地址的参数参考公开 SDK 示例。该修订未找到仓库许可证，这里只使用链接格式。[京东网页组件](https://storage.360buyimg.com/miniprogram-platform/m-add-sns/receive-coupon-m/main.a04e4b02.js) · [电脑版链接示例](https://github.com/irebit/jingdong_union_go/blob/deb4c5eaa5c63a08a423ae5d3f24eec432efc30f/jd.union_test.go#L84) |
-| 淘宝指定店铺券 | 淘宝开放平台和 OpenFlutter/nautilus（Apache-2.0）提供了店铺、活动两个 ID 的领券链接格式。网页助手根据官方券面判断有效期、门槛和「确认领取」按钮，在同一张券上每天最多尝试一次。[淘宝开放平台](https://developer.alibaba.com/docs/doc.htm?articleId=109022&docType=1&treeId=796) · [OpenFlutter 示例](https://github.com/OpenFlutter/nautilus/blob/787250c0f02002697b6da058a8477159a607ae0f/README.md#L46-L48) · [淘宝券页组件](https://g.alicdn.com/cm/m-rx-coupon/0.1.2/pages/detail/index.web.js) |
-| 两款 Loon 提醒 | 京东提醒打开京豆页。三平台提醒在设备上生成通知，用户轻点后打开所选活动。淘宝金币和红包入口分别与 JavisPeng（GPL-3.0）、TonyJiangWJ（GPL-2.0）的 Android 签到流程交叉核对。iOS 使用淘宝公开跳转格式。抖音商城优惠由用户在 App 内领取。两款提醒均使用本仓固定提交的脚本。[淘金币](https://github.com/JavisPeng/taojinbi/blob/e0e9638f48f863c0ddf250ce0ea30df432288dd0/taojinbi.js#L478-L488) · [红包签到](https://github.com/TonyJiangWJ/Unify-Sign/blob/821962e037ae0578f66acff4fc26d37dedac482f/core/Taobao-Sign.js#L53-L69) · [iOS 入口样例](https://gist.github.com/JamesHopbourn/046bc341e7debfd0c86e3b388d983c53/3809a04465599866323dcc8685d64bfa5332e543) · [抖音商城指南](https://apps.apple.com/cn/story/id1759101041) |
-
-签到和单券助手根据官网公开的活动入口、页面结构和控件状态编写。浏览器访问官网并维持登录，助手使用可见按钮。官网发布的前端代码用于核对界面，未收录到本仓。[安装、验证范围与到账说明](checkin/README.md)
+YouTube 和网页去广告助手均从本仓的对应文件更新。Userscripts 可在扩展菜单检查和安装新版，定期检查默认关闭。已安装且没有更新地址的旧脚本需要手动安装一次新版。需要整站元素过滤时，还可选用 AdGuard for iOS。[Userscripts 更新实现](https://github.com/quoid/userscripts/blob/8b743e37dd7dfc8a510aff4e5e2ab8b1cc9210df/xcode/Ext-Safari/Functions.swift#L916-L928) · [默认更新设置](https://github.com/quoid/userscripts/blob/8b743e37dd7dfc8a510aff4e5e2ab8b1cc9210df/src/ext/shared/settings.js#L168-L191) · [AdGuard for iOS 设置](web/README.md)

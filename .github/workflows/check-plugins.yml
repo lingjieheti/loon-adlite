@@ -13,6 +13,9 @@ on:
       release_base:
         type: string
         required: true
+      upstream:
+        type: string
+        required: true
 
 permissions:
   contents: read
@@ -26,7 +29,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ inputs.candidate || github.sha }}
-          fetch-depth: 0 # Resolve and compare the scripts pinned by Loon reminders, offline.
+          fetch-depth: 0 # Compare the candidate with the published base.
           persist-credentials: false
 
       - name: Verify jq 1.8.2
@@ -57,9 +60,14 @@ jobs:
         env:
           RELEASE_BASE: ${{ inputs.release_base || github.event.pull_request.base.sha || env.PUSH_BASE }}
           MANAGED_CANDIDATE: ${{ inputs.candidate }}
+          UPSTREAM: ${{ inputs.upstream }}
         run: |
           args=(--base "$RELEASE_BASE" --head HEAD)
-          if [[ -n "$MANAGED_CANDIDATE" ]]; then args+=(--managed); fi
+          if [[ -n "$MANAGED_CANDIDATE" ]]; then
+            [[ "$UPSTREAM" =~ ^[0-9a-f]{40}$ ]]
+            args+=(--upstream "$UPSTREAM")
+            if [[ "$MANAGED_CANDIDATE" != "$RELEASE_BASE" ]]; then args+=(--managed); fi
+          fi
           python3 -B .github/scripts/audit_release.py "${args[@]}"
 
       - name: Test published plugins
@@ -70,16 +78,10 @@ jobs:
 
       - name: Test the Safari helpers with simulated pages
         run: |
-          python3 -m venv "$RUNNER_TEMP/checkin-tests"
-          "$RUNNER_TEMP/checkin-tests/bin/python" -m pip install --only-binary=:all: playwright==1.58.0
-          "$RUNNER_TEMP/checkin-tests/bin/python" tests/checkin_browser.py
-          "$RUNNER_TEMP/checkin-tests/bin/python" tests/coupon_browser.py
-          "$RUNNER_TEMP/checkin-tests/bin/python" tests/taobao_coupon_browser.py
-          "$RUNNER_TEMP/checkin-tests/bin/python" tests/youtube_browser.py
-          "$RUNNER_TEMP/checkin-tests/bin/python" tests/web_ads_browser.py
-          "$RUNNER_TEMP/checkin-tests/bin/python" -m playwright install --with-deps webkit
-          CHECKIN_TEST_BROWSER=webkit "$RUNNER_TEMP/checkin-tests/bin/python" tests/checkin_browser.py
-          YOUTUBE_TEST_BROWSER=webkit "$RUNNER_TEMP/checkin-tests/bin/python" tests/youtube_browser.py
-          COUPON_TEST_BROWSER=webkit "$RUNNER_TEMP/checkin-tests/bin/python" tests/coupon_browser.py
-          COUPON_TEST_BROWSER=webkit "$RUNNER_TEMP/checkin-tests/bin/python" tests/taobao_coupon_browser.py
-          WEB_ADS_TEST_BROWSER=webkit "$RUNNER_TEMP/checkin-tests/bin/python" tests/web_ads_browser.py
+          python3 -m venv "$RUNNER_TEMP/adblock-tests"
+          "$RUNNER_TEMP/adblock-tests/bin/python" -m pip install --only-binary=:all: playwright==1.58.0
+          "$RUNNER_TEMP/adblock-tests/bin/python" tests/youtube_browser.py
+          "$RUNNER_TEMP/adblock-tests/bin/python" tests/web_ads_browser.py
+          "$RUNNER_TEMP/adblock-tests/bin/python" -m playwright install --with-deps webkit
+          YOUTUBE_TEST_BROWSER=webkit "$RUNNER_TEMP/adblock-tests/bin/python" tests/youtube_browser.py
+          WEB_ADS_TEST_BROWSER=webkit "$RUNNER_TEMP/adblock-tests/bin/python" tests/web_ads_browser.py

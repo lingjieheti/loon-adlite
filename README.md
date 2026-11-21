@@ -22,11 +22,9 @@
 
 YouTube 网页助手可在官方「跳过广告」按钮出现时尝试点击。网页过滤指南另有隐藏 Pornhub 部分广告位的助手。 [安装 YouTube 网页助手](youtube/README.md) · [网页过滤与 Safari 设置](web/README.md)
 
-可以签到领京豆，也可以在什么值得买每日签到。在 Safari 打开自己选中的京东普通券或淘宝店铺券，助手会尝试领券。抖音活动仍需在官方页面操作。 [打开签到与领券指南](checkin/README.md)
-
 ## 更新
 
-GitHub 每周核对一组已审核的广告域名，清单有变化且测试通过时，自动发布到同一个订阅地址。哔哩哔哩、京东等 App 的内嵌广告规则单独审核。 [自动更新记录](https://github.com/lingjieheti/loon-adlite/actions/workflows/sync-ad-hosts.yml)
+GitHub 每天核对上游广告域名，每次都做安全审计。已审核的域名清单有变动，且审计和全部测试通过后，才会自动发布到原订阅地址。哔哩哔哩、京东等 App 的内嵌广告规则来源也每天比对，需要调整的规则经专项安全审计后发布。 [自动更新记录](https://github.com/lingjieheti/loon-adlite/actions/workflows/sync-ad-hosts.yml)
 
 订阅地址跟随 `main`。在 Loon 把外部资源设为每天检查，即可随客户端刷新获取新版。回退时可把订阅地址中的 `main` 替换为目标提交的完整编号。 [提交历史](https://github.com/lingjieheti/loon-adlite/commits/main/) · [上游变动报告](https://github.com/lingjieheti/loon-adlite/actions/workflows/review-upstreams.yml)
 

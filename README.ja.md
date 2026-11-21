@@ -22,11 +22,9 @@ WeChat 公式アカウントの記事や Bilibili のホームにある一部の
 
 YouTube ウェブ版の補助スクリプトは、公式の「広告をスキップ」ボタンが表示されるとクリックを試みます。Pornhub の一部の広告枠を隠すスクリプトもあります。 [YouTube 用スクリプトを開く](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js) · [Pornhub 用スクリプトを開く](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
 
-京東・什么值得买のチェックインや、自分で選んだ京東・淘宝のクーポンの受け取りに対応します。抖音のキャンペーンは公式ページで操作してください。 [チェックインとクーポンのガイド（中国語）](checkin/README.md)
-
 ## 更新
 
-GitHub は確認済みの広告ホストを毎週照合し、変更がありテストに合格した場合、同じ購読 URL に新版を公開します。Bilibili や京東のアプリ内広告向けルールは個別に確認します。
+GitHub は毎日、広告ホストを上流の一覧と照合し、その都度セキュリティ監査を行います。承認済みホストの一覧に変更があり、監査とすべてのテストを通過した場合に、同じ購読 URL に自動公開します。Bilibili や京東のアプリ内広告ルールについても参照元を毎日確認し、ルールを変更する場合は公開前に個別のセキュリティ審査を行います。
 
 購読先は `main` です。Loon の外部リソースを毎日更新確認する設定にできます。以前の版に戻すには、購読用 URL の `main` を対象コミットの完全なハッシュ値に置き換えてください。 [コミット履歴](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
