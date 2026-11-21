@@ -64,7 +64,9 @@ class CheckinBrowserTests(unittest.TestCase):
         playwright = sync_playwright().start()
         cls.addClassCleanup(playwright.stop)
         executable = os.environ.get("CHROME_BIN")
-        if executable:
+        if os.environ.get("CHECKIN_TEST_BROWSER") == "webkit":
+            cls.browser = playwright.webkit.launch()
+        elif executable:
             cls.browser = playwright.chromium.launch(executable_path=executable)
         else:
             try:

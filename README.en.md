@@ -32,4 +32,4 @@ Each subscription URL follows its edition on the `main` branch. GitHub checks th
 
 To roll back, replace `main` in the subscription URL with the full commit hash of the version you want. Import that URL and disable the previous entry. [Commit history](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Coverage and limitations by app (Chinese)](COVERAGE.md) · [Rule sources and review notes (Chinese)](audit.html) · [Offline regression tests](tests/)
+[Coverage and limitations by app (Chinese)](COVERAGE.md) · [Upstream sources by feature (Chinese)](SOURCES.md) · [Rule sources and review notes (Chinese)](audit.html) · [Offline regression tests](tests/)
