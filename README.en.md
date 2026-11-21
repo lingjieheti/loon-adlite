@@ -2,7 +2,9 @@
 
 [简体中文](README.md) · **English** · [日本語](README.ja.md) | [Support my work](SPONSOR.en.md)
 
-I use these Loon plugins to filter ads that appear when an app opens or while I scroll through its feed. All three run on the device and use no remote scripts or telemetry. For the lowest overhead, start with Lite.
+These are the Loon filters I use on my own iPhone and iPad. They’re for anyone who uses mainland Chinese apps in daily life, from local users to international students and others living or working in China. They cover apps like JD (京东) and Taobao (淘宝) for shopping, and Meituan (美团) for food delivery.
+
+The filters block some ads at launch or in feeds, depending on the app. If you’re new to Loon, start with Lite. It requires no certificate. All three editions filter traffic on your device, run no remote scripts and collect no usage data.
 
 ## Installation
 
