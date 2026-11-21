@@ -1,10 +1,19 @@
-# 常用 App 合并版的覆盖范围
+# 常用 App 去广告的覆盖范围
 
-本页对应 2026-11-21 的 `iPad-AdSuite.lpx`。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
+本页对应 2026-11-21 的「常用 App 去广告」。iPhone 与 iPad 使用同一订阅文件 `iPad-AdSuite.lpx`，共 39 条精确域名规则、27 条原生复写和 27 个精确 HTTPS 解密主机。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
+
+## 抖音主 App
+
+这两条规则针对中国版抖音主 App 的推荐流和候选开屏路径。2026-11-21 查到的中国区 App Store 版本为 **41.2.0**。上游分析的是 iOS **30.3.0** 的安装包，测试使用合成响应；更早的字段实现只标注支持到 16.2.0。目前缺少 41.2.0 的 iPhone 或 iPad 广告响应和实机命中记录，实际使用的主机、路径和编码可能已经变化。抖音极速版及国际版 TikTok 另用各自客户端。[中国区 App Store](https://apps.apple.com/cn/app/id1142110895) · [30.3.0 静态证据](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L25-L53) · [旧版适配说明](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Module/douyin.sgmodule#L1-L15)
+
+- **主机范围**仅为 `api3-core-c.amemv.com`、`api3-normal-c.amemv.com`、`api.amemv.com`、`aweme.snssdk.com`。这些是共享 API 主机。开启解密后，发往这些主机的其他 HTTPS 请求也可能在本机经过 TLS 解密；插件只在指定路径执行复写。
+- **推荐信息流**仅匹配 `/aweme/v1/feed` 和 `/aweme/v2/feed`。HTTP 200 的 JSON 还须包含数值 `status_code=0` 和顶层 `aweme_list` 数组。混合列表中，只去掉直接条目里 `is_ads` 为布尔 `true` 或数值 `1` 的对象，纯广告页保留，以降低连续翻页遇到空列表的风险。普通视频、直播、带货和本地生活卡片本身均不作为广告依据，其他条目顺序、分页游标和预取字段保留。[历史广告标记](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Script/douyin.js#L27-L43)
+- **定向请求与编码**。查询中带 `aweme_id` 或 `aweme_ids` 的定向内容、分享及其他视频路径跳过处理；Protobuf、其他二进制响应和未知 JSON 结构也跳过。这样的请求仍可能携带广告。[上游数据格式边界](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L47-L65)
+- **候选开屏接口**共有五个完整路径，分别为`/api/ad/v1/splash/stock`、`/api/ad/v16/splash/preload`、`/api/ad/splash/stock/realtime/v14`、`/api/ad/splash/stock/realtime/v15`、`/api/ad/splash/aweme/v15`。路径出自旧安装包；与前述四个主机的组合是基于静态配置的预防性匹配，缺少各组合的运行时捕获。拒绝请求后仍可能有本地倒计时、缓存画面或重试等待。[候选路径与证据](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Rewrite/DouyinAdClean.snippet#L9-L17)
 
 ## 美团
 
-合并版共 **39 条精确域名规则、21 条原生复写，声明 21 个精确 HTTPS 解密主机**。本次美团更新增加 6 条复写，涉及 6 个主机。美团的独立广告主机继续由域名规则拦截。[域名依据](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan.lpx#L12-L22)
+美团部分包含 6 条原生复写，涉及 6 个完整主机名。美团的独立广告主机继续由域名规则拦截。[域名依据](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan.lpx#L12-L22)
 
 | 场景 | 规则匹配与处理 | 验证边界 |
 | --- | --- | --- |
@@ -32,12 +41,14 @@
 | --- | --- | --- |
 | 小红书、知乎 | 小红书首页去掉带非空 `ads_info` 对象的广告卡，另拦三台广告素材主机。知乎首页按 `type=feed_advert` 过滤 | 小红书保留仅有商品关联、直播标记的普通条目，知乎保留未知类型。作者自行植入的推广通常没有这类标记。[小红书](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/xiaohongshu_splash_ad_block.plugin#L58-L65) · [知乎](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/zhihu.js#L33-L69) |
 | 微信、哔哩哔哩 | 公众号文章广告列表、B 站 App 和网页首页推荐、App 混排横幅中的广告子项 | 对齐原内嵌版，保留阅读互动和普通推荐，避免仅凭 `ad_info` 误删视频。[内嵌版说明](README.md#内嵌广告插件) |
-| 微博 | 开屏预加载、广告图片、已知广告策略主机 | 只处理列入名单的广告请求。[微博](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/weibo.plugin#L28-L45) |
+| 微博主 App | 关注流的 `statuses` 以及首页、推荐流的 `items` 中，只移除带数值 `is_ad=1` 或精确标签 `mblogtypename="广告"` 的微博。另有原有开屏和素材主机规则。 | 普通微博、文字里出现“广告”的正文和未标记推广继续显示。保留正常微博的顺序及分页字段。[广告标记](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L140-L155) · [关注流](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L438-L452) · [首页和推荐](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L96-L102) |
+| 微博轻享版 | 单独处理 `/2/ad/weibointl` 广告接口。 | 只匹配这条路径，覆盖取决于当前版本是否使用它。[轻享版专用接口](https://github.com/gj0134/Loon-Plugins/blob/5c835d0db14a4808c19cd010641be1235b6b3d73/plugins/Weibo-Intl-AdBlock.plugin#L7-L16) |
+| 酷安 | 在匹配的列表响应中，只移除 `entityTemplate="sponsorCard"` 的赞助卡。 | 普通动态、带商品的内容及带“红包”等字样的卡片可正常保留。页面仍可能展示未带该标记的推广。[赞助卡字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/coolapk.js#L28-L44) |
 | 网易云音乐、QQ 音乐 | 网易云开屏图片及视频广告素材，QQ 音乐广告投送及素材 | 播放与普通封面 CDN 不在域名拦截中。[网易云](https://github.com/zbsdsb/loon-adblock-plugins/blob/890f64953efc870d4ca6cc5ec19b048c88ec73bb/NeteaseCloudMusic_ads_v2.lpx#L8-L12) · [QQ 音乐](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/qqmusic_splash_ad_block.plugin#L14-L20) |
 | 腾讯视频、优酷、爱奇艺 | 腾讯广点通广告素材主机、优酷两个广告交易主机、爱奇艺规则收录的 Tanx 广告主机 | 覆盖部分外部广告请求。没有对播放清单或视频流动手。与正片拼接播放的广告、口播和未经过这些主机的贴片仍可出现。[腾讯视频](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/tencentvideo_splash_ad_block.plugin#L13-L19) · [优酷](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/youku_splash_ad_block.plugin#L18-L24) · [爱奇艺](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partA/iQIYI.lpx#L15-L23) |
 
-合并版也保留原来的百度、字节穿山甲、快手、Google 和 WPS 等广告主机。抖音有机会命中其中的字节广告服务，尚未验证当前抖音客户端的混排广告可被识别。完整清单和 21 个 HTTPS 解密主机可直接查看[插件原文](iPad-AdSuite.lpx)。
+合并版还涵盖百度、字节穿山甲、快手、Google 和 WPS 等已知广告主机。域名规则、原生复写和完整解密主机名可查看[插件原文](iPad-AdSuite.lpx)。
 
 ## 已完成的验证
 
-回归测试使用离线样例核对插件中的实际 URL 正则及 jq 过滤器。购物样例包含错误响应、未知结构、相似操作名、正常商品和优惠券。测试还核对原有规则、正常业务路径及主机名单。真实广告命中率、实际吞吐量和 HTTPS 解密耗时需要在启用后的 iPad 上验证。在仓库根目录运行 `python -m unittest discover -s tests` 可复现全部 22 项离线回归测试。[美团专项](tests/test_meituan.py) · [购物与常见 App 测试](tests/test_suite.py) · [原内嵌规则测试](tests/test_inline.py)
+回归测试使用离线样例核对插件中的实际 URL 正则及 jq 过滤器。购物样例包含错误响应、未知结构、相似操作名、正常商品和优惠券。测试还核对原有规则、正常业务路径及主机名单。真实广告命中率、实际吞吐量和 HTTPS 解密耗时需要在启用后的 iPhone 或 iPad 上验证。在仓库根目录运行 `python -m unittest discover -s tests` 可运行整套离线回归测试。[抖音专项](tests/test_mobile.py) · [微博与酷安](tests/test_social.py) · [美团专项](tests/test_meituan.py) · [购物与常见 App 测试](tests/test_suite.py) · [原内嵌规则测试](tests/test_inline.py)

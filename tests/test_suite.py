@@ -23,6 +23,7 @@ MIME_PATTERN = r"\$\{response\.header\['Content-Type'\]\} ~= /((?:\\.|[^/\\])*)/
 HOST = re.compile(r"(?:[a-z0-9]+(?:-+[a-z0-9]+)*\.)+[a-z]{2,}")
 
 REQUEST_CASES = {
+    "https://api3-core-c.amemv.com/api/ad/v16/splash/preload": "reject(404)",
     "https://wmapi.meituan.com/api/v7/openscreen": "reject_dict(200)",
     "https://wmapi.meituan.com/api/v7/startpicture": "reject_dict(200)",
     "https://p0.meituan.net/adunion/example.jpg": "reject_img(200)",
@@ -41,6 +42,14 @@ REQUEST_CASES = {
 XHS = "https://edith.xiaohongshu.com/api/sns/v6/homefeed"
 ZHIHU = "https://api.zhihu.com/topstory/recommend"
 RESPONSE_URLS = (
+    "https://api3-core-c.amemv.com/aweme/v1/feed",
+    "https://api3-normal-c.amemv.com/aweme/v2/feed",
+    "https://api.amemv.com/aweme/v1/feed",
+    "https://aweme.snssdk.com/aweme/v1/feed",
+    "https://api.weibo.cn/2/statuses/friends/timeline",
+    "https://api.weibo.cn/2/statuses/container_timeline",
+    "https://api.weibo.cn/2/ad/weibointl",
+    "https://api.coolapk.com/v6/main/dataList",
     "https://mop.meituan.com/api/entryModule/startupPicture",
     "https://wmapi.meituan.com/api/v7/loadInfo",
     "https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement",
