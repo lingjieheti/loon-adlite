@@ -20,7 +20,7 @@ Safari에서 Userscripts 확장 프로그램을 켠 뒤 원하는 스크립트 �
 
 - **YouTube 웹**에서는 홈 화면과 검색 결과의 광고 일부를 숨기고, 플레이어에 ‘광고 건너뛰기’ 버튼이 활성화되면 클릭을 시도합니다. YouTube 앱에는 적용되지 않으며 영상에 편집해 넣은 협찬 장면은 그대로 재생됩니다. [YouTube 스크립트](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
 - **웹 광고**는 Lite와 Suite가 일부 광고 입찰 및 송출 요청을 차단합니다. Pornhub용 Safari 스크립트를 추가하면 식별 가능한 사이드바 배너와 모바일 광고 영역도 숨길 수 있습니다. [Pornhub 스크립트](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
-- **징둥·什么值得买(SMZDM) 출석 체크**는 Safari에서 로그인한 뒤 전용 페이지를 열면 출석 버튼 누르기를 시도합니다. Loon용 징둥 알림도 별도로 켤 수 있습니다. [출석 체크 설정 안내(중국어)](checkin/README.md)
+- **출석 체크와 쿠폰**. 징둥 포인트(京豆)와 SMZDM(什么值得买)의 일일 출석 체크, 징둥·타오바오·더우인 쿠폰을 한곳에서 찾을 수 있습니다. 징둥에서 지원하는 일반 쿠폰을 선택하면 해당 페이지를 Safari에 열어 둔 동안 도우미가 수령을 시도합니다. 타오바오와 더우인의 출석 체크와 쿠폰은 공식 이벤트 페이지나 앱에서 직접 확인하세요. [출석 체크 및 쿠폰 안내(중국어)](checkin/README.md)
 
 ## 업데이트와 이전 버전 복원
 
