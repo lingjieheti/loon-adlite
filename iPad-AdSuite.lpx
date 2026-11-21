@@ -25,6 +25,35 @@ DOMAIN,ad.line-scdn.net,REJECT
 DOMAIN,a.adtng.com,REJECT
 DOMAIN,ads.trafficjunky.net,REJECT
 
+# 拼多多广告联盟 · 第三方 App 的视频推广素材
+DOMAIN,video-dsp.pddpic.com,REJECT
+
+# 墨迹天气 · 独立广告接口与开屏
+DOMAIN,ad.api.moji.com,REJECT
+DOMAIN,adlaunch.moji.com,REJECT
+
+# 虎扑、百词斩、澎湃新闻、七猫小说、虎嗅
+DOMAIN,adx.hupu.com,REJECT
+DOMAIN,advertise.baicizhan.com,REJECT
+DOMAIN,advertise.baicizhan.org,REJECT
+DOMAIN,adpai.thepaper.cn,REJECT
+DOMAIN,cdn-new-ad.wtzw.com,REJECT
+DOMAIN,api-ad-product.huxiu.com,REJECT
+
+# 喜马拉雅、酷狗音乐、蜻蜓 FM · 广告服务与素材
+DOMAIN,adse.ximalaya.com,REJECT
+DOMAIN,adse.wsa.ximalaya.com,REJECT
+DOMAIN,ads.service.kugou.com,REJECT
+DOMAIN,adserviceretry.kugou.com,REJECT
+DOMAIN,ad.qingting.fm,REJECT
+DOMAIN,ad-cdn.qingting.fm,REJECT
+
+# 凤凰新媒体、网易有道词典、讯飞输入法 · 独立广告服务
+DOMAIN,api.newad.ifeng.com,REJECT
+DOMAIN,impservice.dictapp.youdao.com,REJECT
+DOMAIN,dsp-impr2.youdao.com,REJECT
+DOMAIN,bj.imp.voiceads.cn,REJECT
+
 # 百度地图 · 百度信息流广告投放与配置
 DOMAIN,afd.baidu.com,REJECT
 DOMAIN,afdconf.baidu.com,REJECT
@@ -198,6 +227,9 @@ request if ${url} ~= /^https:\/\/api-ios\.zhipin\.com\/api\/zpCommon\/user\/star
 
 # 拼多多 · 开屏广告配置
 request if ${url} ~= /^https:\/\/api\.(?:pinduoduo|yangkeduo)\.com\/api\/cappuccino\/splash\/?(?:\?|$)/ then reject(404)
+
+# 拼多多 · 搜索结果中带商品、商家和广告创意标识的付费商品卡
+response if ${url} ~= /^https:\/\/api\.pinduoduo\.com(?::443)?\/search\/?\?(?:(?!(?i:q|cb|callback|jsonp|jsoncallback)=)[A-Za-z0-9_-]+=[^&#;]*&)*q=[^&#;]+(?:&(?!(?i:q|cb|callback|jsonp|jsoncallback)=)[A-Za-z0-9_-]+=[^&#;]*)*$/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def id: type == "number" and . > 0 and . <= 9007199254740991 and floor == .; def product: type == "object" and (.goods_id | id) and (.goods_name | type == "string" and length > 0); def paid: product and (.ad | type) == "object" and (.ad.goods_id | id) and .goods_id == .ad.goods_id and (.ad.creative_id | id) and (.ad.mall_id | id) and (.ad.ocpcBid | type == "number" and . > 0); if type == "object" and ((has("success") | not) or .success == true) and ((has("code") | not) or .code == 0 or .code == 200) and (.error_code == null or .error_code == 0) and (.error_msg == null or .error_msg == "") and .error == null and (.empty_reason == null or .empty_reason == 0) and (.flip | type) == "string" and (.items | type) == "array" and any(.items[]; paid) and any(.items[]; product and .ad == null) then .items |= map(select(paid | not)) else . end`)
 
 # 拼多多 · 首页推荐模块中的明确广告标记
 response if ${url} ~= /^https:\/\/api\.pinduoduo\.com\/api\/alexa\/homepage\/hub(?:\/refresh)?\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and ((has("success") | not) or .success == true) and ((has("code") | not) or .code == 0 or .code == 200) and (.error_code == null or .error_code == 0) and (.error_msg == null or .error_msg == "") and .error == null and (.result | type) == "object" and (.result.module_order | type) == "array" then .result.module_order |= map(select(if type == "object" then .module_name != "ad_module" else true end)) else . end`)
