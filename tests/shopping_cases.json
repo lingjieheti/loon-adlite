@@ -1,0 +1,2254 @@
+[
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=start",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [],
+      "showTimesDaily": 0,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?client=ios&functionId=start&build=1",
+    "input": {
+      "code": "0",
+      "data": {
+        "images": [
+          {
+            "url": "fixture-product-or-ad"
+          }
+        ],
+        "showTimesDaily": 3,
+        "deviceLevel": "L1"
+      }
+    },
+    "expected": {
+      "code": "0",
+      "data": {
+        "images": [],
+        "showTimesDaily": 0,
+        "deviceLevel": "L1"
+      }
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=welcomeHome",
+    "input": {
+      "floorList": [
+        {
+          "type": "recommend",
+          "sku": "42"
+        },
+        {
+          "type": "photoCeiling",
+          "payload": 2
+        },
+        {
+          "type": "bottomXview"
+        },
+        {
+          "type": "searchIcon",
+          "coupon": "ok"
+        },
+        {
+          "type": "ruleFloat"
+        },
+        {
+          "type": "float"
+        },
+        {
+          "type": "topRotate"
+        },
+        {
+          "type": "tabBarAtmosphere"
+        },
+        null,
+        {
+          "title": "normal"
+        }
+      ],
+      "webViewFloorList": [
+        {
+          "content": "normal"
+        }
+      ],
+      "orderId": "77"
+    },
+    "expected": {
+      "floorList": [
+        {
+          "type": "recommend",
+          "sku": "42"
+        },
+        {
+          "type": "searchIcon",
+          "coupon": "ok"
+        },
+        {
+          "type": "ruleFloat"
+        },
+        {
+          "type": "float"
+        },
+        {
+          "type": "topRotate"
+        },
+        {
+          "type": "tabBarAtmosphere"
+        },
+        null,
+        {
+          "title": "normal"
+        }
+      ],
+      "webViewFloorList": [
+        {
+          "content": "normal"
+        }
+      ],
+      "orderId": "77"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?client=ios&functionId=welcomeHome&uuid=local",
+    "input": {
+      "code": 0,
+      "data": {
+        "floorList": [
+          {
+            "type": "recommend",
+            "sku": "42"
+          },
+          {
+            "type": "photoCeiling",
+            "payload": 2
+          },
+          {
+            "type": "bottomXview"
+          },
+          {
+            "type": "searchIcon",
+            "coupon": "ok"
+          },
+          {
+            "type": "ruleFloat"
+          },
+          {
+            "type": "float"
+          },
+          {
+            "type": "topRotate"
+          },
+          {
+            "type": "tabBarAtmosphere"
+          },
+          null,
+          {
+            "title": "normal"
+          }
+        ],
+        "webViewFloorList": [
+          {
+            "content": "normal"
+          }
+        ],
+        "orderId": "77"
+      },
+      "msg": "ok"
+    },
+    "expected": {
+      "code": 0,
+      "data": {
+        "floorList": [
+          {
+            "type": "recommend",
+            "sku": "42"
+          },
+          {
+            "type": "searchIcon",
+            "coupon": "ok"
+          },
+          {
+            "type": "ruleFloat"
+          },
+          {
+            "type": "float"
+          },
+          {
+            "type": "topRotate"
+          },
+          {
+            "type": "tabBarAtmosphere"
+          },
+          null,
+          {
+            "title": "normal"
+          }
+        ],
+        "webViewFloorList": [
+          {
+            "content": "normal"
+          }
+        ],
+        "orderId": "77"
+      },
+      "msg": "ok"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=startup",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=startOther",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=start&functionId=cart",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=cart&functionId=start",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?target=functionId%3Dstart",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?xxfunctionId=start",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=cart",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=productDetail",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://other.jd.com/client.action?functionId=start",
+    "input": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        {
+          "url": "fixture-product-or-ad"
+        }
+      ],
+      "showTimesDaily": 3,
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=start",
+    "input": {
+      "images": [
+        1,
+        2
+      ],
+      "deviceLevel": "L1"
+    },
+    "expected": {
+      "images": [
+        1,
+        2
+      ],
+      "deviceLevel": "L1"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=start",
+    "input": {
+      "images": [
+        1,
+        2
+      ],
+      "showTimesDaily": "three"
+    },
+    "expected": {
+      "images": [
+        1,
+        2
+      ],
+      "showTimesDaily": "three"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=start",
+    "input": {
+      "code": "100",
+      "data": {
+        "images": [
+          {
+            "url": "fixture-product-or-ad"
+          }
+        ],
+        "showTimesDaily": 3,
+        "deviceLevel": "L1"
+      },
+      "msg": "请重新登录"
+    },
+    "expected": {
+      "code": "100",
+      "data": {
+        "images": [
+          {
+            "url": "fixture-product-or-ad"
+          }
+        ],
+        "showTimesDaily": 3,
+        "deviceLevel": "L1"
+      },
+      "msg": "请重新登录"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=start",
+    "input": {
+      "code": 0,
+      "data": {
+        "images": [
+          {
+            "url": "fixture-product-or-ad"
+          }
+        ],
+        "showTimesDaily": 3,
+        "deviceLevel": "L1",
+        "success": false
+      }
+    },
+    "expected": {
+      "code": 0,
+      "data": {
+        "images": [
+          {
+            "url": "fixture-product-or-ad"
+          }
+        ],
+        "showTimesDaily": 3,
+        "deviceLevel": "L1",
+        "success": false
+      }
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=start",
+    "input": {
+      "code": 0,
+      "data": {
+        "images": [
+          {
+            "url": "fixture-product-or-ad"
+          }
+        ],
+        "showTimesDaily": 3,
+        "deviceLevel": "L1",
+        "errorCode": 401
+      }
+    },
+    "expected": {
+      "code": 0,
+      "data": {
+        "images": [
+          {
+            "url": "fixture-product-or-ad"
+          }
+        ],
+        "showTimesDaily": 3,
+        "deviceLevel": "L1",
+        "errorCode": 401
+      }
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=start",
+    "input": {
+      "data": {
+        "images": [
+          {
+            "url": "fixture-product-or-ad"
+          }
+        ],
+        "showTimesDaily": 3,
+        "deviceLevel": "L1"
+      },
+      "error": "login"
+    },
+    "expected": {
+      "data": {
+        "images": [
+          {
+            "url": "fixture-product-or-ad"
+          }
+        ],
+        "showTimesDaily": 3,
+        "deviceLevel": "L1"
+      },
+      "error": "login"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=start",
+    "input": {
+      "code": "0",
+      "data": {
+        "deviceLevel": "L1"
+      }
+    },
+    "expected": {
+      "code": "0",
+      "data": {
+        "deviceLevel": "L1"
+      }
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=welcomeHome",
+    "input": {
+      "floorList": {
+        "type": "bottomXview"
+      }
+    },
+    "expected": {
+      "floorList": {
+        "type": "bottomXview"
+      }
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=welcomeHome",
+    "input": {
+      "code": 2,
+      "floorList": [
+        {
+          "type": "recommend",
+          "sku": "42"
+        },
+        {
+          "type": "photoCeiling",
+          "payload": 2
+        },
+        {
+          "type": "bottomXview"
+        },
+        {
+          "type": "searchIcon",
+          "coupon": "ok"
+        },
+        {
+          "type": "ruleFloat"
+        },
+        {
+          "type": "float"
+        },
+        {
+          "type": "topRotate"
+        },
+        {
+          "type": "tabBarAtmosphere"
+        },
+        null,
+        {
+          "title": "normal"
+        }
+      ],
+      "msg": "请求失败"
+    },
+    "expected": {
+      "code": 2,
+      "floorList": [
+        {
+          "type": "recommend",
+          "sku": "42"
+        },
+        {
+          "type": "photoCeiling",
+          "payload": 2
+        },
+        {
+          "type": "bottomXview"
+        },
+        {
+          "type": "searchIcon",
+          "coupon": "ok"
+        },
+        {
+          "type": "ruleFloat"
+        },
+        {
+          "type": "float"
+        },
+        {
+          "type": "topRotate"
+        },
+        {
+          "type": "tabBarAtmosphere"
+        },
+        null,
+        {
+          "title": "normal"
+        }
+      ],
+      "msg": "请求失败"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=personinfoBusiness",
+    "input": {
+      "floorList": [
+        {
+          "type": "recommend",
+          "sku": "42"
+        },
+        {
+          "type": "photoCeiling",
+          "payload": 2
+        },
+        {
+          "type": "bottomXview"
+        },
+        {
+          "type": "searchIcon",
+          "coupon": "ok"
+        },
+        {
+          "type": "ruleFloat"
+        },
+        {
+          "type": "float"
+        },
+        {
+          "type": "topRotate"
+        },
+        {
+          "type": "tabBarAtmosphere"
+        },
+        null,
+        {
+          "title": "normal"
+        }
+      ],
+      "webViewFloorList": [
+        {
+          "content": "normal"
+        }
+      ],
+      "orderId": "77"
+    },
+    "expected": {
+      "floorList": [
+        {
+          "type": "recommend",
+          "sku": "42"
+        },
+        {
+          "type": "photoCeiling",
+          "payload": 2
+        },
+        {
+          "type": "bottomXview"
+        },
+        {
+          "type": "searchIcon",
+          "coupon": "ok"
+        },
+        {
+          "type": "ruleFloat"
+        },
+        {
+          "type": "float"
+        },
+        {
+          "type": "topRotate"
+        },
+        {
+          "type": "tabBarAtmosphere"
+        },
+        null,
+        {
+          "title": "normal"
+        }
+      ],
+      "webViewFloorList": [
+        {
+          "content": "normal"
+        }
+      ],
+      "orderId": "77"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?body=x&functionId=welcomeHomeV2",
+    "input": {
+      "floorList": [
+        {
+          "type": "recommend",
+          "sku": "42"
+        },
+        {
+          "type": "photoCeiling",
+          "payload": 2
+        },
+        {
+          "type": "bottomXview"
+        },
+        {
+          "type": "searchIcon",
+          "coupon": "ok"
+        },
+        {
+          "type": "ruleFloat"
+        },
+        {
+          "type": "float"
+        },
+        {
+          "type": "topRotate"
+        },
+        {
+          "type": "tabBarAtmosphere"
+        },
+        null,
+        {
+          "title": "normal"
+        }
+      ],
+      "webViewFloorList": [
+        {
+          "content": "normal"
+        }
+      ],
+      "orderId": "77"
+    },
+    "expected": {
+      "floorList": [
+        {
+          "type": "recommend",
+          "sku": "42"
+        },
+        {
+          "type": "photoCeiling",
+          "payload": 2
+        },
+        {
+          "type": "bottomXview"
+        },
+        {
+          "type": "searchIcon",
+          "coupon": "ok"
+        },
+        {
+          "type": "ruleFloat"
+        },
+        {
+          "type": "float"
+        },
+        {
+          "type": "topRotate"
+        },
+        {
+          "type": "tabBarAtmosphere"
+        },
+        null,
+        {
+          "title": "normal"
+        }
+      ],
+      "webViewFloorList": [
+        {
+          "content": "normal"
+        }
+      ],
+      "orderId": "77"
+    }
+  },
+  {
+    "url": "https://api.m.jd.com/client.action?functionId=welcomeHome",
+    "input": {
+      "floorList": [
+        {
+          "type": "searchIcon"
+        },
+        {
+          "type": "recommend"
+        },
+        {
+          "type": "iconToolFloor"
+        }
+      ]
+    },
+    "expected": {
+      "floorList": [
+        {
+          "type": "searchIcon"
+        },
+        {
+          "type": "recommend"
+        },
+        {
+          "type": "iconToolFloor"
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://m.360buyimg.com/mobilecms/s1125x2436_jfs/demo.jpg",
+    "input": {
+      "image": 1
+    },
+    "expected": {
+      "image": 1
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        },
+                        {
+                          "newFeature": "keep"
+                        },
+                        {
+                          "videoUrl": "//cdn.example/splash.mp4",
+                          "waitTime": "3"
+                        },
+                        null,
+                        {
+                          "imgUrl": ""
+                        },
+                        {
+                          "imgUrl": 42
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "newFeature": "keep"
+                        },
+                        null,
+                        {
+                          "imgUrl": ""
+                        },
+                        {
+                          "imgUrl": 42
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "newFeature": "keep"
+                        },
+                        {
+                          "videoUrl": "future-media:17"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "newFeature": "keep"
+                        },
+                        {
+                          "videoUrl": "future-media:17"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "FAIL_SYS_PROTOVER_MISSED::缺少协议版本m-pv"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "FAIL_SYS_PROTOVER_MISSED::缺少协议版本m-pv"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::ok",
+        "FAIL_SYS_X::error"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::ok",
+        "FAIL_SYS_X::error"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": "new schema"
+      }
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": "new schema"
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": []
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": []
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.trade.order.create",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    },
+    "expected": {
+      "api": "mtop.trade.order.create",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "2.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "2.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": "opaque"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": "opaque"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.newface.awesome.get/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.taobao.cloudvideo.video.query/1.0/",
+    "input": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    },
+    "expected": {
+      "api": "mtop.taobao.wireless.home.splash.awesome.get",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "containers": {
+          "splash_home_base": {
+            "base": {
+              "sections": [
+                {
+                  "bizData": {
+                    "taobao-splash": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ],
+                      "revision": "1"
+                    },
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  },
+                  "sectionId": "s1"
+                },
+                {
+                  "bizData": {
+                    "taobao-popup": {
+                      "data": [
+                        {
+                          "imgUrl": "https://cdn.example/splash.jpg",
+                          "times": "2",
+                          "coldStart": "true"
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "bizData": "unknown"
+                },
+                null
+              ],
+              "pageId": "top"
+            },
+            "etag": "abc"
+          },
+          "checkout": {
+            "items": [
+              {
+                "imgUrl": "https://cdn.example/sku.jpg"
+              }
+            ]
+          }
+        },
+        "survey": false
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.cainiao.adx.flyad.getad/1.0/",
+    "input": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "mockCreative": "fixture"
+      }
+    },
+    "expected": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {}
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.cainiao.adx.flyad.getad/1.0/",
+    "input": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "data": {},
+      "ret": [
+        "FAIL_SYS_PROTOVER_MISSED::缺少协议版本m-pv"
+      ]
+    },
+    "expected": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "data": {},
+      "ret": [
+        "FAIL_SYS_PROTOVER_MISSED::缺少协议版本m-pv"
+      ]
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.cainiao.adx.flyad.getad/1.0/",
+    "input": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "ret": [
+        "FAIL_SYS::error"
+      ],
+      "data": {
+        "mockCreative": "fixture"
+      }
+    },
+    "expected": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "ret": [
+        "FAIL_SYS::error"
+      ],
+      "data": {
+        "mockCreative": "fixture"
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.cainiao.adx.flyad.getad/1.0/",
+    "input": {
+      "api": "mtop.cainiao.homepage.merge",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "mockCreative": "fixture"
+      }
+    },
+    "expected": {
+      "api": "mtop.cainiao.homepage.merge",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "mockCreative": "fixture"
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.cainiao.adx.flyad.getad/1.0/",
+    "input": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": [
+        {
+          "future": true
+        }
+      ]
+    },
+    "expected": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": [
+        {
+          "future": true
+        }
+      ]
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.cainiao.adx.flyad.getad/1.0/",
+    "input": {
+      "data": {
+        "mockCreative": "fixture"
+      }
+    },
+    "expected": {
+      "data": {
+        "mockCreative": "fixture"
+      }
+    }
+  },
+  {
+    "url": "https://guide-acs.m.taobao.com/gw/mtop.cainiao.adx.flyad.getad.extra/1.0/",
+    "input": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "mockCreative": "fixture"
+      }
+    },
+    "expected": {
+      "api": "mtop.cainiao.adx.flyad.getad",
+      "v": "1.0",
+      "ret": [
+        "SUCCESS::调用成功"
+      ],
+      "data": {
+        "mockCreative": "fixture"
+      }
+    }
+  }
+]

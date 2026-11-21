@@ -1,5 +1,19 @@
 # iPad 轻量去广告
 
+## 常用 App 合并版
+
+**[在 iPad 上安装常用 App 合并版](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx)** · [插件原文](iPad-AdSuite.lpx) · [逐项覆盖与依据](COVERAGE.md)
+
+这一个文件已包含下面两个旧版的规则，同时增加京东、淘宝、拼多多、闲鱼、菜鸟，以及多款生活和影音 App 的广告处理。购物场景针对已识别的广告素材、开屏配置和部分首页推广楼层。小红书、知乎、B 站和微信公众号另有内嵌广告规则。39 条精确域名规则和 15 条原生复写均内置，无远程脚本。
+
+1. 用 iPad 上的 Safari 打开安装链接，在 Loon 确认添加并启用「iPad 常用 App 去广告」。若链接无法唤起 Loon，可在「配置 → 插件 → ＋」粘贴[原始地址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)。
+2. 如果装过「iPad 轻量去广告」或「iPad 内嵌广告过滤」，请在合并版启用后关闭这两个旧插件，避免重复匹配。回退时关闭合并版，再打开原来使用的版本即可。
+3. 域名规则在 Loon 分流模式下工作。首页和开屏接口复写需要 Loon 3.5.1 (978) 或更新版、开启复写与 HTTPS 解密，并在设备上信任自己的 Loon CA。如果已经配置过，可沿用现有证书。合并版为 15 个完整主机声明解密，包括京东和淘宝的共享 API 主机；同一主机的其他 HTTPS 流量也可能由 Loon 在设备上解密，具体复写只匹配列出的路径。没有 CA 时仍可使用域名部分。[Loon 说明](https://nsloon.app/docs/MitM/) · [Apple 证书信任设置](https://support.apple.com/zh-cn/102390)
+
+启用后，可打开淘宝首页、京东首页，再查看一件商品及购物车，检查开屏、图片、价格和优惠券是否正常。规则按已知接口编写，当前客户端可能改用新协议，也可能使用缓存素材。遇到白屏、商品图缺失或等待变长，可先停用合并版并重复相同步骤，比较差异。
+
+## 基础版和内嵌版
+
 基础插件按 22 个完整主机名拦截广告请求，约 1.1 KiB。另有一个可选的内嵌广告插件，针对与正常内容一起下发的广告，使用 Loon 原生 JSON 复写。两者可一起使用，均不加载远程脚本。
 
 [安装基础插件](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [安装内嵌广告插件](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-InlineAds.lpx) · [基础插件原文](iPad-AdLite.lpx) · [内嵌插件原文](iPad-InlineAds.lpx)
