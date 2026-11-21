@@ -1,27 +1,19 @@
-# 赞助我 · Support my work · 開発を応援する
+# 赞助我
 
-如果这些规则帮你少看了一些广告，欢迎随意打赏。谢谢你支持我继续维护这个项目。
+**简体中文** · [English](SPONSOR.en.md) · [日本語](SPONSOR.ja.md)
 
-If these filters have made your apps a little quieter, you’re welcome to leave a tip. Thank you for supporting this project.
-
-このプラグインが役に立ったら、よろしければ開発を応援してください。いつもありがとうございます。
+如果这些规则让你少看了些广告，欢迎自愿打赏，支持我继续维护。谢谢！
 
 ## PayPal
 
-[打开 PayPal 付款页 · Open PayPal · PayPal を開く](https://www.paypal.com/qrcodes/p2pqrc/8CZSV4VY73PB2)
-
-<img src="assets/sponsor/paypal.jpg" alt="PayPal QR code" width="240">
+[打开 PayPal 付款页](https://www.paypal.com/qrcodes/p2pqrc/8CZSV4VY73PB2) · [查看 PayPal 收款码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/paypal.png)
 
 ## USDT · TRON (TRC20)
 
-仅支持 TRON（TRC20）网络的 USDT，单笔须大于 0.01 USDT。
+这个地址接收 **TRON（TRC20）网络的 USDT**。收款平台要求单笔金额**大于 0.01 USDT**。
 
-Send USDT on TRON (TRC20) only. The amount must be greater than 0.01 USDT.
+`TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE`
 
-USDT は TRON（TRC20）ネットワークで、1 回につき 0.01 USDT を超える額を送ってください。
+[查看 USDT 地址二维码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/usdt-tron.png)
 
-```text
-TXE2VuxUSFsenJvmz3Z8oSm7dqPLAUWfRE
-```
-
-<img src="assets/sponsor/usdt-tron.png" alt="USDT on TRON (TRC20) address QR code" width="240">
+[返回插件首页](README.md)

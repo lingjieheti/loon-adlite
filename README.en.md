@@ -1,6 +1,6 @@
 # My Loon ad filters for iPhone and iPad
 
-[简体中文](README.md) · **English** · [日本語](README.ja.md)
+[简体中文](README.md) · **English** · [日本語](README.ja.md) | [Support my work](SPONSOR.en.md)
 
 I use these Loon plugins to filter ads that appear when an app opens or while I scroll through its feed. All three run on the device and use no remote scripts or telemetry. For the lowest overhead, start with Lite.
 
@@ -25,5 +25,3 @@ Each subscription URL follows its edition on the `main` branch. GitHub checks th
 To roll back, replace `main` in the subscription URL with the full commit hash of the version you want. Import that URL and disable the previous entry. [Commit history](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
 [Coverage and limitations by app (Chinese)](COVERAGE.md) · [Rule sources and review notes (Chinese)](audit.html) · [Offline regression tests](tests/)
-
-If you find these filters helpful, you’re welcome to leave a tip. [Support my work](SPONSOR.md)
