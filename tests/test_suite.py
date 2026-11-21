@@ -23,6 +23,11 @@ MIME_PATTERN = r"\$\{response\.header\['Content-Type'\]\} ~= /((?:\\.|[^/\\])*)/
 HOST = re.compile(r"(?:[a-z0-9]+(?:-+[a-z0-9]+)*\.)+[a-z]{2,}")
 
 REQUEST_CASES = {
+    "https://wmapi.meituan.com/api/v7/openscreen": "reject_dict(200)",
+    "https://wmapi.meituan.com/api/v7/startpicture": "reject_dict(200)",
+    "https://p0.meituan.net/adunion/example.jpg": "reject_img(200)",
+    "https://p1.meituan.net/adunion/example.jpg": "reject_img(200)",
+    "https://img.meituan.net/bizad/bizad_brandCpt_123.jpg": "reject_img(200)",
     "https://bdsp-x.jd.com/adx/auction": "reject(404)",
     "https://api.pinduoduo.com/api/cappuccino/splash": "reject(404)",
     "https://api.yangkeduo.com/api/cappuccino/splash": "reject(404)",
@@ -36,6 +41,9 @@ REQUEST_CASES = {
 XHS = "https://edith.xiaohongshu.com/api/sns/v6/homefeed"
 ZHIHU = "https://api.zhihu.com/topstory/recommend"
 RESPONSE_URLS = (
+    "https://mop.meituan.com/api/entryModule/startupPicture",
+    "https://wmapi.meituan.com/api/v7/loadInfo",
+    "https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement",
     XHS, XHS.replace("edith", "rec"), ZHIHU,
     "https://mp.weixin.qq.com/mp/getappmsgad", "https://mp.weixin.qq.com/mp/getappmsgext",
     "https://app.bilibili.com/x/v2/feed/index",
@@ -88,7 +96,7 @@ class Rewrite:
             raise ValueError(f"Invalid URL expression: {pieces[0]}")
         rule = cls(phase, compile_regex(match), action)
         if phase == "request":
-            if len(pieces) != 1 or not re.fullmatch(r"reject(?:_dict)?\((200|404)\)", action):
+            if len(pieces) != 1 or action not in {"reject(404)", "reject_dict(200)", "reject_img(200)"}:
                 raise ValueError(f"Unsupported request rule: {line}")
         elif phase == "response":
             if len(pieces) not in (2, 3) or pieces[1] != "${response.status} == 200":

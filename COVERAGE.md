@@ -2,6 +2,19 @@
 
 本页对应 2026-11-21 的 `iPad-AdSuite.lpx`。同一款 App 可能同时使用广告联盟、自己的内容接口及服务端视频插播。以下列出已实现的广告位置，规则数量不能换算为拦截率。
 
+## 美团
+
+合并版共 **39 条精确域名规则、21 条原生复写，声明 21 个精确 HTTPS 解密主机**。本次美团更新增加 6 条复写，涉及 6 个主机。美团的独立广告主机继续由域名规则拦截。[域名依据](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan.lpx#L12-L22)
+
+| 场景 | 规则匹配与处理 | 验证边界 |
+| --- | --- | --- |
+| 美团主 App 开屏 | `mop.meituan.com/api/entryModule/startupPicture`。在匹配的 JSON 中，只清空 `resource` 或 `resourcesMap` 下名为 `startupPicArea` 的数组，兼容相应对象位于顶层或 `data` 中的结构。 | 上游注明适配 12.67.403。当前 iPad 客户端尚无实机命中记录。首页其他弹窗和分发路径可能继续显示。[上游版本](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/MT.snippet#L1-L3) · [请求路径](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/MT.snippet#L60-L63) · [结构](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/MT.js#L97-L109) |
+| 美团外卖 App 开屏 | `wmapi.meituan.com/api/v7/loadInfo` 的已识别 JSON 中，只清空 `data.startpicture.ad` 广告数组。另用一条规则处理同主机 `/api/v7/openscreen`、`/api/v7/startpicture` 两个专用路径。 | `loadInfo` 的其他启动配置和 `mk` 字段保留。外卖首页推荐、商户菜单、配送费和订单各有自己的业务接口。外卖 App 的客户端版本与主 App 分开计算。[开屏字段](https://github.com/blackmatrix7/ios_rule_script/blob/0b6897dc17e0c513d25449c935a9694818e32f0c/script/startup/startup.js#L76-L87) · [三个外卖路径](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan-MeituanWaimai.lpx#L12-L16) |
+| 美团餐饮微信小程序 | `rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement` 的成功响应中，只移除 `data.adSiteList` 内 `adSiteId` 符合 `adunit-…` 格式的条目，后缀限非空的英文字母、数字、下划线或连字符。 | 核查时匿名访问返回 HTTP 200、`code=200`、`success=true`，其中一个广告位经规则处理后变为零个，其他字段一致。这项结果来自公开接口响应。餐饮小程序的结账、企业餐和优惠权益不能用这条结果推断。[公开接口](https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement) · [路径来源](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partD/DianPing.lpx#L19-L27) |
+| 广告素材 | 一条规则匹配 `p0.meituan.net` 和 `p1.meituan.net` 的 `/adunion/`，另一条匹配 `img.meituan.net/bizad/bizad_brandCpt_数字.jpg`，以及该主机 `/adunion/` 目录内以 `.gif.webp` 或 `.jpg.webp` 结尾的素材。 | 同主机上其他目录的商户、菜品和评价图片不会命中这两条规则。素材请求被拦后，客户端仍可能留下占位或等待重试。[p0/p1 目录](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Rewrite/MeituanAppAdMedia.snippet#L4-L7) · [品牌图文件名](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan-MeituanWaimai.lpx#L12-L16) · [img 素材后缀](https://github.com/zirawell/R-Store/blob/d0f4dd305bade7cc6a38e3445a768d72aaea0e5b/Rule/QuanX/Adblock/App/M/%E7%BE%8E%E5%9B%A2/rewrite/meituan.conf#L4) |
+
+上述 6 个主机承载的其他 HTTPS 请求也可能在本机经过 TLS 解密。网络耗时、缓存条件和 App 实现都会影响实际体验。菜单图片、结算页或优惠券出现异常时，可停用合并版，在同一网络重复打开相同页面，比对两次结果。[Loon 解密范围](https://nsloon.app/docs/MitM/)
+
 ## 购物和生活
 
 | App | 已实现的规则 | 适用条件与保留内容 |
@@ -10,7 +23,7 @@
 | 淘宝 | 淘宝开屏配置的 `taobao-splash` 槽，仅移除含图片或视频素材地址的广告条目 | 校验方法名、版本和 MTOP 成功状态。正常首页、红包、商品视频、详情和结算不在复写路径中。首页混排的商业推荐仍可能出现。[淘宝开屏字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/myBlockAds.js#L84-L121) |
 | 菜鸟 | 淘宝网关中菜鸟专用广告投放接口的成功响应 | 仅在接口和响应形状吻合时清空广告数据，保留业务状态。没有取得真实成功投放响应。[菜鸟维护者规则](https://github.com/UserC23/cainiao-ads-loon/blob/e6aac018f1a61df72b51a290a4beb99993692b77/CainiaoAds.plugin#L49-L50) |
 | 拼多多、闲鱼 | 拼多多的开屏配置路径，闲鱼的同步和异步开屏广告方法 | 只匹配指定路径或方法，不封购物网关。商品推荐、优惠和交易请求继续按已有配置处理。[拼多多](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partP/Pinduoduo.lpx) · [闲鱼](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/xianyu_splash_ad_block.plugin#L30-L40) |
-| 美团、大众点评 | 美团独立广告主机，大众点评启动时的开屏配置 | 不删除餐厅推荐、商户优惠和点评内容。[美团](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan.lpx#L12-L22) · [大众点评](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partD/DianPing.lpx#L17-L25) |
+| 大众点评 | 启动时的开屏配置 | 只匹配列出的启动请求，餐厅推荐、商户优惠和点评正文不在该规则中。[大众点评](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partD/DianPing.lpx#L17-L25) |
 | 高德地图、铁路 12306 | 高德的两条启动广告接口，铁路 12306 的独立广告主机 | 路线、导航、查票和购票接口不在名单中。App 自带的开屏倒计时可能继续显示。[高德地图](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partG/AutoNavi.lpx#L27-L36) · [铁路 12306](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/part1/12306.lpx#L14-L22) |
 
 ## 内容和影音
@@ -23,8 +36,8 @@
 | 网易云音乐、QQ 音乐 | 网易云开屏图片及视频广告素材，QQ 音乐广告投送及素材 | 播放与普通封面 CDN 不在域名拦截中。[网易云](https://github.com/zbsdsb/loon-adblock-plugins/blob/890f64953efc870d4ca6cc5ec19b048c88ec73bb/NeteaseCloudMusic_ads_v2.lpx#L8-L12) · [QQ 音乐](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/qqmusic_splash_ad_block.plugin#L14-L20) |
 | 腾讯视频、优酷、爱奇艺 | 腾讯广点通广告素材主机、优酷两个广告交易主机、爱奇艺规则收录的 Tanx 广告主机 | 覆盖部分外部广告请求。没有对播放清单或视频流动手。与正片拼接播放的广告、口播和未经过这些主机的贴片仍可出现。[腾讯视频](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/tencentvideo_splash_ad_block.plugin#L13-L19) · [优酷](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/youku_splash_ad_block.plugin#L18-L24) · [爱奇艺](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partA/iQIYI.lpx#L15-L23) |
 
-合并版也保留原来的百度、字节穿山甲、快手、Google 和 WPS 等广告主机。抖音有机会命中其中的字节广告服务，尚未验证当前抖音客户端的混排广告可被识别。完整清单和 15 个 HTTPS 解密主机可直接查看[插件原文](iPad-AdSuite.lpx)。
+合并版也保留原来的百度、字节穿山甲、快手、Google 和 WPS 等广告主机。抖音有机会命中其中的字节广告服务，尚未验证当前抖音客户端的混排广告可被识别。完整清单和 21 个 HTTPS 解密主机可直接查看[插件原文](iPad-AdSuite.lpx)。
 
 ## 已完成的验证
 
-回归测试使用离线样例核对插件中的实际 URL 正则及 jq 过滤器。购物样例包含错误响应、未知结构、相似操作名、正常商品和优惠券。测试还核对原有规则、正常业务路径及主机名单。真实广告命中率、实际吞吐量和 HTTPS 解密耗时需要在启用后的 iPad 上验证。[购物与常见 App 测试](tests/test_suite.py) · [原内嵌规则测试](tests/test_inline.py)
+回归测试使用离线样例核对插件中的实际 URL 正则及 jq 过滤器。购物样例包含错误响应、未知结构、相似操作名、正常商品和优惠券。测试还核对原有规则、正常业务路径及主机名单。真实广告命中率、实际吞吐量和 HTTPS 解密耗时需要在启用后的 iPad 上验证。在仓库根目录运行 `python -m unittest discover -s tests` 可复现全部 22 项离线回归测试。[美团专项](tests/test_meituan.py) · [购物与常见 App 测试](tests/test_suite.py) · [原内嵌规则测试](tests/test_inline.py)

@@ -101,6 +101,24 @@ response if ${url} ~= /^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.w
 # 菜鸟 · 专用广告投放接口
 response if ${url} ~= /^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.cainiao\.adx\.flyad\.getad(?:\/1\.0\/?)?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def mtop_ok($name): type == "object" and .api == $name and (.v == null or .v == "1.0") and (.ret | type) == "array" and (.ret | length) > 0 and all(.ret[]; type == "string" and (. == "SUCCESS" or startswith("SUCCESS::"))); if mtop_ok("mtop.cainiao.adx.flyad.getad") and (.data | type) == "object" then .data = {} else . end`)
 
+# 美团 · 主 App 启动页的开屏素材数组
+response if ${url} ~= /^https:\/\/mop\.meituan\.com\/api\/entryModule\/startupPicture\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def clear_area: if type == "object" and (.startupPicArea | type) == "array" then .startupPicArea = [] else . end; def clear_holder: if type == "object" then (select(has("resource")) | .resource) |= clear_area | (select(has("resourcesMap")) | .resourcesMap) |= clear_area else . end; if type == "object" and ((has("code") | not) or .code == 0 or .code == 200) and ((has("success") | not) or .success == true) and .error == null and .systemError != true then clear_holder | (select(has("data")) | .data) |= clear_holder else . end`)
+
+# 美团外卖 · 混合启动配置中的广告数组
+response if ${url} ~= /^https:\/\/wmapi\.meituan\.com\/api\/v7\/loadInfo\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and ((has("code") | not) or .code == 0 or .code == 200) and ((has("success") | not) or .success == true) and .error == null and .systemError != true and (.data | type) == "object" and (.data.startpicture | type) == "object" and (.data.startpicture.ad | type) == "array" then .data.startpicture.ad = [] else . end`)
+
+# 美团外卖 · 两个独立开屏广告接口
+request if ${url} ~= /^https:\/\/wmapi\.meituan\.com\/api\/v7\/(?:openscreen|startpicture)\/?(?:\?|$)/ then reject_dict(200)
+
+# 美团 · p0/p1 图床的广告联盟素材
+request if ${url} ~= /^https:\/\/p[01]\.meituan\.net\/adunion\/[^?#\/]+(?:\/[^?#\/]+)*(?:\?|$)/ then reject_img(200)
+
+# 美团 · 图片服务器的品牌和联盟广告素材
+request if ${url} ~= /^https:\/\/img\.meituan\.net\/(?:bizad\/bizad_brandCpt_[0-9]+\.jpg|adunion\/(?:[^?#\/]+\/)*[^?#\/]+\.(?:gif|jpg)\.webp)(?:\?|$)/ then reject_img(200)
+
+# 美团餐饮微信小程序 · 带广告单元标识的广告位
+response if ${url} ~= /^https:\/\/rms\.meituan\.com\/api\/v1\/rmsmina\/c\/queryWechatAdvertisement\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .code == 200 and .success == true and .systemError != true and .error == null and (.data | type) == "object" and (.data.adSiteList | type) == "array" then .data.adSiteList |= map(select(if type == "object" and (.adSiteId | type) == "string" then (.adSiteId | test("^adunit-[a-zA-Z0-9_-]+$") | not) else true end)) else . end`)
+
 # 拼多多 · 开屏广告配置
 request if ${url} ~= /^https:\/\/api\.(?:pinduoduo|yangkeduo)\.com\/api\/cappuccino\/splash\/?(?:\?|$)/ then reject(404)
 
@@ -123,4 +141,4 @@ response if ${url} ~= /^https:\/\/(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v[0
 response if ${url} ~= /^https:\/\/api\.zhihu\.com\/topstory\/recommend\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and (.data | type) == "array" then .data |= map(select(if type == "object" then .type != "feed_advert" else true end)) else . end`)
 
 [MitM]
-hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com, api.m.jd.com, bdsp-x.jd.com, guide-acs.m.taobao.com, api.pinduoduo.com, api.yangkeduo.com, acs.m.goofish.com, mapi.dianping.com, m5.amap.com, amap-aos-info-nogw.amap.com, edith.xiaohongshu.com, rec.xiaohongshu.com, api.zhihu.com
+hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com, api.m.jd.com, bdsp-x.jd.com, guide-acs.m.taobao.com, mop.meituan.com, wmapi.meituan.com, p0.meituan.net, p1.meituan.net, img.meituan.net, rms.meituan.com, api.pinduoduo.com, api.yangkeduo.com, acs.m.goofish.com, mapi.dianping.com, m5.amap.com, amap-aos-info-nogw.amap.com, edith.xiaohongshu.com, rec.xiaohongshu.com, api.zhihu.com
