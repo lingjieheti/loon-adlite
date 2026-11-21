@@ -10,12 +10,14 @@
 
 Safari で YouTube を見る場合は、ホームや検索結果の一部の広告枠を隠し、スキップできるようになったら公式ボタンを押す専用スクリプトも使えます。対象はブラウザ版です。Safari で Userscripts を有効にし、次のリンクを開いて拡張機能のメニューからインストールしてください。[YouTube 用スクリプトを開く](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/youtube/youtube.user.js)
 
+軽量版と統合版は、PubMatic や Criteo の広告入札用ホスト、Pornhub で使われる一部の広告配信先への通信もブロックします。Safari では、専用スクリプトで Pornhub のサイドバーやモバイル再生ページの一部の広告枠を非表示にできます。Userscripts からインストールし、対象サイトでの実行を許可してページを再読み込みしてください。動画に組み込まれた広告は再生されることがあります。[Pornhub 用スクリプトを開く](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/web/pornhub.user.js)
+
 京東と「什么值得买」のチェックインには、対象ページを Safari で開いたときに動く専用スクリプトがあります。Loon の京東リマインダーも任意で追加できます。[設定方法（中国語）](checkin/README.md)
 
 iPhone または iPad の Safari でインストールリンクを開き、Loon で読み込みを確定します。購読 URL をコピーして、Loon のプラグイン一覧の「＋」から追加することもできます。
 
 - **統合版**は、軽量版とインライン広告版の全ルールに、京東・淘宝・美団などのアプリ向けルールを加えたものです。統合版を使う場合は、ほかの 2 つを無効にしてください。[統合版をインストール](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [購読 URL](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
-- **軽量版**は、通信処理の負荷を抑えたい方向けです。統合版と共通の広告ホスト名 39 件に完全一致する通信をブロックします。HTTPS の復号や証明書のインストールは不要です。[軽量版をインストール](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [購読 URL](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
+- **軽量版**は、通信処理の負荷を抑えたい方向けです。統合版と共通の広告ホスト名 43 件に完全一致する通信をブロックします。HTTPS の復号や証明書のインストールは不要です。[軽量版をインストール](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [購読 URL](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
 
 ## インライン広告版
 

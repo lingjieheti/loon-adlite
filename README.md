@@ -10,6 +10,8 @@
 
 在 Safari 看 YouTube，可以单独安装网页助手，收起部分首页和搜索广告，并在官方「跳过广告」按钮可用时尝试自动点击。YouTube 原生 App 不在此助手的覆盖范围内。[安装 YouTube 网页助手](youtube/README.md)
 
+轻量版和合并版也能拦截部分普通网页广告请求，包括 PubMatic、Criteo 的广告竞价，以及 Pornhub 使用的部分广告服务。在 iPad 的 Safari 里，还可以按需隐藏 Pornhub 侧栏横幅和移动播放页广告位。[网页过滤与 Safari 设置](web/README.md)
+
 想每天签到，可以单独启用京东和什么值得买的网页助手。它在 Safari 打开指定页面后尝试签到，另提供可选的 Loon 京东提醒。[安装签到助手](checkin/README.md)
 
 ## 安装
@@ -17,7 +19,7 @@
 用 iPhone 或 iPad 的 Safari 点安装链接，在 Loon 确认导入，也可以在「配置 → 插件 → ＋」粘贴对应的订阅地址。
 
 - **合并版**｜包含轻量版和内嵌版，另有购物、外卖、社交等 App 的定向规则。使用合并版时，停用另外两个版本即可。[安装合并版](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [订阅地址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
-- **轻量版**｜与合并版共用 39 个完整广告域名，适合只拦广告投送和素材请求的设备，无需 HTTPS 解密或安装证书。[安装轻量版](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [订阅地址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
+- **轻量版**｜与合并版共用 43 个完整广告域名，拦截匹配的广告请求，无需 HTTPS 解密或安装证书。[安装轻量版](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdLite.lpx) · [订阅地址](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdLite.lpx)
 
 ## 内嵌广告插件
 
