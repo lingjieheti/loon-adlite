@@ -165,7 +165,7 @@ class AdSuite(unittest.TestCase):
         lite = read_sections(ROOT / "iPad-AdLite.lpx")
         self.assertEqual(set(lite), {"rule"})
         self.assertEqual(lite["rule"], self.sections["rule"])
-        self.assertEqual(len(set(lite["rule"])), 39)
+        self.assertEqual(len(set(lite["rule"])), 43)
         original_hosts = {
             "googleads.g.doubleclick.net", "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net",
             "pagead2.googlesyndication.com", "mobads.baidu.com", "adscdn.baidu.com",
@@ -179,6 +179,24 @@ class AdSuite(unittest.TestCase):
         inline = read_sections(ROOT / "iPad-InlineAds.lpx")["rewrite"]
         self.assertEqual(len(inline), 4)
         self.assertTrue(set(inline).issubset(self.sections["rewrite"]))
+
+    def test_web_ad_hosts_and_normal_web_traffic(self):
+        ad_hosts = ("a.adtng.com", "ads.trafficjunky.net", "hbopenbid.pubmatic.com", "grid-bidder.criteo.com")
+        rules = self.sections["rule"]
+        for host in ad_hosts:
+            self.assertIn(f"DOMAIN,{host},REJECT", rules)
+
+        untouched = {
+            "pornhub.com", "www.pornhub.com", "ei.phncdn.com", "ev.phncdn.com",
+            "www.pubmatic.com", "www.criteo.com", "www.trafficjunky.com", "cdn.jsdelivr.net",
+        }
+        for host in ad_hosts:
+            untouched.update((host.partition(".")[2], f"sub.{host}", f"{host}.example.org"))
+
+        for host in untouched:
+            with self.subTest(host=host):
+                self.assertNotIn(f"DOMAIN,{host},REJECT", rules)
+                self.assertEqual(self.matches(f"https://{host}/video/test.mp4"), [])
 
     def test_hosts_and_all_rule_entry_points(self):
         self.assertEqual(set(self.sections), {"rule", "rewrite", "mitm"})

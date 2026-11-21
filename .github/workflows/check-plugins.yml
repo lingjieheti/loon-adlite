@@ -13,7 +13,7 @@ jobs:
   validate:
     name: Plugin checks
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -39,3 +39,5 @@ jobs:
           "$RUNNER_TEMP/checkin-tests/bin/python" -m pip install --only-binary=:all: playwright==1.58.0
           "$RUNNER_TEMP/checkin-tests/bin/python" tests/checkin_browser.py
           "$RUNNER_TEMP/checkin-tests/bin/python" tests/youtube_browser.py
+          "$RUNNER_TEMP/checkin-tests/bin/python" -m playwright install --with-deps webkit
+          WEB_ADS_TEST_BROWSER=webkit "$RUNNER_TEMP/checkin-tests/bin/python" tests/web_ads_browser.py
