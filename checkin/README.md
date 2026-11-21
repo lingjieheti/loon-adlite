@@ -5,20 +5,28 @@
 | 平台 | 签到 | 领券与查券 |
 | --- | --- | --- |
 | 京东 | [我的京豆](https://bean.jd.com/myJingBean/list#loon-checkin)可搭配下方签到脚本。 | 打开京东 App 首页的「领券」挑券。有官方单券链接时，可用下方助手尝试领取；到账后查看[我的优惠券](https://my.m.jd.com/coupon/index.html?sceneval=2)。[京东领券说明](https://help.jd.com/user/issue/169-335.html) |
-| 淘宝 | [红包签到](https://pages-fast.m.taobao.com/wow/z/vip/hbqd5/hbqd5.0)或[领淘金币](https://pages-fast.m.taobao.com/wow/z/tmtjb/town/home)。如提示「前往手淘 App」，在淘宝完成当天活动。淘金币是可按规则抵扣的积分。 | 在商品或店铺活动页查看券面、门槛和有效期，选择要领的券。[我的权益 → 券](https://pages-fast.m.taobao.com/wow/bz/jingmi/1592?tabType=coupon)可查已领的券。[淘金币玩法](https://pages.tmall.com/wow/z/tmtjb/tjbTube/nchn73f3hfmnsmr8474r) |
+| 淘宝 | 提醒可直达「红包签到」或「淘金币」。也可从 Safari 打开[红包签到](https://pages-fast.m.taobao.com/wow/z/vip/hbqd5/hbqd5.0)或[淘金币首页](https://pages-fast.m.taobao.com/wow/z/tmtjb/town/home)。金币抵扣条件以活动页为准。 | 提醒可以打开自己选的店铺券，核对门槛、有效期后领取。去[我的权益 → 券](https://pages-fast.m.taobao.com/wow/bz/jingmi/1592?tabType=coupon)查到账记录。 |
 | 抖音主 App | 「我 → ≡ → 我的钱包 → 积分」可按页面提示签到领支付积分。所引活动规则适用至 2026 年 12 月 31 日，资格和后续活动以钱包页面为准。[支付积分规则](https://lf26-cdn-tos.draftstatic.com/obj/ies-hotsoon-draft/financePayment/61d48a0f-5550-47f3-bdb5-7c8e7e28a4c9.html) | 打开「抖音 → 商城」，选择当天展示的优惠券。提醒可尝试直接打开商城；若未跳转，手动打开抖音并点「商城」。[打开抖音的 App Store 页面](https://apps.apple.com/cn/app/id1142110895) · [商城领券指南](https://apps.apple.com/cn/story/id1759101041) |
 
 ## 用 Loon 提醒打开活动
 
-在 Loon 插件设置中选「轻点通知打开」和每日提醒时间。默认 09:00 打开三平台清单，也可选 12:00 或 20:00，均为设备当地时间。启用插件、允许 Loon 通知后，轻点当天的提醒即可。淘宝活动和抖音商城由本人在官方页面确认；京东领券中心选项通过 App Store 打开京东，再从首页点「领券」。如已有旧的「京东签到提醒」，保留一个提醒即可。新版提醒需要 Loon 3.5.1（983）或更新版本。
+在 Loon 3.5.1（983）或更新版本中启用插件，允许通知。在「轻点通知打开」选一个入口。默认按设备当地时间 09:00 提醒，也可改为 12:00 或 20:00。默认入口是三平台清单。若同时订阅了旧的「京东签到提醒」，启用其中一个即可。
+
+### 淘宝红包、淘金币和店铺券
+
+- **红包与金币**　在「轻点通知打开」选「淘宝红包签到」或「淘宝淘金币」。「淘宝打开方式」默认选「淘宝 App」，点通知会尝试直接进入对应活动。未安装淘宝或希望用 Safari 时，改选「网页」。若网页提示「前往手淘 App」，请在淘宝内继续。
+- **店铺单券**　选择「淘宝店铺券」，将自己选好的店铺券领取网址粘贴到「淘宝官方店铺券链接」。支持 `https://taoquan.taobao.com/coupon/unify_apply.htm` 下同时带 `sellerId`（数字商家 ID）和 `activityId`（32 位十六进制活动 ID）的链接。默认在淘宝 App 打开这张券，由你核对门槛、有效期后领取。[淘宝官方店铺券格式](https://developer.alibaba.com/docs/doc.htm?articleId=109022&docType=1&treeId=796) · [OpenFlutter 的店铺单券直达示例（Apache-2.0）](https://github.com/OpenFlutter/nautilus/blob/787250c0f02002697b6da058a8477159a607ae0f/README.md#L46-L48)
+- **用 Safari 尝试领这张券**　将「淘宝打开方式」改成「网页」，在 Safari 的 Userscripts 中单独安装[淘宝单券助手](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/checkin/taobao-coupon.user.js)，允许它在 `market.m.taobao.com` 运行。轻点提醒后，助手核对网址标记 `#loon-coupon=<sellerId>.<activityId>` 与跳转后店铺、活动两个 ID 都相符，并在官方券页识别出普通领取按钮时，才会自动尝试一次。未登录会进入淘宝登录页。红包签到和淘金币继续在活动页手动完成，实际领到的优惠券以券包为准。[淘宝公开券页组件](https://g.alicdn.com/cm/m-rx-coupon/0.1.2/pages/detail/index.web.js)
+
+Android 开源项目分别实现了淘宝的「签到领金币」和「红包签到」。这里沿用这两个活动入口，改为从 iPhone 或 iPad 的通知直接进入。无登录测试已核实单券跳转和登录页，真实账号领券到账仍待验证。[JavisPeng 的淘金币实现（GPL-3.0）](https://github.com/JavisPeng/taojinbi/blob/e0e9638f48f863c0ddf250ce0ea30df432288dd0/taojinbi.js#L478-L488) · [TonyJiangWJ 的红包签到实现（GPL-2.0）](https://github.com/TonyJiangWJ/Unify-Sign/blob/821962e037ae0578f66acff4fc26d37dedac482f/core/Taobao-Sign.js#L53-L69) · [iOS 淘宝活动直达示例](https://gist.github.com/JamesHopbourn/046bc341e7debfd0c86e3b388d983c53/3809a04465599866323dcc8685d64bfa5332e543)
 
 ## 自动尝试领取自己选定的京东券
 
 1. 在 Safari 启用 Userscripts，打开脚本并在扩展菜单中安装，允许它在 `coupon.m.jd.com` 运行。[京东单券助手](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/checkin/jd-coupon.user.js) · [Userscripts](https://apps.apple.com/app/id1463298887)
-2. 在 Loon 的签到领券提醒里选「京东指定优惠券」，把自己选好的京东官方单券网址粘到「京东官方单券链接」。支持 `https://coupon.m.jd.com/coupons/show.action` 下带 `key` 和 `roleId`，或仅带 `linkKey` 的链接。也可以在不使用提醒时，给符合该格式的网址末尾加上 `#loon-coupon`，自行用 Safari 打开。
+2. 在提醒的「轻点通知打开」选「京东指定优惠券」，把券链接粘到「京东官方单券链接」。支持手机版 `https://coupon.m.jd.com/coupons/show.action` 的 `key` ＋ `roleId` 或 `linkKey` 格式，也支持电脑版 `https://coupon.jd.com/ilink/couponSendFront/send_index.action` 的 `key` ＋ `roleId` 格式。提醒会打开对应的手机单券页。若直接用 Safari，请在该手机链接末尾加上 `#loon-coupon`。[京东桌面店铺券的公开链接样例](https://github.com/irebit/jingdong_union_go/blob/deb4c5eaa5c63a08a423ae5d3f24eec432efc30f/jd.union_test.go#L84)
 3. 轻点提醒会在前台打开这张券。助手只在能辨认出券面、使用条件及唯一「立即领取」按钮时尝试一次。登录提示、活动结束、关注店铺、付费、会员或积分兑换等情况由你在京东页面处理。领取结果以京东提示及券包为准。[京东单券页公开组件](https://storage.360buyimg.com/miniprogram-platform/m-add-sns/receive-coupon-m/main.a04e4b02.js)
 
-提醒只在本机创建通知，无需 HTTPS 解密或提供账号 Cookie。单券地址保存在插件设置里；轻点有效的单券通知后才会打开对应的京东页面。Safari 助手按北京时间记录当天尝试过的券链接摘要，重复打开或同时打开两个标签页时，同一链接当天最多尝试一次。若第一次遇到登录提示，登录后可在官网手动领取。
+提醒只在本机创建通知，无需 HTTPS 解密或提供账号 Cookie。京东和淘宝的单券地址保存在 Loon 插件设置里，轻点通知后才打开对应页面。两个 Safari 单券助手分别在官网的浏览器本地存储中记录券标识的摘要，按北京时间去重。同一张淘宝券或同一条京东券链接当天最多尝试一次，同时打开两个标签页也一样。若遇到登录提示，可以在官网登录后再打开提醒，或手动领取。
 
 ## 京豆和什么值得买签到
 
