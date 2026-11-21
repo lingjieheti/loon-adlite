@@ -79,6 +79,22 @@ class ReleaseAuditTests(unittest.TestCase):
                 gate.run(self.base, "HEAD", True, {})
         guard.assert_called_once_with(self.base, head)
 
+    def test_pure_managed_diff_needs_no_manual_record(self):
+        for name in gate.PLUGINS:
+            path = self.repo / name
+            before, after, hosts = gate.read_block(path.read_bytes().decode())
+            new = hosts ^ {"adsview3.qq.com"}
+            if not new:
+                new.add("adsview2.qq.com")
+            block = ["# Source: v2ray/domain-list-community@" + "a" * 40,
+                     *(f"DOMAIN,{h},REJECT" for h in sorted(new))]
+            newline = "\r\n" if before.endswith("\r\n") else "\n"
+            path.write_bytes((before + newline.join(block) + newline + after).encode())
+        head = self.commit()
+        report = {}
+        gate.run(self.base, head, False, report)
+        self.assertIn("仅受管", report["类别"])
+
     def test_failure_reports_without_rendering_filename_markup(self):
         dest = self.repo / "summary"
         with patch.object(gate.os, "environ", {"GITHUB_STEP_SUMMARY": str(dest)}), contextlib.redirect_stdout(io.StringIO()):

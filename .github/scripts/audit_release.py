@@ -155,8 +155,9 @@ def main():
     try:
         run(args.base, args.head, args.managed, report)
         report["结果"] = "通过"
-    except (OSError, ValueError, subprocess.CalledProcessError) as exc:
-        report["错误"] = str(exc)
+    except Exception as exc:
+        # An unexpected parser or Git failure must also leave a failed audit in the run summary.
+        report["错误"] = type(exc).__name__ + ": " + str(exc)
     publish_summary(report)
     return int(report["结果"] != "通过")
 
