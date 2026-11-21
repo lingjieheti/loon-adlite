@@ -6,6 +6,8 @@
 
 ## インストール
 
+京東と「什么值得买」のチェックインには、対象ページを Safari で開いたときに動く専用スクリプトがあります。Loon の京東リマインダーも任意で追加できます。[設定方法（中国語）](checkin/README.md)
+
 iPhone または iPad の Safari でインストールリンクを開き、Loon で読み込みを確定します。購読 URL をコピーして、Loon のプラグイン一覧の「＋」から追加することもできます。
 
 - **統合版**は、軽量版とインライン広告版の全ルールに、京東・淘宝・美団などのアプリ向けルールを加えたものです。統合版を使う場合は、ほかの 2 つを無効にしてください。[統合版をインストール](https://www.nsloon.com/openloon/import?plugin=https%3A%2F%2Fraw.githubusercontent.com%2Flingjieheti%2Floon-adlite%2Fmain%2FiPad-AdSuite.lpx) · [購読 URL](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/iPad-AdSuite.lpx)
