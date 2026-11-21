@@ -1,8 +1,8 @@
-# Filter iklan Loon serbaguna untuk iPhone dan iPad
+# Filter iklan ringan untuk Loon di iPhone dan iPad
 
 [简体中文](README.md) · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · **Bahasa Indonesia** · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md)
 
-Ini plugin yang saya pakai sendiri dan saya bagikan untuk pengguna aplikasi Tiongkok, termasuk mahasiswa asing yang tinggal di sana. Aturannya menyasar sebagian iklan saat JD, Taobao, dan Meituan dibuka, serta memblokir permintaan web ke host iklan yang dikenal.
+Saya membagikan satu langganan yang saya pakai di iPhone dan iPad untuk pengguna aplikasi Tiongkok seperti JD, Taobao, dan Meituan, termasuk mahasiswa asing di Tiongkok. Loon memblokir permintaan di perangkat jika nama host sama persis dengan salah satu domain iklan dalam daftar. Untuk menyaring sebagian iklan di dalam aplikasi, Anda juga bisa mengaktifkan aturan penulisan ulang lokal yang berlaku pada permintaan tertentu.
 
 ## Pemasangan
 

@@ -1,8 +1,8 @@
-# Mi filtro de anuncios todo en uno para Loon
+# Filtro de anuncios ligero de Loon para iPhone y iPad
 
 [简体中文](README.md) · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · **Español** · [العربية](README.ar.md)
 
-Uso este complemento en mi iPhone y mi iPad. Lo comparto con quienes usan aplicaciones chinas a diario, incluidos los estudiantes internacionales que viven en China. Filtra algunos anuncios que aparecen al abrir JD, Taobao y Meituan, y bloquea solicitudes de sitios web a servidores de publicidad conocidos.
+Comparto la suscripción que uso en el iPhone y el iPad con quienes utilizan aplicaciones como JD, Taobao y Meituan a diario, incluidos los estudiantes internacionales que viven en China. Loon bloquea las solicitudes en el dispositivo cuando el nombre del servidor coincide exactamente con un dominio publicitario de la lista. Para filtrar también algunos anuncios integrados, puedes activar reglas de reescritura local que solo se aplican a determinadas solicitudes.
 
 ## Instalación
 

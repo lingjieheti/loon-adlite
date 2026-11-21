@@ -1,8 +1,8 @@
-# 常用 App 去廣告（懶人版）
+# iPhone、iPad 輕量去廣告｜Loon 懶人版
 
 [简体中文](README.md) · **繁體中文** · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md)
 
-我在 iPhone 和 iPad 上自用的外掛，分享給常用中國大陸 App 的朋友，包括在中國留學或工作的使用者。規則針對京東、淘寶、美團等 App 的部分開屏廣告，也能攔截網頁向已知廣告網域送出的請求。
+我在 iPhone 和 iPad 上共用這個訂閱，分享給常用京東、淘寶、美團等中國大陸 App 的朋友，包括在中國留學或工作的人。App 或網頁發出請求時，Loon 會在裝置上比對主機名稱，精確符合清單中的廣告網域就攔截。想過濾部分內嵌廣告，也可以開啟本機改寫規則，只處理指定的請求。
 
 ## 安裝
 
