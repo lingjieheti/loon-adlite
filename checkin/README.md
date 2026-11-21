@@ -10,7 +10,7 @@
 ## 第一次使用
 
 1. 在 iPad 安装并打开 Safari 扩展 [Userscripts](https://apps.apple.com/app/id1463298887)，按应用提示设定脚本目录。在「设置 → App → Safari → 扩展」启用它。
-2. 用 Safari [打开签到脚本](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/checkin/daily.user.js)，从 Safari 的扩展菜单打开 Userscripts，选择安装。也可以把下载的 `daily.user.js` 放入已设定的脚本目录，再打开一次扩展菜单。[扩展作者的安装说明](https://github.com/quoid/userscripts#ios)
+2. 用 Safari [打开签到脚本](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/checkin/daily.user.js)，从 Safari 的扩展菜单打开 Userscripts，选择安装。也可以把下载的 `daily.user.js` 放入已设定的脚本目录，再打开一次扩展菜单。[扩展作者的安装说明](https://github.com/quoid/userscripts#ios-ipados)
 3. 在 Safari 登录想用的官网，然后从上表打开对应入口。按 Safari 提示允许扩展在该站点运行。如果登录后回到了普通首页，再点一次专用入口。保留网址末尾的 `#loon-checkin`。
 
 ## 每天怎么用
