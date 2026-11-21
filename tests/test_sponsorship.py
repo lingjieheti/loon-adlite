@@ -21,9 +21,11 @@ QR_HASHES = {
 
 class SponsorshipTests(unittest.TestCase):
     def test_published_images_match_verified_codes(self):
+        folder = ROOT / "assets" / "sponsor"
+        self.assertEqual({file.name for file in folder.iterdir()}, set(QR_HASHES) | {"paypal.jpg"})
         for filename, digest in QR_HASHES.items():
             with self.subTest(filename=filename):
-                code = (ROOT / "assets" / "sponsor" / filename).read_bytes()
+                code = (folder / filename).read_bytes()
                 self.assertEqual(hashlib.sha256(code).hexdigest(), digest)
 
     def test_payment_destinations_and_language_navigation(self):
@@ -36,7 +38,7 @@ class SponsorshipTests(unittest.TestCase):
                 links = set(re.findall(r"\]\(([^)]+)\)", body))
                 expected = (pages - {page}) | {readme} | PAYMENT_LINKS
                 expected.update(QR_BASE + name for name in QR_HASHES)
-                self.assertFalse(expected - links, f"Missing links: {expected - links}")
+                self.assertEqual(links, expected)
                 self.assertEqual(re.findall(r"^`([^`\n]+)`$", body, flags=re.MULTILINE), [TRON_ADDRESS])
                 self.assertNotIn("![", body)
                 self.assertNotIn("<img", body.lower())
