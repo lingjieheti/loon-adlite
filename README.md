@@ -1,6 +1,6 @@
 # 个人自用的 Loon 去广告
 
-**简体中文** · [English](README.en.md) · [日本語](README.ja.md) ｜ [赞助我](SPONSOR.md)
+**简体中文** · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md) ｜ [赞助我](SPONSOR.md)
 
 这是我自己在 iPhone 和 iPad 上用的 Loon 去广告插件，分享给常用中国大陆 App 的朋友，包括中国用户、在华留学生，以及来华工作或生活的朋友。平时用京东、淘宝购物，用美团点外卖，都能用上这套规则。
 
