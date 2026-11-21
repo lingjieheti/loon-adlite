@@ -1,8 +1,8 @@
-# Bộ lọc quảng cáo Loon tất cả trong một
+# Bộ lọc quảng cáo gọn nhẹ cho Loon trên iPhone và iPad
 
 [简体中文](README.md) · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · **Tiếng Việt** · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md)
 
-Đây là tiện ích tôi dùng trên iPhone và iPad, dành cho những ai thường dùng ứng dụng Trung Quốc, kể cả du học sinh đang sống tại đây. Bộ lọc nhắm đến một số quảng cáo lúc mở JD, Taobao và Meituan, đồng thời chặn yêu cầu gửi tới các máy chủ quảng cáo đã biết trên web.
+Tôi chia sẻ liên kết đăng ký dùng chung trên iPhone và iPad cho những ai thường dùng JD, Taobao hay Meituan, kể cả du học sinh ở Trung Quốc. Loon chặn yêu cầu ngay trên thiết bị khi tên máy chủ khớp hoàn toàn với một tên miền quảng cáo trong danh sách. Để lọc thêm một số quảng cáo nhúng trong ứng dụng, bạn có thể bật quy tắc viết lại trên thiết bị cho những yêu cầu cụ thể.
 
 ## Cài đặt
 

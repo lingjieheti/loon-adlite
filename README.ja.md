@@ -1,8 +1,8 @@
-# iPhone・iPad 用の自作 Loon 広告フィルター（オールインワン版）
+# iPhone・iPad 向けの軽量広告フィルター（Loon 用）
 
 [简体中文](README.md) · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · **日本語** · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md) ｜ [開発を応援する](SPONSOR.ja.md)
 
-中国のアプリをよく使う方や中国に留学中の方向けに、私が普段使っているプラグインを公開しています。京東・淘宝・美団などで一部の起動時広告を対象とし、ウェブでも既知の広告ホストへの通信をブロックします。
+中国のアプリを日常的に使う方や中国に留学中の方向けに、私が iPhone と iPad で使っている購読を公開しています。購読は一つで、京東・淘宝・美団などのアプリやウェブからの通信は、ホスト名がリスト内の広告ドメインと完全に一致したときに端末上で遮断します。アプリ内の一部の広告には、特定のリクエストにだけ適用する書き換えルールも任意で有効にできます。
 
 ## インストール
 

@@ -1,8 +1,8 @@
-# Mon filtre publicitaire tout-en-un pour Loon
+# Filtre publicitaire léger pour Loon sur iPhone et iPad
 
 [简体中文](README.md) · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · **Français** · [Español](README.es.md) · [العربية](README.ar.md)
 
-J’utilise ce module sur iPhone et iPad. Je le partage avec les personnes qui utilisent couramment des applications chinoises, y compris celles qui étudient en Chine. Il cible certaines publicités au lancement de JD, Taobao et Meituan et bloque les requêtes de sites web vers des serveurs publicitaires connus.
+Je partage l’abonnement que j’utilise sur iPhone et iPad avec les habitués de JD, Taobao ou Meituan, y compris les étudiants internationaux en Chine. Sur l’appareil, Loon bloque les requêtes dont le nom d’hôte correspond exactement à un domaine publicitaire répertorié. Pour filtrer aussi certaines publicités intégrées, vous pouvez activer les règles de réécriture locale qui ciblent des requêtes précises.
 
 ## Installation
 
