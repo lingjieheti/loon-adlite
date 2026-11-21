@@ -87,6 +87,12 @@ DOMAIN,ads-video-qc.xhscdn.com,REJECT
 DOMAIN,ad.12306.cn,REJECT
 
 # BEGIN synced ad hosts
+# Source: v2ray/domain-list-community@564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8
+DOMAIN,ad.api.3g.youku.com,REJECT
+DOMAIN,ad.api.mobile.youku.com,REJECT
+DOMAIN,ads-union.jd.com,REJECT
+DOMAIN,adsview.qq.com,REJECT
+DOMAIN,adsview2.qq.com,REJECT
 # END synced ad hosts
 
 [Rewrite]
