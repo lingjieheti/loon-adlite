@@ -165,7 +165,7 @@ class AdSuite(unittest.TestCase):
         lite = read_sections(ROOT / "iPad-AdLite.lpx")
         self.assertEqual(set(lite), {"rule"})
         self.assertEqual(lite["rule"], self.sections["rule"])
-        self.assertEqual(len(set(lite["rule"])), 45)
+        self.assertEqual(len(set(lite["rule"])), len(lite["rule"]))
         original_hosts = {
             "googleads.g.doubleclick.net", "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net",
             "pagead2.googlesyndication.com", "mobads.baidu.com", "adscdn.baidu.com",
@@ -348,7 +348,9 @@ class AdSuite(unittest.TestCase):
             url = XHS.replace("edith", host)
             for envelope in ({"code": 0}, {"code": 0, "success": True}, {"success": True}):
                 self.check_body(url, {**envelope, "data": mixed}, {**envelope, "data": keep})
-            for envelope in ({"code": 403}, {"code": 0, "success": False}, {"code": "0"}, {}):
+            for envelope in ({"code": 403}, {"code": 0, "success": False}, {"code": 0, "success": 0},
+                             {"code": 0, "success": None}, {"code": 0, "success": "true"}, {"code": "0"},
+                             {"code": 0, "success": True, "error": {"code": 403}}, {}):
                 payload = {**envelope, "data": mixed}
                 self.check_body(url, payload, payload)
             self.check_body(url, {"code": 0, "data": {}}, {"code": 0, "data": {}})
@@ -359,8 +361,13 @@ class AdSuite(unittest.TestCase):
             {"type": "future", "ad_info": {}}, {"children": [{"type": "feed_advert"}]}, None,
         ]
         mixed = [*keep, {"type": "feed_advert"}]
-        self.check_body(ZHIHU, {"data": mixed, "paging": {"next": BIG_ID}},
-                        {"data": keep, "paging": {"next": BIG_ID}})
+        for envelope in ({}, {"success": True}, {"code": 0}, {"code": 0, "success": True}):
+            self.check_body(ZHIHU, {**envelope, "data": mixed, "paging": {"next": BIG_ID}},
+                            {**envelope, "data": keep, "paging": {"next": BIG_ID}})
+        for envelope in ({"code": 403, "success": False}, {"code": 403}, {"success": False},
+                         {"code": None}, {"code": "0"}, {"success": 0}, {"success": None}, {"success": "true"}):
+            payload = {**envelope, "data": mixed}
+            self.check_body(ZHIHU, payload, payload)
         for payload in ({"data": mixed, "error": {"code": 401}}, {"data": {"items": mixed}}, []):
             self.check_body(ZHIHU, payload, payload)
 

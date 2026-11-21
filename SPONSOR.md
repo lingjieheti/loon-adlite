@@ -4,6 +4,10 @@
 
 如果这些规则让你少看了些广告，欢迎自愿打赏，支持我继续维护。谢谢！
 
+## 微信赞赏
+
+用微信扫一扫，或把图片保存到相册，再从微信「扫一扫」里选择。 [查看微信赞赏码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/wechat-appreciation.jpg)
+
 ## PayPal
 
 [打开 PayPal 付款页](https://www.paypal.com/qrcodes/p2pqrc/8CZSV4VY73PB2) · [查看 PayPal 收款码](https://raw.githubusercontent.com/lingjieheti/loon-adlite/main/assets/sponsor/paypal.png)

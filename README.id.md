@@ -26,6 +26,8 @@ Panduan mencakup check-in harian di JD dan SMZDM serta cara mengambil kupon JD a
 
 ## Pembaruan
 
+Setiap minggu, GitHub memeriksa daftar host iklan yang telah ditinjau. Jika daftarnya berubah dan lolos pengujian, pembaruan otomatis terbit di URL langganan yang sama. Perubahan filter iklan dalam aplikasi seperti Bilibili dan JD ditinjau secara terpisah.
+
 Alamat langganan mengikuti cabang `main`. Atur Loon untuk memeriksa sumber daya eksternal setiap hari. Untuk kembali ke versi lama, ganti `main` pada alamat langganan dengan hash lengkap commit yang diinginkan. [Riwayat perubahan](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Cakupan dan batasan per aplikasi (bahasa Mandarin)](COVERAGE.md) · [Sumber tiap fitur (bahasa Mandarin)](SOURCES.md) · [Uji regresi luring](tests/) · [Dukung proyek ini (bahasa Inggris)](SPONSOR.en.md)
+[Cakupan dan batasan per aplikasi (bahasa Mandarin)](COVERAGE.md) · [Sumber tiap fitur (bahasa Mandarin)](SOURCES.md) · [Uji regresi luring](tests/) · [Dukung proyek ini (bahasa Inggris)](SPONSOR.en.md) · [Audit keamanan (bahasa Mandarin)](SECURITY-AUDIT.md)

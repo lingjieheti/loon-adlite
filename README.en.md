@@ -26,6 +26,8 @@ The rewards guide covers daily check-ins for JD Beans and SMZDM, and claiming JD
 
 ## Updates
 
+GitHub checks a reviewed set of ad hosts weekly. When the list changes and tests pass, GitHub publishes the update to the same subscription URL. Changes to in-app filters for Bilibili and JD are reviewed separately.
+
 The subscription follows `main`. Set Loon to check external resources daily for automatic updates. To roll back, replace `main` in the subscription URL with the full commit hash you want. [Commit history](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Coverage and limitations by app (Chinese)](COVERAGE.md) · [Upstream sources by feature (Chinese)](SOURCES.md) · [Rule sources and review notes (Chinese)](audit.html) · [Offline regression tests](tests/)
+[Coverage and limitations by app (Chinese)](COVERAGE.md) · [Upstream sources by feature (Chinese)](SOURCES.md) · [Rule sources and review notes (Chinese)](audit.html) · [Offline regression tests](tests/) · [Security audit (Chinese)](SECURITY-AUDIT.md)

@@ -2,6 +2,8 @@
 
 每个功能先查已有实现，再核对目标 App 或网页上的具体接口、字段和控件。下表区分了采用的规则、做过的本地适配，以及仅用于对照的资料。
 
+GitHub Actions 每周一检查京东、腾讯和优酷分类的广告域名。每次从同一个上游提交读取三份文件，只取带有 `@ads` 标记且符合本仓筛选条件的完整主机名。订阅只写入精确匹配的域名规则。每次变更都会运行插件、隐私和浏览器测试，通过后自动发布到 `main`。域名清单没有变化时沿用现有版本。插件生成区内记录所用上游提交，便于核对。App 内嵌广告的 HTTPS 主机和响应复写由维护者另行审核。[自动更新记录](https://github.com/lingjieheti/loon-adlite/actions/workflows/sync-ad-hosts.yml) · [筛选条件](.github/scripts/sync_ad_hosts.py) · [京东](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/jd) · [腾讯](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/tencent) · [优酷](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/data/youku) · [上游 MIT 许可](https://github.com/v2ray/domain-list-community/blob/564849233e2fa3a33e71a4b02dd51bcc7a9bc1a8/LICENSE)
+
 GitHub 每周一北京时间 11:27 排期检查本页直接列出的 GitHub 固定文件。报告比较文件内容，列出与上游默认分支已有差异的项目。官网、Gist 和链接到其他手册的二级来源，仍需随功能更新人工核对。维护时先对照许可、设备权限和相关测试，再将选中的改动合入发布分支。[查看历次比对](https://github.com/lingjieheti/loon-adlite/actions/workflows/review-upstreams.yml)
 
 ## Loon 去广告插件

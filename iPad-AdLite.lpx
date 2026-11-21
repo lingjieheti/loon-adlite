@@ -84,3 +84,6 @@ DOMAIN,ads-video-qc.xhscdn.com,REJECT
 
 # 铁路12306
 DOMAIN,ad.12306.cn,REJECT
+
+# BEGIN synced ad hosts
+# END synced ad hosts

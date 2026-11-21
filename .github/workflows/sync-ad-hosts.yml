@@ -1,0 +1,112 @@
+name: Sync reviewed ad hosts
+
+on:
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: sync-reviewed-ad-hosts
+  cancel-in-progress: false
+
+env:
+  CANDIDATE_REF: refs/heads/automation/ad-hosts-${{ github.run_id }}
+
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    outputs:
+      candidate: ${{ steps.build.outputs.candidate }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Generate and inspect the two subscriptions
+        id: build
+        run: |
+          python3 -B .github/scripts/sync_ad_hosts.py
+          git add -- iPad-AdLite.lpx iPad-AdSuite.lpx
+          git diff --exit-code
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo 'Reviewed hosts are up to date.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          diff <(printf '%s\n' iPad-AdLite.lpx iPad-AdSuite.lpx) <(git diff --cached --name-only)
+          git -c user.name='github-actions[bot]' \
+              -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+              commit -m 'Sync reviewed ad hosts'
+          candidate=$(git rev-parse HEAD)
+          python3 -B .github/scripts/audit_host_update.py "$GITHUB_SHA" "$candidate"
+          echo "candidate=$candidate" >> "$GITHUB_OUTPUT"
+
+      - name: Make the exact candidate available to the read-only tests
+        if: steps.build.outputs.candidate != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh auth setup-git
+          git push --force-with-lease="$CANDIDATE_REF:" origin "HEAD:$CANDIDATE_REF"
+
+  validate:
+    needs: prepare
+    if: needs.prepare.outputs.candidate != ''
+    permissions:
+      contents: read
+    uses: ./.github/workflows/check-plugins.yml
+    with:
+      candidate: ${{ needs.prepare.outputs.candidate }}
+      release_base: ${{ github.sha }}
+
+  publish:
+    needs: [prepare, validate]
+    if: always() && needs.prepare.result == 'success' && needs.prepare.outputs.candidate != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      checks: write
+      contents: write
+    env:
+      CANDIDATE: ${{ needs.prepare.outputs.candidate }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check the tested revision and record the result
+        env:
+          VALIDATION: ${{ needs.validate.result }}
+        run: |
+          gh auth setup-git
+          git fetch --no-tags origin "$CANDIDATE_REF"
+          test "$(git rev-parse FETCH_HEAD)" = "$CANDIDATE"
+          python3 -B .github/scripts/audit_host_update.py "$GITHUB_SHA" "$CANDIDATE"
+          conclusion=failure
+          if [[ "$VALIDATION" == success ]]; then conclusion=success; fi
+          # The reusable workflow's jobs are attached to the scheduled run's base SHA.
+          # Report its actual result on the exact revision that was checked out and tested.
+          gh api "repos/$GITHUB_REPOSITORY/check-runs" --method POST --silent \
+            -f name='Plugin checks' -f head_sha="$CANDIDATE" -f conclusion="$conclusion" \
+            -f details_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          test "$conclusion" = success
+
+      - name: Fast-forward main with the tested commit
+        run: |
+          # The audit verifies a direct child. The lease also honors a concurrent rollback.
+          git push --force-with-lease="refs/heads/main:$GITHUB_SHA" origin "$CANDIDATE:refs/heads/main"
+          echo "Published \`$CANDIDATE\`." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove only this run's unchanged temporary branch
+        if: always()
+        run: |
+          gh auth setup-git
+          git push --force-with-lease="$CANDIDATE_REF:$CANDIDATE" origin ":$CANDIDATE_REF"

@@ -86,6 +86,9 @@ DOMAIN,ads-video-qc.xhscdn.com,REJECT
 # 铁路12306
 DOMAIN,ad.12306.cn,REJECT
 
+# BEGIN synced ad hosts
+# END synced ad hosts
+
 [Rewrite]
 # 微信文章的独立广告接口及阅读互动接口。只处理声明为 JSON 且含广告列表和计数的响应，保留阅读数和评论。
 response if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/(?:getappmsgad|getappmsgext)(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def ok: type == "object" and ((has("ret") | not) or .ret == 0); if ok and (.base_resp == null or (.base_resp | ok)) and (.appmsgstat == null or (.appmsgstat | ok)) and (.advertisement_info | type) == "array" and (.advertisement_num | type) == "number" and .advertisement_num >= 0 then .advertisement_info = [] | .advertisement_num = 0 else . end`)
@@ -166,10 +169,10 @@ request if ${url} ~= /^https:\/\/m5\.amap\.com\/ws\/shield\/dsp\/app\/startup\/i
 request if ${url} ~= /^https:\/\/amap-aos-info-nogw\.amap\.com\/ws\/aos\/alimama\/splash_screen_rt\/?(?:\?|$)/ then reject(404)
 
 # 小红书 · 首页带非空广告信息的推广条目
-response if ${url} ~= /^https:\/\/(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v[0-9]+\/homefeed\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and ((.code == 0 and .success != false) or ((has("code") | not) and .success == true)) and (.data | type) == "array" then .data |= map(select(if type == "object" and (.ads_info | type) == "object" then (.ads_info | length) == 0 else true end)) else . end`)
+response if ${url} ~= /^https:\/\/(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v[0-9]+\/homefeed\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and ((.code == 0 and ((has("success") | not) or .success == true)) or ((has("code") | not) and .success == true)) and (.data | type) == "array" then .data |= map(select(if type == "object" and (.ads_info | type) == "object" then (.ads_info | length) == 0 else true end)) else . end`)
 
 # 知乎 · 首页推荐中的 feed_advert 广告卡
-response if ${url} ~= /^https:\/\/api\.zhihu\.com\/topstory\/recommend\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and (.data | type) == "array" then .data |= map(select(if type == "object" then .type != "feed_advert" else true end)) else . end`)
+response if ${url} ~= /^https:\/\/api\.zhihu\.com\/topstory\/recommend\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and ((has("code") | not) or .code == 0) and ((has("success") | not) or .success == true) and (.data | type) == "array" then .data |= map(select(if type == "object" then .type != "feed_advert" else true end)) else . end`)
 
 [MitM]
 hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com, api.m.jd.com, bdsp-x.jd.com, guide-acs.m.taobao.com, api3-core-c.amemv.com, api3-normal-c.amemv.com, api.amemv.com, aweme.snssdk.com, api.weibo.cn, api.coolapk.com, mop.meituan.com, wmapi.meituan.com, p0.meituan.net, p1.meituan.net, img.meituan.net, rms.meituan.com, api.pinduoduo.com, api.yangkeduo.com, acs.m.goofish.com, mapi.dianping.com, m5.amap.com, amap-aos-info-nogw.amap.com, edith.xiaohongshu.com, rec.xiaohongshu.com, api.zhihu.com

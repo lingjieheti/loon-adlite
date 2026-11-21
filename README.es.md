@@ -26,6 +26,8 @@ La guía explica cómo registrar la visita diaria en JD y SMZDM y cómo solicita
 
 ## Actualizaciones
 
+GitHub comprueba cada semana una selección de dominios publicitarios. Si la lista cambia y supera las pruebas, la actualización se publica automáticamente en la misma dirección de suscripción. Las reglas para anuncios integrados en aplicaciones como Bilibili y JD se revisan por separado.
+
 La suscripción sigue la rama `main`. Puedes configurar Loon para que compruebe los recursos externos a diario. Para volver a una versión anterior, sustituye `main` en la dirección de suscripción por el hash completo del commit que quieras. [Historial de versiones](https://github.com/lingjieheti/loon-adlite/commits/main/)
 
-[Cobertura y límites por aplicación (en chino)](COVERAGE.md) · [Fuentes por función (en chino)](SOURCES.md) · [Pruebas de regresión sin conexión](tests/) · [Apoyar mi trabajo (en inglés)](SPONSOR.en.md)
+[Cobertura y límites por aplicación (en chino)](COVERAGE.md) · [Fuentes por función (en chino)](SOURCES.md) · [Pruebas de regresión sin conexión](tests/) · [Apoyar mi trabajo (en inglés)](SPONSOR.en.md) · [Auditoría de seguridad (en chino)](SECURITY-AUDIT.md)
