@@ -1,6 +1,6 @@
 # 常用 App 去广告的覆盖范围
 
-iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 76 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 81 个。域名拦截无需证书。懒人版另有 46 条原生复写，并列出 39 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 78 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 83 个。域名拦截无需证书。懒人版另有 49 条原生复写，并列出 42 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
 
 ## 网页广告
 
@@ -30,6 +30,17 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 76 条固�
 同样按完整域名拦截 `t.gdt.qq.com`。腾讯发布的 iOS 转化 SDK 使用该主机的 `/conv/sdk/spa/conv`，应用通过这条路径从设备上报广告转化。广告主服务器之间的归因回传不经过设备上的 Loon，仍可发生。[腾讯 iOS SDK 接入说明](https://qzonestyle.gtimg.cn/open_proj/gdt_gw/cms/uploads/ios-sdk-v1.4.pdf) · [官方 SDK 下载](https://imgcache.qq.com/qzone/biz/gdt/dev/sdk/ios/release/GDT_iOS_Track_SDK.zip) · [腾讯转化回传说明](https://qzonestyle.gtimg.cn/open_proj/gdt_gw/cms/uploads/conversion-api2-1108-.pdf)
 
 上述三个主机的所有路径均受域名规则约束，包括使用 `?ADTAG=` 的请求。EasyList China 为 `qq.com` 网站列有这项通用放行。插件保留聊天、推送、登录和支付的共用主机，以及有具体路径放行记录的 `c.gdt.qq.com`、`v.gdt.qq.com`。广告主配置的第三方点击监测仍可能生效。[网页放行规则](https://github.com/easylist/easylistchina/blob/560a345168f36ca2bfbbf3280b0037451d6e3c80/easylistchina.txt#L15813-L15820) · [点击与统计路径的例外](https://github.com/xinggsf/Adblock-Plus-Rule/blob/65eb7d27b0716e6c92c9fddb8bc316aadc048e75/rule.txt#L264-L265) · [腾讯关于点击监测的说明](https://tencentads.com/Faqlist/Detail/397)
+
+## 短视频和购物广告监测
+
+| 场景 | 拦截范围 | 正常功能与证据边界 |
+| --- | --- | --- |
+| 穿山甲广告 SDK | 轻量版和懒人版均拦截 `log-api.pangolin-sdk-toutiao.com`、`log-api.pangolin-sdk-toutiao-b.com` 两个日志主机，无需证书。 | 使用穿山甲的 App 访问这两个主机时生效。抖音主 App 的推荐、直播和视频播放走各自接口，当前版本使用哪些原生广告监测接口仍待实机确认。[穿山甲日志主机清单](https://github.com/TG-Twilight/AWAvenue-Ads-Rule/blob/3b96f6337ee05400d5be302f7e9bdd5188839b82/Filters/AWAvenue-Ads-Rule-Loon.module#L549-L550) |
+| 淘宝手机网页版首页 | 懒人版针对轮播广告展示时发往 `ifs.tanx.com/display_ifs` 的指定 JSONP GET，在本机返回 HTTP 404。 | 官网脚本的两条轮播样例分开提供曝光地址和点击目标。曝光回调函数为空，脚本会在发起请求约 60 秒后清理未完成的回调。点按后使用的 `click.mz.simba.taobao.com/necpm`、商品详情、领券和下单均继续转发。淘宝原生 App 的同类曝光覆盖仍待确认。[淘宝首页脚本 3.3.45](https://g.alicdn.com/dinamic/h5-tb-home/3.3.45/index.min.js) |
+| 京东广告曝光像素 | 懒人版匹配 `im-x.jd.com/dsp/np` 上依次含 `log` 和 `v=404` 的 GET，在本机返回 1×1 GIF。 | 公开商品搜索样例中的 3 个曝光地址全部命中。与它们成对出现的 3 个 `ccc-x.jd.com/dsp/nc` 点击地址均放行。京东商品、领券和结算请求仍走原路径。[曝光及点击样例](https://github.com/justoneapi-official/justoneapi-python/blob/fe5fb527f8b1b791635957d24280290155601a4c/docs/api-examples/getApiJdSearchItemListV2.json#L2662-L2663) · [网页请求记录，第 125 页](https://internet.hactcm.edu.cn/fileservice/network/file/2024/2/26/133534299256773962.pdf#page=125) |
+| 拼多多广告联盟 | 懒人版仅在 GET 访问 `t-dsp.pinduoduo.com/dspcb/i/mrk_union` 且浏览器随请求发送 `Sec-Fetch-Dest: image` 时，在本机返回 1×1 GIF。 | 路径来自快递 100 适配。页面跳转、普通 fetch 和未携带图片标记的原生请求均放行。拼多多主 App 是否通过网页图片调用这个回调仍待确认，商品视频、订单和支付有独立的放行用例。[快递 100 适配](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partK/KuaiDi100.lpx#L154-L158) · [AdGuard 维护者跟帖](https://github.com/AdguardTeam/AdguardFilters/issues/225770#issuecomment-4045419446) |
+
+三条购物回调规则均在发出请求前匹配，其他方法及相邻业务路径继续转发。使用懒人版并启用 HTTPS 解密后，这三个具名主机的其他流量也可能在设备上解密。本次已离线检查公开样例和合成请求。两台设备上当前版本的广告命中、播放体验、下单流程和网速尚未实测。
 
 ## 抖音主 App
 

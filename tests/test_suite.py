@@ -32,7 +32,13 @@ WECHAT_IMPRESSION_MOCK = (
     + WECHAT_IMPRESSION_ACTION
 )
 
+PDD_IMAGE_CALLBACK = "https://t-dsp.pinduoduo.com/dspcb/i/mrk_union"
+REQUEST_CASE_HEADERS = {PDD_IMAGE_CALLBACK: {"Sec-Fetch-Dest": "image"}}
 REQUEST_CASES = {
+    PDD_IMAGE_CALLBACK: "reject_img(200)",
+    "https://im-x.jd.com/dsp/np?log=example_1&v=404": "reject_img(200)",
+    ("https://ifs.tanx.com/display_ifs?i=x%42+._-9&p=AAAAAAAAAAAAAAAA%2FBBBBBBBBBBBBBBBBB%3D%3D"
+     "&callback=__jp0"): "reject(404)",
     "https://mp.weixin.qq.com/mp/ad_report?action=see_report&aid=314&tid=demo&seepos=2&report_type=0": "reject_img(200)",
     "https://mp.weixin.qq.com/mp/advertisement_report?action=extra_report&x5=0&f=json": "reject_dict(200)",
     "https://cdn-xyk-app.bankofbeijing.com.cn/cdn/resource/image/advertise/2026/banner.jpg": "reject_img(200)",
@@ -125,6 +131,7 @@ class Rewrite:
     jq: str = ""
     mime: re.Pattern = None
     method: str = ""
+    image_request: bool = False
 
     @classmethod
     def parse(cls, line):
@@ -138,7 +145,15 @@ class Rewrite:
         if line == WECHAT_IMPRESSION_MOCK:
             rule.method = "GET"
         elif phase == "request":
-            if len(pieces) != 1 or action not in {"reject(404)", "reject_dict(200)", "reject_img(200)"}:
+            guards = pieces[1:]
+            if guards[:1] == ['${request.method} == "GET"']:
+                rule.method = "GET"
+                guards = guards[1:]
+            if rule.method and guards == ["${request.header['Sec-Fetch-Dest']} == \"image\""]:
+                rule.image_request = True
+            elif guards:
+                raise ValueError(f"Unsupported request condition: {line}")
+            if action not in {"reject(404)", "reject_dict(200)", "reject_img(200)"}:
                 raise ValueError(f"Unsupported request rule: {line}")
         elif phase == "response":
             if len(pieces) not in (2, 3) or pieces[1] != "${response.status} == 200":
@@ -156,13 +171,33 @@ class Rewrite:
             raise ValueError(f"Unknown phase: {phase}")
         return rule
 
-    def matches(self, url, status=200, mime="application/json", method="GET"):
+    def matches(self, url, status=200, mime="application/json", method="GET", headers=None):
         if not self.url.search(url) or (self.method and self.method != method):
             return False
+        if self.image_request:
+            normalized = {k.lower(): v for k, v in (headers or {}).items()}
+            if normalized.get("sec-fetch-dest") != "image":
+                return False
         if self.jq:
             return status == 200 and (self.mime is None or bool(self.mime.search(mime)))
         # Request rejections and the reviewed response mock complete before upstream headers exist.
         return True
+
+
+
+class ShoppingAdRequests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        suite = read_sections(ROOT / "iPad-AdSuite.lpx")
+        cls.rules = [Rewrite.parse(line) for line in suite["rewrite"]]
+        cls.blocked_hosts = {line.split(",")[1] for line in suite["rule"]}
+        cls.mitm_hosts = {host.strip() for line in suite["mitm"]
+                          for host in line.partition("=")[2].split(",")}
+
+    def assert_passes(self, url, method="GET", headers=None):
+        with self.subTest(url=url, method=method):
+            self.assertNotIn(urlsplit(url).hostname, self.blocked_hosts)
+            self.assertFalse(any(rule.matches(url, method=method, headers=headers) for rule in self.rules))
 
 
 class AdSuite(unittest.TestCase):
@@ -261,9 +296,11 @@ class AdSuite(unittest.TestCase):
         urls = [*REQUEST_CASES, *RESPONSE_URLS]
         self.assertEqual({urlsplit(u).hostname for u in urls}, set(intercepted))
         for url in urls:
-            self.assertEqual(len(self.matches(url)), 1, url)
+            headers = REQUEST_CASE_HEADERS.get(url)
+            self.assertEqual(len(self.matches(url, headers=headers)), 1, url)
         for rule in self.rules:
-            self.assertTrue(any(rule.matches(u) for u in urls), rule.url.pattern)
+            self.assertTrue(any(rule.matches(u, headers=REQUEST_CASE_HEADERS.get(u))
+                                for u in urls), rule.url.pattern)
             if rule.jq:
                 witness = next(u for u in urls if rule.matches(u))
                 self.check_body(witness, None, None)
@@ -322,7 +359,8 @@ class AdSuite(unittest.TestCase):
         for url, action in REQUEST_CASES.items():
             for suffix in (("",) if "?" in url else ("", "?test=1")):
                 with self.subTest(url=url + suffix):
-                    rule, = self.matches(url + suffix)
+                    headers = REQUEST_CASE_HEADERS.get(url)
+                    rule, = self.matches(url + suffix, headers=headers)
                     self.assertEqual((rule.phase, rule.action), ("request", action))
 
     def test_mtop_nested_business_error_passes_through(self):
