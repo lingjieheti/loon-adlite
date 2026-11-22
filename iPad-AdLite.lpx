@@ -75,6 +75,10 @@ DOMAIN,adsmind.apdcdn.tc.qq.com,REJECT
 DOMAIN,ad.tencentmusic.com,REJECT
 DOMAIN,tmead.y.qq.com,REJECT
 
+# 穿山甲广告 SDK · 专用日志主机
+DOMAIN,log-api.pangolin-sdk-toutiao.com,REJECT
+DOMAIN,log-api.pangolin-sdk-toutiao-b.com,REJECT
+
 # 字节跳动与穿山甲
 DOMAIN,ad.zijieapi.com,REJECT
 DOMAIN,pangolin.snssdk.com,REJECT

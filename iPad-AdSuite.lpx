@@ -76,6 +76,10 @@ DOMAIN,adsmind.apdcdn.tc.qq.com,REJECT
 DOMAIN,ad.tencentmusic.com,REJECT
 DOMAIN,tmead.y.qq.com,REJECT
 
+# 穿山甲广告 SDK · 专用日志主机
+DOMAIN,log-api.pangolin-sdk-toutiao.com,REJECT
+DOMAIN,log-api.pangolin-sdk-toutiao-b.com,REJECT
+
 # 字节跳动与穿山甲
 DOMAIN,ad.zijieapi.com,REJECT
 DOMAIN,pangolin.snssdk.com,REJECT
@@ -173,6 +177,9 @@ response if ${url} ~= /^https:\/\/api\.bilibili\.com\/x\/web-interface\/wbi\/ind
 # 哔哩哔哩 App 开屏。只去同时带两种商业标记的素材，按同一响应里的已知素材 ID 清理对应排期和缓存引用。
 response if ${url} ~= /^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def material_id: type == "number" and . >= 1 and . <= 2147483647 and . == floor; def id_key: (if type == "string" then (tonumber? // .) else . end) | if material_id then floor | tostring else tostring end; def ad: type == "object" and .is_ad == true and .cm_mark == 1 and (.id | material_id); if type == "object" and .code == 0 and .error == null and ((has("success") | not) or .success == true) and (.data | type) == "object" and (.data.list | type) == "array" and any(.data.list[]; ad) then (reduce (.data.list[] | objects | select(.id | type == "string" or type == "number")) as $row ({}; ($row.id | id_key) as $key | .[$key] = (.[$key] != false and ($row | ad)))) as $ad_ids | def removed: material_id and (id_key as $key | $ad_ids[$key] == true); .data.list |= map(select(ad | not)) | if (.data.show | type) == "array" then .data.show |= map(select((type == "object" and (.id | removed)) | not)) else . end | if (.data.keep_ids | type) == "array" then .data.keep_ids |= map(select(removed | not)) else . end else . end`)
 
+# 京东 · 商品搜索广告的展示像素
+request if ${url} ~= /^https:\/\/im-x\.jd\.com\/dsp\/np\?log=[A-Za-z0-9_-]+&v=404$/ && ${request.method} == "GET" then reject_img(200)
+
 # 京东开屏图（明文 start）
 response if ${url} ~= /^https:\/\/api\.m\.jd\.com\/client\.action\?(?:(?!functionId(?:[=&]|$))[^%=&#]*(?:=[^&#]*)?&)*functionId=start(?:&(?!functionId(?:[=&]|$))[^%=&#]*(?:=[^&#]*)?)*$/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def ok: type == "object" and ((has("code") | not) or .code == 0 or .code == "0") and ((has("success") | not) or .success == true) and ((has("errorCode") | not) or .errorCode == 0 or .errorCode == "0"); def clean: if ok and (.images | type) == "array" and (.showTimesDaily | type) == "number" and .showTimesDaily >= 0 then .images = [] | .showTimesDaily = 0 else . end; if ok then (if has("data") then (if (.code == 0 or .code == "0") and (.data | type) == "object" then .data |= clean else . end) else clean end) else . end`)
 
@@ -181,6 +188,9 @@ response if ${url} ~= /^https:\/\/api\.m\.jd\.com\/client\.action\?(?:(?!functio
 
 # 京东竞价广告（仅 bdsp-x 的 /adx/ 路径）
 request if ${url} ~= /^https:\/\/bdsp-x\.jd\.com\/adx\// then reject(404)
+
+# 淘宝移动首页 · 轮播广告的 JSONP 展示回调
+request if ${url} ~= /^https:\/\/ifs\.tanx\.com\/display_ifs\?i=(?:[A-Za-z0-9._+-]|%[0-9A-Fa-f]{2})+&p=(?:[A-Za-z0-9]|%2[BbFf]){34}%3[Dd]%3[Dd]&callback=__jp(?:0|[1-9][0-9]*)$/ && ${request.method} == "GET" then reject(404)
 
 # 淘宝 · 开屏广告素材
 response if ${url} ~= /^https:\/\/guide-acs\.m\.taobao\.com\/gw\/mtop\.taobao\.wireless\.home\.splash\.awesome\.get(?:\/1\.0\/?)?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def mtop_ok($name): type == "object" and .api == $name and (.v == null or .v == "1.0") and (.ret | type) == "array" and (.ret | length) > 0 and (.data | type) == "object" and .data.success != false and (.data.errmsg == null or .data.errmsg == "") and all(.ret[]; type == "string" and (. == "SUCCESS" or startswith("SUCCESS::"))); def sections: try .data.containers.splash_home_base.base.sections catch null; def slots: try .bizData["taobao-splash"].data catch null; def ipv4: split(".") | length == 4 and all(.[]; test("^(?:0|[1-9][0-9]{0,2})\\z") and tonumber <= 255); def ipv6: split(":")[-1] as $tail | if ($tail | contains(".")) then if ($tail | ipv4) then sub("[^:]+$"; "0:0") else "invalid" end else . end | split("::") as $s | [$s[] | select(. != "") | split(":")[]] as $groups | all($groups[]; test("^[0-9a-f]{1,4}\\z"; "i")) and (if ($s|length) == 1 then ($groups|length) == 8 else ($s|length) == 2 and ($groups|length) < 8 end); def material_url: type == "string" and (first(capture("\\A(?:https?:)?//(?<host>[a-z0-9.-]+|\\[[0-9a-f:.]+\\])(?::(?<port>[0-9]{1,5}))?(?:[/?#][^[:space:][:cntrl:]\\\\]*)?\\z"; "i") | ((.port // "80") | tonumber | . > 0 and . <= 65535) and (.host | if startswith("[") then .[1:-1] | ipv6 else rtrimstr(".") | length > 0 and length <= 253 and (if test("^[0-9.]+\\z") then ipv4 else split(".") | all(.[]; test("^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\z"; "i")) end) end)) // false); def is_creative: type == "object" and ((.imgUrl | material_url) or (.videoUrl | material_url)); if mtop_ok("mtop.taobao.wireless.home.splash.awesome.get") and (sections | type) == "array" then .data.containers.splash_home_base.base.sections |= map(if (slots | type) == "array" then .bizData["taobao-splash"].data |= map(select(is_creative | not)) else . end) else . end`)
@@ -239,6 +249,9 @@ request if ${url} ~= /^https:\/\/app\.zhuanzhuan\.com\/zz\/v2\/zzlogic\/getOpenS
 # BOSS 直聘 · 启动广告
 request if ${url} ~= /^https:\/\/api-ios\.zhipin\.com\/api\/zpCommon\/user\/startupAd\/?(?:\?|$)/ then reject_dict(200)
 
+# 拼多多广告联盟 · 仅处理浏览器标记为图片的展示回调
+request if ${url} ~= /^https:\/\/t-dsp\.pinduoduo\.com\/dspcb\/i\/mrk_union(?:\?[^#\s]*)?$/ && ${request.method} == "GET" && ${request.header['Sec-Fetch-Dest']} == "image" then reject_img(200)
+
 # 拼多多 · 开屏广告配置
 request if ${url} ~= /^https:\/\/api\.(?:pinduoduo|yangkeduo)\.com\/api\/cappuccino\/splash\/?(?:\?|$)/ then reject(404)
 
@@ -285,4 +298,4 @@ response if ${url} ~= /^https:\/\/(?:edith|rec)\.xiaohongshu\.com\/api\/sns\/v[0
 response if ${url} ~= /^https:\/\/api\.zhihu\.com\/topstory\/recommend\/?(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .error == null and ((has("code") | not) or .code == 0) and ((has("success") | not) or .success == true) and (.data | type) == "array" then .data |= map(select(if type == "object" then .type != "feed_advert" else true end)) else . end`)
 
 [MitM]
-hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com, api.m.jd.com, bdsp-x.jd.com, guide-acs.m.taobao.com, api3-core-c.amemv.com, api3-normal-c.amemv.com, api.amemv.com, aweme.snssdk.com, api.weibo.cn, api.coolapk.com, mop.meituan.com, wmapi.meituan.com, p0.meituan.net, p1.meituan.net, img.meituan.net, rms.meituan.com, api.pinduoduo.com, api.yangkeduo.com, acs.m.goofish.com, mapi.dianping.com, www.dianping.com, m5.amap.com, amap-aos-info-nogw.amap.com, edith.xiaohongshu.com, rec.xiaohongshu.com, api.zhihu.com, cards.iqiyi.com, t7z.cupid.iqiyi.com, cdn-xyk-app.bankofbeijing.com.cn, static.95508.com, app.dewu.com, p0.pipi.cn, app.zhuanzhuan.com, api-ios.zhipin.com, homefront.qunar.com, app.variflight.com, tiebac.baidu.com
+hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com, api.m.jd.com, bdsp-x.jd.com, im-x.jd.com, ifs.tanx.com, guide-acs.m.taobao.com, api3-core-c.amemv.com, api3-normal-c.amemv.com, api.amemv.com, aweme.snssdk.com, api.weibo.cn, api.coolapk.com, mop.meituan.com, wmapi.meituan.com, p0.meituan.net, p1.meituan.net, img.meituan.net, rms.meituan.com, t-dsp.pinduoduo.com, api.pinduoduo.com, api.yangkeduo.com, acs.m.goofish.com, mapi.dianping.com, www.dianping.com, m5.amap.com, amap-aos-info-nogw.amap.com, edith.xiaohongshu.com, rec.xiaohongshu.com, api.zhihu.com, cards.iqiyi.com, t7z.cupid.iqiyi.com, cdn-xyk-app.bankofbeijing.com.cn, static.95508.com, app.dewu.com, p0.pipi.cn, app.zhuanzhuan.com, api-ios.zhipin.com, homefront.qunar.com, app.variflight.com, tiebac.baidu.com

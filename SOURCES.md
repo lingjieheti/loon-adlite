@@ -34,6 +34,14 @@ QQ 空间的范围来自维护者的抓包记录，曝光及 SDK 上报主机另
 
 生活和资讯 App 的主机分类另与 anti-AD 的 MIT 许可快照及 vokins/ad 的 GPL-2.0 许可快照核对。两份上游整表均无需装入 Loon。[anti-AD 许可](https://github.com/privacy-protection-tools/anti-AD/blob/c1d0a1ddb1a5d048f104e2a7eac991b43c3cca8f/LICENSE) · [vokins/ad 许可](https://github.com/vokins/ad/blob/5f177915e12fbaed055dd2ef79f56b97f689ac58/LICENSE)
 
+### 短视频和购物广告监测的来源
+
+穿山甲采用 AWAvenue 列出的两个完整日志主机。该项目的用户也在趣智校园及其支付宝小程序的广告清单里记录了这两个主机。[穿山甲主机](https://github.com/TG-Twilight/AWAvenue-Ads-Rule/blob/3b96f6337ee05400d5be302f7e9bdd5188839b82/Filters/AWAvenue-Ads-Rule-Loon.module#L549-L550) · [用户提交的广告主机记录](https://github.com/TG-Twilight/AWAvenue-Ads-Rule/issues/193)
+
+淘宝手机网页首页脚本 3.3.45 含两条轮播广告样例。`apearAD` 在展示时读取 `args.ifs`，其 JSONP 帮助函数追加回调名。主动点按使用另一个字段 `targetUrl`。复核该文件时 SHA-256 为 `8339e20400dea06004b67ce15ddb0b243096f917404e56c6723b1f43e211620a`。京东的公开搜索样例也分别列出曝光和点击地址，网页请求记录显示 `np` 由图片加载发起。Loon 的 `reject_img(200)` 会在本机返回 1×1 GIF。[淘宝首页脚本](https://g.alicdn.com/dinamic/h5-tb-home/3.3.45/index.min.js) · [京东曝光与点击样例](https://github.com/justoneapi-official/justoneapi-python/blob/fe5fb527f8b1b791635957d24280290155601a4c/docs/api-examples/getApiJdSearchItemListV2.json#L4360-L4361) · [浏览器网络记录，第 125 页](https://internet.hactcm.edu.cn/fileservice/network/file/2024/2/26/133534299256773962.pdf#page=125) · [Loon 原生动作](https://nsloon.app/docs/Rewrite/rewrite_v2/)
+
+拼多多联盟的端点取自快递 100 适配，AdGuard 维护者另记录了该广告主机。本项目只取这条回调路径，并要求浏览器发送图片请求标记，以保留同一地址上的导航和其他用途。GitHub 文件使用固定提交，每日参与来源比对。官网脚本、课堂抓包和讨论跟帖在改动相应规则时复核。[联盟回调路径](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partK/KuaiDi100.lpx#L154-L158) · [维护者跟帖](https://github.com/AdguardTeam/AdguardFilters/issues/225770#issuecomment-4045419446) · [逐项覆盖](COVERAGE.md#短视频和购物广告监测)
+
 ## Safari 网页助手
 
 | 功能 | 采用的依据与本地适配 |

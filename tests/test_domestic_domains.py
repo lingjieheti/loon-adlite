@@ -39,6 +39,7 @@ class DomesticDomainRules(unittest.TestCase):
                         parent = host.split(".", 1)[1]
                         self.assertNotIn(parent, domains)
                         self.assertNotIn("example." + host, domains)
-            self.assertFalse({"p.kuaidi100.com", "t-dsp.pinduoduo.com"} & intercepted)
+            self.assertNotIn("p.kuaidi100.com", intercepted)
+            self.assertEqual("t-dsp.pinduoduo.com" in intercepted, name == "iPad-AdSuite.lpx")
             self.assertTrue(domains.isdisjoint({"www.autohome.com.cn", "www.58.com",
                                                 "da.mgtv.com", "t-dsp.pinduoduo.com"}))

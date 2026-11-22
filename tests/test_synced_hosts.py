@@ -46,7 +46,7 @@ class SyncTests(unittest.TestCase):
             raw = (ROOT / name).read_text(encoding="utf-8")
             prefix, suffix, hosts = sync.read_block(raw)
             manual = [m[1] for line in (prefix + suffix).splitlines() if (m := sync.RULE.fullmatch(line))]
-            self.assertEqual(len(manual), 76)
+            self.assertEqual(len(manual), 78)
             self.assertFalse(set(manual) & hosts)
             versions.append(raw[len(prefix):len(raw) - len(suffix)])
         self.assertEqual(*versions)
