@@ -1,8 +1,10 @@
 # 常用 App 去广告的覆盖范围
 
-iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 78 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 83 个。域名拦截无需证书。懒人版另有 49 条原生复写，并列出 42 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 49 条原生复写，并列出 42 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
 
 ## 网页广告
+
+- **Google 视频直播和点播**。部分播放器需要从 `pubads.g.doubleclick.net` 取得 HLS 或 DASH 播放清单。轻量版和懒人版均允许访问这个共用主机，也允许它承载的广告请求。随节目合流的广告仍可能播放。[Google 播放清单地址](https://support.google.com/admanager/answer/7299051?hl=en) · [公开测试流](https://developers.google.com/ad-manager/dynamic-ad-insertion/streams) · [EasyList 的直播放行规则](https://github.com/easylist/easylist/blob/27076a68237ad6a4eebb00b190439473c926ea03/easylist/easylist_allowlist.txt#L530)
 
 - **网页竞价广告**。Loon 拦截 PubMatic、Criteo 和 TripleLift 的指定竞价主机。新增的 `tlx.3lift.com` 用于 Prebid 的浏览器竞价，AdAway 也收录了这个完整主机名。同一广告位可能向其他广告商询价。[PubMatic](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/pubmaticBidAdapter.js#L25) · [Criteo](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/criteoBidAdapter.js#L27) · [TripleLift](https://github.com/prebid/Prebid.js/blob/9902b20d730d4b4afb13d09256e059a73f929e70/modules/tripleliftBidAdapter.js#L10) · [AdAway](https://github.com/AdAway/adaway.github.io/blob/f39ba0a523564447dfa94e40327c1a14c02304dc/hosts.txt#L81)
 - **百度联盟展示广告**。AMP 的百度广告组件从 `dup.baidustatic.com` 加载广告脚本，EasyList China 也将其列为广告主机，因此插件精确拦截该主机。另一个广告主机 `cpro.baidustatic.com` 有四个网站的指定脚本放行例外，因此留给能识别来源网页和路径的浏览器过滤器处理。[AMP 百度广告组件](https://github.com/ampproject/amphtml/blob/29d4f68e5a1017ed5d63e3086b219b4b25a41332/ads/vendors/baidu.js#L16-L35) · [EasyList China 主机规则](https://github.com/easylist/easylistchina/blob/7efab892b13dc99ed81f1995887a9c0f79510362/easylistchina.txt#L7928) · [网站例外](https://github.com/easylist/easylistchina/blob/7efab892b13dc99ed81f1995887a9c0f79510362/easylistchina.txt#L15828-L15829)

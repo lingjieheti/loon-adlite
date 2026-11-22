@@ -240,7 +240,7 @@ class AdSuite(unittest.TestCase):
         self.assertEqual(lite["rule"], self.sections["rule"])
         self.assertEqual(len(set(lite["rule"])), len(lite["rule"]))
         original_hosts = {
-            "googleads.g.doubleclick.net", "pubads.g.doubleclick.net", "securepubads.g.doubleclick.net",
+            "googleads.g.doubleclick.net", "securepubads.g.doubleclick.net",
             "pagead2.googlesyndication.com", "mobads.baidu.com", "adscdn.baidu.com",
             "mobads-pre-config.cdn.bcebos.com", "mi.gdt.qq.com", "pgdt.gtimg.cn", "adsmind.apdcdn.tc.qq.com",
             "ad.tencentmusic.com", "tmead.y.qq.com", "ad.zijieapi.com", "pangolin.snssdk.com",
@@ -276,6 +276,25 @@ class AdSuite(unittest.TestCase):
             with self.subTest(host=host):
                 self.assertNotIn(f"DOMAIN,{host},REJECT", rules)
                 self.assertEqual(self.matches(f"https://{host}/video/test.mp4"), [])
+
+    def test_google_live_and_on_demand_manifests(self):
+        # Google Ad Manager SSB paths with public Full-service DAI sample IDs.
+        paths = (
+            "/ssai/event/c-rArva4ShKVIAkNfy6HUQ/master.m3u8",
+            "/ssai/event/PSzZMzAkSXCmlJOWDmRj8Q/manifest.mpd",
+            "/ondemand/hls/content/2548831/vid/tears-of-steel/master.m3u8",
+            "/ondemand/dash/content/2559737/vid/tos-dash/manifest.mpd",
+        )
+        for name in ("iPad-AdLite.lpx", "iPad-AdSuite.lpx"):
+            sections = read_sections(ROOT / name)
+            blocked = {line.split(",")[1] for line in sections["rule"]}
+            rewrites = [Rewrite.parse(line) for line in sections.get("rewrite", [])]
+            for host in ("pubads.g.doubleclick.net", "dai.google.com"):
+                for path in paths:
+                    url = "https://" + host + path
+                    with self.subTest(plugin=name, url=url):
+                        self.assertNotIn(host, blocked)
+                        self.assertFalse(any(r.matches(url) for r in rewrites))
 
     def test_hosts_and_all_rule_entry_points(self):
         self.assertEqual(set(self.sections), {"rule", "rewrite", "mitm"})
