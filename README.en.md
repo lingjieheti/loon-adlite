@@ -2,7 +2,7 @@
 
 [简体中文](README.md) · [繁體中文](README.zh-Hant.md) · **English** · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md) | [Support my work](SPONSOR.en.md)
 
-I use this plugin on my iPhone and iPad and share it with people who use mainland Chinese apps, including international students in China. One subscription of about **32 KB** lets Loon block requests to known ad hosts by matching their exact names on your device. With HTTPS decryption enabled for selected hosts, it can also filter some launch ads in JD, Taobao and Meituan and some labeled promotions in Pinduoduo search results and Bilibili’s home feed.
+I use this plugin on my iPhone and iPad and share it with people who use mainland Chinese apps, including international students in China. One subscription of about **31 KB** lets Loon block requests to known ad hosts by matching their exact names on your device. With HTTPS decryption enabled for selected hosts, it can also filter some launch ads in JD, Taobao and Meituan and some labeled promotions in Pinduoduo search results and the Bilibili app’s home feed.
 
 The subscription blocks selected Tencent ad reporting hosts. With HTTPS decryption already enabled for WeChat public articles, Loon can also stop specific ad measurement requests locally. [WeChat and QQ coverage](COVERAGE.md#微信与-qq-广告监测)
 
@@ -16,7 +16,7 @@ If you already subscribe to Suite, refresh your existing subscription. If you us
 
 ## Ads embedded in apps
 
-To filter certain ads in WeChat articles or the Bilibili home feed, use Loon 3.5.1 (build 978) or later. Enable rewrites and HTTPS decryption for the listed hosts, then trust your own Loon certificate on the device. Other requests to those hosts may also be decrypted. TLS handshakes and response processing add overhead. [Loon’s HTTPS decryption guide](https://nsloon.app/docs/MitM/)
+To filter certain ads in WeChat articles or the Bilibili app's home feed, use Loon 3.5.1 (build 978) or later. Enable rewrites and HTTPS decryption for the listed hosts, then trust your own Loon certificate on the device. Other requests to those hosts may also be decrypted. TLS handshakes and response processing add overhead. [Loon’s HTTPS decryption guide](https://nsloon.app/docs/MitM/)
 
 The Douyin feed rules have been tested on sample responses. Their effect on the current app still needs checking on a device. Sponsor segments recorded as part of a video still play.
 

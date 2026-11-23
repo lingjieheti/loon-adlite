@@ -64,7 +64,7 @@ class InlineAds(unittest.TestCase):
         self.assertEqual(json.dumps(self.rewrite(url, result), sort_keys=True), wanted)
 
     def test_url_scope(self):
-        for url in (WX_AD, WX_EXT, APP_FEED, APP_SPLASH, WEB_FEED):
+        for url in (WX_AD, WX_EXT, APP_FEED, APP_SPLASH):
             for suffix in ("", "?a=1&b=2"):
                 with self.subTest(url=url + suffix):
                     self.assertEqual(len(self.matching_rules(url + suffix)), 1)
@@ -97,9 +97,9 @@ class InlineAds(unittest.TestCase):
         self.assertEqual(len(hosts), 1)
         self.assertEqual(
             {entry.strip() for entry in hosts[0].split(",")},
-            {urlsplit(url).hostname for url in (WX_AD, APP_FEED, WEB_FEED)},
+            {urlsplit(url).hostname for url in (WX_AD, APP_FEED)},
         )
-        for url in (WX_AD, WX_EXT, APP_FEED, APP_SPLASH, WEB_FEED):
+        for url in (WX_AD, WX_EXT, APP_FEED, APP_SPLASH):
             rule, = self.matching_rules(url)
             self.assertTrue(rule.jq)
             self.assertIsNotNone(rule.mime)
@@ -110,8 +110,8 @@ class InlineAds(unittest.TestCase):
             for bad in ("text/html; charset=UTF-8", "application/grpc", "application/jsonp",
                         "text/javascript", "text/plain", "application/octet-stream", ""):
                 self.assertFalse(rule.matches(url, mime=bad))
-        self.assertEqual(len(self.rules), 7)
-        self.assertEqual(sum(bool(rule.jq) for rule in self.rules), 4)
+        self.assertEqual(len(self.rules), 6)
+        self.assertEqual(sum(bool(rule.jq) for rule in self.rules), 3)
         self.assertEqual(sum(rule.phase == "request" for rule in self.rules), 2)
         self.assertEqual(sum(rule.action == WECHAT_IMPRESSION_ACTION for rule in self.rules), 1)
 
@@ -185,12 +185,29 @@ class InlineAds(unittest.TestCase):
             with self.subTest(banner=kind):
                 self.check_result(APP_FEED, source, expected)
 
-    def test_web_feed_requires_explicit_goto(self):
-        organic = {"goto": "av", "id": BIG_ID, "business_info": {"is_ad_loc": True}}
-        preserved = [organic, {"goto": "live"}, {"is_ad": True}, None, "opaque"]
-        source = {"code": 0, "data": {"item": [*preserved, {"goto": "ad"}], "other": BIG_ID}}
-        expected = {"code": 0, "data": {"item": preserved, "other": BIG_ID}}
-        self.check_result(WEB_FEED, source, expected)
+    def test_web_home_details_and_playback_pass_through(self):
+        for url in (
+            WEB_FEED, WEB_FEED + "?fresh_type=4",
+            "https://api.bilibili.com/x/web-interface/view?aid=411978753",
+            "https://api.bilibili.com/x/player/wbi/playurl?avid=411978753&cid=1423365216",
+            "https://api.bilibili.com/pgc/player/web/playurl?ep_id=42",
+        ):
+            with self.subTest(url=url):
+                self.assertEqual(self.matching_rules(url), [])
+
+    def test_app_video_identifiers_and_preload_link_survive_ad_removal(self):
+        # Public App feed sample, with the opaque preload URL shortened for the fixture.
+        # https://github.com/realysy/bili-apis/blob/3802052be89effc3bbd27574037942310a23672d/docs/video/recommend.md#L524-L610
+        video = {
+            "card_type": "small_cover_v2", "card_goto": "av", "param": "411978753",
+            "uri": ("bilibili://video/411978753?cid=1423365216"
+                    "&player_preload=%7B%22cid%22%3A1423365216%7D"),
+            "args": {"aid": 411978753},
+            "player_args": {"aid": 411978753, "cid": 1423365216, "type": "av", "duration": 80},
+        }
+        ad = {"card_type": "cm_v2", "card_goto": "ad_av"}
+        self.check_result(APP_FEED, {"code": 0, "data": {"items": [ad, video]}},
+                          {"code": 0, "data": {"items": [video]}})
 
     def test_splash_commercial_material_and_same_response_references(self):
         # Fields in the published splash/list response, including the ad flag and cm_mark.
@@ -233,7 +250,6 @@ class InlineAds(unittest.TestCase):
     def test_bilibili_errors_and_changed_shapes(self):
         for url, key, ad in (
             (APP_FEED, "items", {"card_type": "cm_v2", "card_goto": "ad_av"}),
-            (WEB_FEED, "item", {"goto": "ad"}),
             (APP_SPLASH, "list", {"id": 9460, "is_ad": True, "cm_mark": 1}),
         ):
             wrong_key = "item" if key == "items" else "items"

@@ -1,8 +1,8 @@
 #!name = iPad 内嵌广告过滤
-#!desc = 过滤微信公众号文章广告及部分广告监测、哔哩哔哩首页广告卡和有商业标记的开屏素材。使用 Loon 原生复写，需为下列三个主机启用 HTTPS 解密。
+#!desc = 过滤微信公众号文章广告及部分广告监测、哔哩哔哩 App 首页广告卡和有商业标记的开屏素材。使用 Loon 原生复写，需为下列两个主机启用 HTTPS 解密。
 #!author = lingjieheti
 #!loon_version = 3.5.1(978)
-#!date = 2026-11-22
+#!date = 2026-11-23
 
 [Rewrite]
 # 微信公众号 · 只拦已知广告可见位置和停留时间的图片信标
@@ -20,11 +20,8 @@ response if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/(?:getappmsgad|getapp
 # 哔哩哔哩 App 首页。卡片类型和去向同时匹配才剔除，混排横幅仅移除广告子项。
 response if ${url} ~= /^https:\/\/app\.bilibili\.com\/x\/v2\/feed\/index(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def banner_ad: type == "object" and (.type == "ad" or .type == "ad_inline"); def clean_card: if type != "object" then . else .card_type as $kind | if $kind == "cm_v1" or $kind == "cm_v2" then .card_goto as $goto | select((($goto | IN("ad_web_s", "ad_av", "ad_web_gif")) or ($kind == "cm_v2" and ($goto | IN("ad_player", "ad_inline_3d", "ad_inline_eggs", "ad_inline_live")))) | not) elif $kind == "cm_double_v9" then select(.card_goto != "ad_inline_av") elif ($kind == "banner_v8" or $kind == "banner_ipad_v8") and .card_goto == "banner" and (.banner_item | type) == "array" and any(.banner_item[]; banner_ad) then .banner_item |= map(select(banner_ad | not)) else . end end; if type == "object" and .code == 0 and .error == null and ((has("success") | not) or .success == true) and (.data | type) == "object" and (.data.items | type) == "array" then .data.items |= map(clean_card) else . end`)
 
-# 哔哩哔哩网页首页。该接口使用单数 item；普通视频即使带广告位元数据也保留。
-response if ${url} ~= /^https:\/\/api\.bilibili\.com\/x\/web-interface\/wbi\/index\/top\/feed\/rcmd(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`if type == "object" and .code == 0 and .error == null and ((has("success") | not) or .success == true) and (.data | type) == "object" and (.data.item | type) == "array" then .data.item |= map(select(if type == "object" then .goto != "ad" else true end)) else . end`)
-
 # 哔哩哔哩 App 开屏。只去同时带两种商业标记的素材，按同一响应里的已知素材 ID 清理对应排期和缓存引用。
 response if ${url} ~= /^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list(?:\?|$)/ && ${response.status} == 200 && ${response.header['Content-Type']} ~= /^application\/json\s*(?:;|$)/i then response.json.jq(`def material_id: type == "number" and . >= 1 and . <= 2147483647 and . == floor; def id_key: (if type == "string" then (tonumber? // .) else . end) | if material_id then floor | tostring else tostring end; def ad: type == "object" and .is_ad == true and .cm_mark == 1 and (.id | material_id); if type == "object" and .code == 0 and .error == null and ((has("success") | not) or .success == true) and (.data | type) == "object" and (.data.list | type) == "array" and any(.data.list[]; ad) then (reduce (.data.list[] | objects | select(.id | type == "string" or type == "number")) as $row ({}; ($row.id | id_key) as $key | .[$key] = (.[$key] != false and ($row | ad)))) as $ad_ids | def removed: material_id and (id_key as $key | $ad_ids[$key] == true); .data.list |= map(select(ad | not)) | if (.data.show | type) == "array" then .data.show |= map(select((type == "object" and (.id | removed)) | not)) else . end | if (.data.keep_ids | type) == "array" then .data.keep_ids |= map(select(removed | not)) else . end else . end`)
 
 [MitM]
-hostname = mp.weixin.qq.com, app.bilibili.com, api.bilibili.com
+hostname = mp.weixin.qq.com, app.bilibili.com
