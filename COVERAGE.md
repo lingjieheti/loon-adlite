@@ -1,6 +1,6 @@
 # 常用 App 去广告的覆盖范围
 
-iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 49 条原生复写，并列出 42 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 48 条原生复写，并列出 41 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
 
 ## 网页广告
 
@@ -139,7 +139,7 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 | --- | --- | --- |
 | 小红书、知乎 | 小红书首页去掉带非空 `ads_info` 对象的广告卡，另拦三台广告素材主机。知乎首页按 `type=feed_advert` 过滤 | 小红书保留仅有商品关联、直播标记的普通条目，知乎保留未知类型。作者自行植入的推广通常没有这类标记。[小红书](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/xiaohongshu_splash_ad_block.plugin#L58-L65) · [知乎](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/zhihu.js#L33-L69) |
 | 哔哩哔哩 App 开屏 | 在 `/x/v2/splash/list` 的成功 JSON 中，素材同时满足 `is_ad=true`、`cm_mark=1` 和有效数值 ID 时才移除。`show`、`keep_ids` 只清理同一响应中仅属于已删广告的数值引用。 | 固定资料中的一条商业素材被识别。独立的品牌图、活动和曝光上报接口继续使用原响应。实际客户端是否使用该路径，仍取决于版本与投放。[开屏响应样本](https://github.com/realysy/bili-apis/blob/3802052be89effc3bbd27574037942310a23672d/docs/APP_widget/splash.md#L321-L351) · [移动端请求观测](https://github.com/UserC23/bilibili-ads-loon/blob/38ad51c6bef2be64625b7a86e9bf8aac44a4119a/docs/analysis.md#L36-L46) |
-| 微信、哔哩哔哩 | 公众号文章广告列表、B 站 App 和网页首页推荐、App 混排横幅中的广告子项 | 公众号仅尝试解析声明为 JSON 的成功 HTTP 响应，跳过 HTML 验证页面。保留阅读互动和普通推荐，避免仅凭 `ad_info` 误删视频。[内嵌广告说明](README.md#内嵌广告) |
+| 微信、哔哩哔哩 | 公众号文章广告列表、B 站 App 首页的推广卡和混排横幅中的广告子项。 | 微信文章保留阅读互动。B 站只按卡片类型和去向移除推广，普通视频或直播卡可以带有 `ad_info`。网页首页的推荐使用原始响应，推广卡可能显示。[内嵌广告说明](README.md#内嵌广告) |
 | 微博主 App | 关注流的 `statuses` 以及首页、推荐流的 `items` 中，只移除带数值 `is_ad=1` 或精确标签 `mblogtypename="广告"` 的微博。另有原有开屏和素材主机规则。 | 普通微博、文字里出现“广告”的正文和未标记推广继续显示。保留正常微博的顺序及分页字段。[广告标记](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L140-L155) · [关注流](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L438-L452) · [首页和推荐](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L96-L102) |
 | 微博轻享版 | 在 `api.weibo.cn/2/ad/weibointl` 的成功 JSON 中，仅清空 `data` 广告数组。 | 只匹配这条路径，覆盖取决于当前版本是否使用它。[轻享版专用接口](https://github.com/gj0134/Loon-Plugins/blob/5c835d0db14a4808c19cd010641be1235b6b3d73/plugins/Weibo-Intl-AdBlock.plugin#L7-L16) |
 | 酷安 | 在 `api.coolapk.com/v6/main/dataList`、`/v6/main/indexV8` 成功返回的 `data` 数组中，只移除 `entityTemplate="sponsorCard"` 的赞助卡。 | 普通动态、带商品的内容及带“红包”等字样的卡片可正常保留。页面仍可能展示未带该标记的推广。[赞助卡字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/coolapk.js#L28-L44) |
@@ -148,6 +148,14 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 | 爱奇艺 | 外部 Tanx 广告主机；首页与搜索结果中有明确广告标记的卡片；官网频道页已识别的焦点图和内容卡视频广告位。 | 卡片和广告位使用本机响应过滤，需对 `cards.iqiyi.com` 和 `t7z.cupid.iqiyi.com` 开启 HTTPS 解密。当前证据限于已知接口和两个展示位，未验证能跳过播放器的片头、片中广告或视频内口播。[卡片字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/cnftp.js#L146-L156) · [搜索字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/cnftp.js#L223-L241) · [接口路径](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partA/iQIYI.lpx) · [爱奇艺官网频道资源](https://www.iqiyi.com/static/js/channel_afbe97b7.56f893f6.js) |
 
 懒人版还涵盖百度、字节穿山甲、快手、Google 和 WPS 等已知广告主机。域名规则、原生复写和完整解密主机名可查看[插件原文](iPad-AdSuite.lpx)。
+
+### 哔哩哔哩播放排查
+
+视频详情、播放地址和网页首页推荐共用 `api.bilibili.com`。Loon 按主机名决定是否解密 HTTPS。只复写网页推荐这一条路径，也会让该主机上的播放请求进入解密。懒人版和内嵌版已移除这个主机，App 首页与开屏的两条规则仍在 `app.bilibili.com` 上运行。公开的 iOS 客户端抓包在同一次会话里记录了 3 次播放地址请求和 1 次视频详情请求。[Loon 解密范围](https://nsloon.app/docs/MitM/) · [移动端抓包记录](https://github.com/UserC23/bilibili-ads-loon/blob/38ad51c6bef2be64625b7a86e9bf8aac44a4119a/docs/analysis.md#L241-L253)
+
+另一次匿名测试中，番剧 `ep267851` 的播放接口成功返回地址，但分配的音频和视频主节点均在 TLS 握手时超时，同一响应给出的四个备用地址都返回了媒体数据。另一条普通视频使用同一 CDN 域下的不同节点时可以读取。这种情况下，封禁整个 CDN 也会挡住可用节点。
+
+若某条视频仍打不开，可在同一网络下用 App 和 Safari 打开同一 BV 号，并在 Loon「请求记录」里核对失败时间、主机和命中的规则来源。其他插件或主配置仍可能把 `api.bilibili.com` 列入解密。排查时只需比较相关配置，保留现有代理策略，无需把全部 B 站域名改为直连。桌面浏览器已验证一条免费视频能开始播放，其余公开样本核对到媒体数据开头。用户设备上的故障仍待实测。[本次验证](SECURITY-AUDIT.md#2026-11-23--哔哩哔哩播放兼容性)
 
 ## 已完成的验证
 
