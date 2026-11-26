@@ -2,7 +2,7 @@
 
 **简体中文** · [繁體中文](README.zh-Hant.md) · [English](README.en.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Tiếng Việt](README.vi.md) · [ไทย](README.th.md) · [Bahasa Indonesia](README.id.md) · [Русский](README.ru.md) · [Français](README.fr.md) · [Español](README.es.md) · [العربية](README.ar.md) ｜ [赞助我](SPONSOR.md)
 
-这是我在 iPhone 和 iPad 上自用的去广告插件，分享给日常使用中国大陆 App 的朋友，包括在华留学生。只需订阅一份约 **27 KB** 的规则，Loon 就能在本机按完整域名拦截已知广告请求。按需开启 HTTPS 解密后，还能过滤京东和美团的部分开屏广告，以及拼多多搜索结果、哔哩哔哩 App 首页中有明确标记的部分推广卡片。
+这是我在 iPhone 和 iPad 上自用的去广告插件，分享给日常使用中国大陆 App 的朋友，包括在华留学生。只需订阅一份约 **23 KB** 的规则，Loon 就能在本机按完整域名拦截已知广告请求。按需开启 HTTPS 解密后，还能过滤美团的部分开屏广告，以及拼多多搜索结果、哔哩哔哩 App 首页中有明确标记的部分推广卡片。
 
 微信和 QQ 的广告监测也有专门规则。广告曝光与 SDK 上报主机可直接拦截；公众号文章内的已知监测请求可在开启原有 HTTPS 解密后由 Loon 在本机处理。[微信与 QQ 广告监测](COVERAGE.md#微信与-qq-广告监测)
 
@@ -26,7 +26,7 @@ YouTube 网页助手可在官方「跳过广告」按钮出现时尝试点击。
 
 ## 更新
 
-GitHub 每天核对上游广告域名，每次都做安全审计。已审核的域名清单有变动，且审计和全部测试通过后，才会自动发布到原订阅地址。哔哩哔哩、京东等 App 的内嵌广告规则来源也每天比对，需要调整的规则经专项安全审计后发布。 [自动更新记录](https://github.com/lingjieheti/loon-adlite/actions/workflows/sync-ad-hosts.yml)
+GitHub 每天核对上游广告域名，每次都做安全审计。已审核的域名清单有变动，且审计和全部测试通过后，才会自动发布到原订阅地址。哔哩哔哩、拼多多等 App 的内嵌广告规则来源也每天比对，需要调整的规则经专项安全审计后发布。 [自动更新记录](https://github.com/lingjieheti/loon-adlite/actions/workflows/sync-ad-hosts.yml)
 
 订阅地址跟随 `main`。在 Loon 把外部资源设为每天检查，即可随客户端刷新获取新版。回退时可把订阅地址中的 `main` 替换为目标提交的完整编号。 [提交历史](https://github.com/lingjieheti/loon-adlite/commits/main/) · [上游变动报告](https://github.com/lingjieheti/loon-adlite/actions/workflows/review-upstreams.yml)
 

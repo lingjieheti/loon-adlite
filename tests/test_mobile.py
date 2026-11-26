@@ -7,7 +7,7 @@ import test_suite as shared
 
 
 HOSTS = (
-    "api3-core-c.amemv.com", "api3-normal-c.amemv.com", "api.amemv.com", "aweme.snssdk.com",
+    "api3-core-c.amemv.com", "api3-normal-c.amemv.com", "api.amemv.com",
 )
 FEEDS = ("/aweme/v1/feed", "/aweme/v2/feed")
 SPLASH = (
@@ -77,7 +77,7 @@ class Douyin(unittest.TestCase):
                     f"https://{host}.example.org{path}", f"https://{host}@example.org{path}",
                     f"https://test.{host}{path}", f"http://{host}{path}",
                 ])
-        for host in ("api4-normal-c.amemv.com", "api3-core.amemv.com", "aweme-snssdk.com"):
+        for host in ("api4-normal-c.amemv.com", "api3-core.amemv.com", "aweme-snssdk.com", "aweme.snssdk.com"):
             urls.extend(f"https://{host}{path}" for path in (*FEEDS, *SPLASH))
         for url in urls:
             with self.subTest(url=url):

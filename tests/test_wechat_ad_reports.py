@@ -36,6 +36,9 @@ class WechatAdReports(unittest.TestCase):
             self.assert_actions(PIXEL + f"seepos={position}&report_type=0", ["reject_img(200)"])
         for duration in (500, 1000, 2000):
             self.assert_actions(PIXEL + f"seetime={duration}&report_type=1", ["reject_img(200)"])
+        for method in ("POST", "HEAD", "OPTIONS"):
+            self.assert_actions(PIXEL + "seepos=1&report_type=0", [], method=method)
+            self.assert_actions(PIXEL + "seetime=500&report_type=1", [], method=method)
         for change in ("seepos=0&report_type=0", "seepos=1&report_type=1", "seetime=500&report_type=0",
                        "seetime=750&report_type=1", "seetime=500&report_type=1&action=follow"):
             self.assert_actions(PIXEL + change, [])

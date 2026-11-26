@@ -1,6 +1,8 @@
 # 常用 App 去广告的覆盖范围
 
-iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 41 条原生复写，并列出 34 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 31 条原生复写，并列出 24 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
+
+按 App 查看正常业务入口、保留的规则和实机验证边界，请参阅[连接兼容性复核](COMPATIBILITY.md)。
 
 ## 网页广告
 
@@ -21,7 +23,7 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 
 | 匹配的请求 | 处理方式 |
 | --- | --- |
-| `/mp/ad_report` 的 `action=see_report` | 对带广告标识的已知像素请求在本机返回小图片，涵盖滚动至广告特定位置及广告可见 500、1000、2000 毫秒的上报。[可见位置与时长](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/index42f400.js#L1617-L1627) |
+| `/mp/ad_report` 的 `action=see_report` | 对带广告标识的已知像素 GET 在本机返回小图片，涵盖滚动至广告特定位置及广告可见 500、1000、2000 毫秒的上报。[可见位置与时长](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/index42f400.js#L1617-L1627) |
 | `/mp/advertisement_report` 的 `action=extra_report` | 对已识别的附加上报在本机返回空 JSON 对象。这条路径用于记录点击时间或递交累积的曝光时长。[点击计时](https://github.com/stellarkey/912_project/blob/688e74dabb40b4ffd1ca47a9d8a72495c77b6ddb/1%20%E6%8B%9B%E7%94%9F%E4%BF%A1%E6%81%AF/%21%E6%8B%9B%E7%94%9F%E6%A6%82%E5%86%B5/%E3%80%90%E9%95%9C%E5%83%8F%E3%80%91%E7%8E%8B%E9%81%93%E5%9C%A8%E7%BA%BF/%E7%8E%8B%E9%81%93%E5%9C%A8%E7%BA%BF_files/report42f400.js#L227-L242) · [曝光计时](https://github.com/stellarkey/912_project/blob/688e74dabb40b4ffd1ca47a9d8a72495c77b6ddb/1%20%E6%8B%9B%E7%94%9F%E4%BF%A1%E6%81%AF/%21%E6%8B%9B%E7%94%9F%E6%A6%82%E5%86%B5/%E3%80%90%E9%95%9C%E5%83%8F%E3%80%91%E7%8E%8B%E9%81%93%E5%9C%A8%E7%BA%BF/%E7%8E%8B%E9%81%93%E5%9C%A8%E7%BA%BF_files/report42f400.js#L291-L307) |
 | `/mp/advertisement_report` 的 `report_type=1` | 对带有广告与跟踪标识的主曝光请求，在本机返回 `{"ret":0}`。公开页面把这个值视为上报成功，可避免它将同一次曝光重新入队。[曝光回调](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/index42f400.js#L1484-L1526) |
 
@@ -46,9 +48,9 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 
 ## 抖音主 App
 
-这两条规则针对中国版抖音主 App 的推荐流和候选开屏路径。2026-11-21 查到的中国区 App Store 版本为 **41.2.0**。上游分析的是 iOS **30.3.0** 的安装包，测试使用合成响应；更早的字段实现只标注支持到 16.2.0。目前缺少 41.2.0 的 iPhone 或 iPad 广告响应和实机命中记录，实际使用的主机、路径和编码可能已经变化。抖音极速版及国际版 TikTok 另用各自客户端。[中国区 App Store](https://apps.apple.com/cn/app/id1142110895) · [30.3.0 静态证据](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L25-L53) · [旧版适配说明](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Module/douyin.sgmodule#L1-L15)
+这两条规则针对中国版抖音主 App 的推荐流和候选开屏路径。曾用于签名播放的 aweme.snssdk.com 保留原始 HTTPS 连接。2026-11-21 查到的中国区 App Store 版本为 **41.2.0**。上游分析的是 iOS **30.3.0** 的安装包，测试使用合成响应；更早的字段实现只标注支持到 16.2.0。目前缺少 41.2.0 的 iPhone 或 iPad 广告响应和实机命中记录，实际使用的主机、路径和编码可能已经变化。抖音极速版及国际版 TikTok 另用各自客户端。[中国区 App Store](https://apps.apple.com/cn/app/id1142110895) · [30.3.0 静态证据](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L25-L53) · [旧版适配说明](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Module/douyin.sgmodule#L1-L15)
 
-- **主机范围**仅为 `api3-core-c.amemv.com`、`api3-normal-c.amemv.com`、`api.amemv.com`、`aweme.snssdk.com`。这些是共享 API 主机。开启解密后，发往这些主机的其他 HTTPS 请求也可能在本机经过 TLS 解密；插件只在指定路径执行复写。
+- **主机范围**仅为 `api3-core-c.amemv.com`、`api3-normal-c.amemv.com`、`api.amemv.com`。这些是共享 API 主机。开启解密后，发往这些主机的其他 HTTPS 请求也可能在本机经过 TLS 解密；插件只在指定路径执行复写。
 - **推荐信息流**仅匹配 `/aweme/v1/feed` 和 `/aweme/v2/feed`。HTTP 200 的 JSON 须包含数值 `status_code=0` 和顶层 `aweme_list` 数组。仅当同页还含可识别的非广告作品或直播时，才过滤广告。作品取 `aweme_id`，直播取 `room_id`、`live_room.id` 或 `live_room.id_str`，这些标识须为正整数字样。过滤时只移除直接条目中 `is_ads` 为布尔 `true` 或数值 `1` 的对象。纯广告页、广告以外只有占位项的页面，以及找不到可识别作品或直播的页面均原样保留，避免翻页后只剩空白。带货和本地生活标记本身不会触发删除。其余条目的顺序、分页游标和预取字段保留。没有上述广告标记时直接返回，无需重新构造数组。[历史广告标记](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Script/douyin.js#L27-L43)
 - **定向请求与编码**。查询参数名为 `aweme_id` 或 `aweme_ids` 的定向请求跳过处理。参数名含百分号编码时也跳过，避免改动指定作品。只有参数值含编码时，普通推荐仍按上述条件过滤。分享及其他视频路径、带明确失败标记的响应、Protobuf 等二进制响应和结构未知的 JSON 均保留。[上游数据格式边界](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L47-L65)
 - **候选开屏接口**共有五个完整路径，分别为`/api/ad/v1/splash/stock`、`/api/ad/v16/splash/preload`、`/api/ad/splash/stock/realtime/v14`、`/api/ad/splash/stock/realtime/v15`、`/api/ad/splash/aweme/v15`。路径出自旧安装包；与前述四个主机的组合是基于静态配置的预防性匹配，缺少各组合的运行时捕获。拒绝请求后仍可能有本地倒计时、缓存画面或重试等待。[候选路径与证据](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Rewrite/DouyinAdClean.snippet#L9-L17)
@@ -70,14 +72,15 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 
 | App | 已实现的规则 | 适用条件与保留内容 |
 | --- | --- | --- |
-| 京东 | 京媒广告请求、另一竞价主机的 `/adx/` 路径。能识别操作名时，清空开屏图和次数，剔除首页两种悬浮推广楼层 | 要求 URL 中只有一个明确的 `functionId=start` 或 `functionId=welcomeHome`。同一请求出现无值或重复的操作名、或含百分号编码的参数名时跳过。普通参数值仍可编码。新版可能把操作名及正文编码，此时这两条复写会跳过。商品图片 CDN、比价、优惠券、购物车和订单均未列为拦截目标。[京媒 SDK](https://help-sdk-doc.jd.com/ansdkDoc/faq/faq.html) · [首页字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/jingdong/jingdong.js#L258-L280) · [竞价接口](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/jd_splash_ad_block.plugin#L19-L25) · [新版样本和限制](https://github.com/zbsdsb/loon-adblock-plugins/blob/890f64953efc870d4ca6cc5ec19b048c88ec73bb/tests/jd-test.js#L26-L50) |
+| 京东 | 京媒广告域名、竞价专用路径和网页展示像素。 | api.m.jd.com 同时提供原生购物和登录关联令牌。已撤下依赖该网关的旧版明文开屏与首页规则。[京东开发文档](https://opendoc.jd.com/shop/newisv/docs/documents/questionAndAnswer#问题15) · [竞价接口](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/jd_splash_ad_block.plugin#L19-L25) |
 | 淘宝 | 手机网页版首页的指定轮播曝光回调 | 淘宝与菜鸟共用的 MTOP 网关保留原始 HTTPS 连接。淘宝 App 这处开屏广告可能再次显示。[消息排查](#淘宝消息排查) |
 | 菜鸟 | 淘宝与菜鸟共用的 MTOP 网关保留原始 HTTPS 连接 | 原先针对该网关的菜鸟广告过滤已撤下。[菜鸟 App 网关记录](https://github.com/UserC23/cainiao-ads-loon/blob/e6aac018f1a61df72b51a290a4beb99993692b77/CHANGELOG.md#L24-L27) |
-| 拼多多 | 开屏配置、首页及刷新接口中标为 `ad_module` 的模块，以及已知混合搜索页的付费商品卡。 | 首页只按明确的模块名过滤。个人中心的取货通知与优惠横幅整块保留。订单、支付、优惠券、聊天和普通商品推荐有保留用例。本次验证用的是离线样本。[开屏配置](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partP/Pinduoduo.lpx#L11-L14) · [首页字段](https://github.com/ishowshu/qx/blob/3ad7bec45ec25cd41edfbae70db3869106e01890/script/pdd.js#L30-L46) · [刷新路径](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/Pinduoduo.snippet#L24) |
+| 拼多多 | 首页及刷新接口中标为 `ad_module` 的模块，以及已知混合搜索页的付费商品卡。 | 首页只按明确的模块名过滤。个人中心的取货通知与优惠横幅整块保留。订单、支付、优惠券、聊天和普通商品推荐有保留用例。两台开屏接口保留服务端原始响应，api.yangkeduo.com 也退出解密。本次验证用的是离线样本。[开屏配置](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partP/Pinduoduo.lpx#L11-L14) · [首页字段](https://github.com/ishowshu/qx/blob/3ad7bec45ec25cd41edfbae70db3869106e01890/script/pdd.js#L30-L46) · [刷新路径](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/Pinduoduo.snippet#L24) |
 | 快递 100 等接入拼多多广告联盟的 App | 拦截 `video-dsp.pddpic.com` 的推广视频素材。公开路径记录来自快递 100，规则按完整域名生效。 | 运单接口、商品图片和普通视频域名不在本条规则中。[素材路径](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partK/KuaiDi100.lpx#L154-L158) · [独立域名记录](https://github.com/vokins/ad/blob/5f177915e12fbaed055dd2ef79f56b97f689ac58/ad.lsr#L341) |
 | 闲鱼 | 共用的 MTOP 业务网关保留原始 HTTPS 连接 | 闲鱼技术团队记录了用 MTOP 拉取消息的机制。同步和异步开屏广告可能再次显示。[闲鱼消息团队技术说明](https://juejin.cn/post/7005836853001748517) |
 | 大众点评 | 按精确主机拦截 ad.api.dianping.com 的独立广告请求。 | 点评 App 网关与桌面网页保留原始 HTTPS 连接，App 开屏与网页城市横幅可能再次显示。[点评网络团队对广告域名的说明](https://tech.meituan.com/2017/03/17/shark-sdk.html) |
-| 高德地图、铁路 12306 | 高德的两条启动广告接口，铁路 12306 的独立广告主机 | 路线、导航、查票和购票接口不在名单中。App 自带的开屏倒计时可能继续显示。[高德地图](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partG/AutoNavi.lpx#L27-L36) · [铁路 12306](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/part1/12306.lpx#L14-L22) |
+| 高德地图 | 保留阿里妈妈独立开屏广告路径。 | m5.amap.com 同时提供导航接口，此主机保留原始 HTTPS 连接。[导航测量](https://tns.thss.tsinghua.edu.cn/~yangzheng/papers/Zhao-CellTrans-UbiComp2019.pdf) · [开屏规则来源](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partG/AutoNavi.lpx#L27-L36) |
+| 铁路 12306 | 精确拦截专用广告主机。 | 查票、购票和候补入口使用原有连接。[广告规则来源](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/part1/12306.lpx#L14-L22) |
 
 **拼多多搜索**　规则只处理已知 `api.pinduoduo.com/search` 的成功 JSON。混合结果中，卡片须同时具备商品名称、匹配的商品 ID、广告创意 ID、商家 ID 及数值大于零的广告竞价（`ocpcBid`）才会移除。同件商品的自然结果、优惠信息和翻页游标都会保留。若整页都是推广，规则保留原页，避免产生无法继续翻页的空列表。[公开搜索接口与字段](https://github.com/zheng515253/spiderDemo/blob/da58b9332336118e185517fc741d9f72fc1e9452/pddSpider/spiders/pdd_keyword_goods_v8.py#L92-L111) · [搜索路径记录](https://github.com/Reukix/ukix/blob/44daad38c7d9b24379cb969f2a1a89ca49ec3297/Script/Pinduoduo.sgmodule#L27)
 
@@ -129,15 +132,15 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 
 | App | 拦截位置与范围 | 来源 |
 | --- | --- | --- |
-| 百度贴吧 | 看图模式的批量广告接口 `tiebac.baidu.com/tiebaads/commonbatch`。查询中须有一个明确的 `adcmd`。只在成功 JSON 的 `res.ad` 是非空对象数组时清空它。帖子、图片列表和 JSONP 回调保持原样。 | [上游路径](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/module/tieba.sgmodule#L10-L15) · [响应字段](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/tieba-json.js#L17-L35) |
-| 得物 | `app.dewu.com/api/v1/app/advertisement` 开屏广告配置。 | [得物开屏](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partD/DeWu.lpx#L13-L15) |
-| 猫眼 | `p0.pipi.cn` 的 `/adAdmin/` 和 `/mediaplus/maoyantong_ads_fe/` 两个广告目录。仅匹配 GIF 或带指定质量、尺寸参数的 JPG、PNG。 | [广告图片目录](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partM/MaoYan.lpx#L13-L15) · [文件格式与参数](https://github.com/zirawell/R-Store/blob/a4f3b10d6038d77ae3e1ff68bd19a49071ebabd3/Rule/QuanX/Adblock/App/M/%E7%8C%AB%E7%9C%BC/snippet/pipi.snippet#L13-L15) |
-| 转转 | `app.zhuanzhuan.com/zz/v2/zzlogic/getOpenScreen` 开屏配置。 | [转转开屏](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partZ/ZhuanZhuan.lpx#L15-L21) |
+| 百度贴吧 | tiebac.baidu.com 保留原始 HTTPS 连接。 | iPhone 请求记录表明同一域名载有正常帖子，旧看图广告响应使用原有链路。[iPhone 请求记录](https://github.com/app2smile/rules/issues/247) |
+| 得物 | app.dewu.com 保留原始 HTTPS 连接。 | 该主机用于商品、鉴别和分享入口，旧开屏广告可能显示。[得物 App 关联配置](https://app.dewu.com/.well-known/apple-app-site-association) |
+| 猫眼 | p0.pipi.cn 的普通剧照和人物图片沿用原连接。 | 两处广告目录的图片可能再次显示。[猫眼图片样本](https://p0.pipi.cn/basicdata/25bfd6d753706dc7ed8077fa5007898cf9e86.jpg?imageMogr2/thumbnail/2500x2500%3E) |
+| 转转 | app.zhuanzhuan.com 保留原始 HTTPS 连接。 | 此主机也承担正常二手交易和搜索入口，开屏广告可能显示。[转转官网](https://app.zhuanzhuan.com/) |
 | BOSS 直聘 | `api-ios.zhipin.com/api/zpCommon/user/startupAd` 启动广告。 | [iOS 启动广告接口](https://github.com/zirawell/R-Store/blob/a4f3b10d6038d77ae3e1ff68bd19a49071ebabd3/Rule/QuanX/Adblock/App/B/Boss%E7%9B%B4%E8%81%98/snippet/boss.snippet#L13-L15) |
 | 去哪儿 | `homefront.qunar.com/front/splash/ad` 独立开屏广告请求。 | [去哪儿开屏](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partQ/Qunar.lpx#L14-L16) |
-| 飞常准 | `app.variflight.com` 上的 `/ad/` 和 `/v1/advert/` 两个广告目录，只匹配普通路径段。 | [飞常准广告目录](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partF/VariFlight.lpx#L19-L22) |
+| 飞常准 | app.variflight.com 保留原始 HTTPS 连接。 | 该主机提供行程、航班和会员服务页面，广告目录使用原始响应。[飞常准出行](https://app.variflight.com/trip/) |
 | 北京银行信用卡「掌上京彩」 | 静态主机 `cdn-xyk-app.bankofbeijing.com.cn` 的 `/cdn/resource/image/advertise/` 中，以 JPG、JPEG、PNG、GIF 或 WebP 为扩展名的图片。 | [广告图片目录](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partB/ZhangShangJingCai.lpx#L12-L14) |
-| 广发信用卡「发现精彩」 | 静态主机 `static.95508.com` 的 `/mmg/ciop/sysabbr/cmep/images/` 下，限 `apppopupads/`、`popupads/` 两个目录和上述图片格式。 | [弹窗广告目录](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partF/FaXianJingCai.lpx#L14-L15) |
+| 广发信用卡「发现精彩」 | static.95508.com 的正规业务文件和图片沿用原连接。 | 弹窗广告素材可能再次显示。[广发公开文件](https://static.95508.com/cgbstatic/POCM/commercialPensionFile/20260710/202607101010403506981409129447.pdf) |
 
 公开规则与离线样本可用于核对匹配范围。这些广告位在当前 iPhone、iPad 版本上的实际命中和启动耗时还待验证。广告素材如已缓存，首次重新打开 App 时仍可能显示。
 
