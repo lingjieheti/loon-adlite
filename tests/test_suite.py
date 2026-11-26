@@ -75,6 +75,7 @@ RESPONSE_URLS = (
     "https://t7z.cupid.iqiyi.com/mixer",
     "https://mp.weixin.qq.com/mp/getappmsgad", "https://mp.weixin.qq.com/mp/getappmsgext",
     "https://app.bilibili.com/x/v2/feed/index",
+    "https://app.bilibili.com/x/v2/feed/index/story",
 )
 
 
@@ -227,8 +228,8 @@ class AdSuite(unittest.TestCase):
         }
         self.assertTrue({f"DOMAIN,{host},REJECT" for host in original_hosts}.issubset(lite["rule"]))
         inline = read_sections(ROOT / "iPad-InlineAds.lpx")["rewrite"]
-        self.assertEqual(len(inline), 6)
-        self.assertEqual(sum(bool(Rewrite.parse(line).jq) for line in inline), 3)
+        self.assertEqual(len(inline), 7)
+        self.assertEqual(sum(bool(Rewrite.parse(line).jq) for line in inline), 4)
         self.assertTrue(set(inline).issubset(self.sections["rewrite"]))
 
     def test_web_ad_hosts_and_normal_web_traffic(self):
