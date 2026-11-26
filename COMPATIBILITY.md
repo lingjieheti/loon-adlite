@@ -2,6 +2,12 @@
 
 2026-11-27，以 [大众点评修订后的订阅](https://github.com/lingjieheti/loon-adlite/blob/f9e6f87f53a3a4bf4667f79a90ba432409603409/iPad-AdSuite.lpx) 为基线，核对三个订阅的 82 条精确域名拒绝、41 条懒人版复写和 34 个解密主机，重点比对原始广告规则、业务请求记录及公开技术资料。Loon 的 HTTPS 解密按主机生效。同主机正常请求即使绕过复写，仍可能在设备上解密。下列结果是规则重放和公开样例核验，实际时延、签名请求及客户端重试仍需在 iOS 设备上观测。[Loon 解密说明](https://nsloon.app/docs/MitM/)
 
+## 后续补回的广告位
+
+本轮新增五条精确广告主机规则，覆盖猫眼小程序弹窗和横幅、小红书广告图、1RTB 与 Tanx 广告请求。B 站竖屏推荐使用已列名的同一 App 主机，只处理有明确商业字段且混有正常视频的响应。新版懒人版的解密主机数为 24。[新增广告依据](COVERAGE.md#独立投放主机补漏) · [竖屏广告抓包](https://github.com/UserC23/bilibili-ads-loon/blob/38ad51c6bef2be64625b7a86e9bf8aac44a4119a/docs/analysis.md#L137-L146)
+
+可直接影响业务的候选中，京东曾有拦截共用图片域名导致商品图消失的公开修复，闲鱼开屏素材桶亦用于普通内容视频。飞常准的历史广告主机在两套公开 DNS 中均未解析。本轮补漏按独立广告服务和可识别响应字段取证，原生 App 中仍混在业务响应里的广告覆盖取决于实际投放。[京东商品图记录](https://github.com/Thelongdarkorg/loon-plugins/commit/4f431103128b12ccc3632b9c9b1299b8b933bcd7) · [闲鱼视频架构](https://developer.aliyun.com/article/785838)
+
 ## 已调整的应用
 
 | 应用 | 已查证的范围和处理 |

@@ -21,6 +21,7 @@ PLUGIN = Path(__file__).resolve().parents[1] / "iPad-InlineAds.lpx"
 WX_AD = "https://mp.weixin.qq.com/mp/getappmsgad"
 WX_EXT = "https://mp.weixin.qq.com/mp/getappmsgext"
 APP_FEED = "https://app.bilibili.com/x/v2/feed/index"
+APP_STORY = APP_FEED + "/story"
 APP_SPLASH = "https://app.bilibili.com/x/v2/splash/list"
 WEB_FEED = "https://api.bilibili.com/x/web-interface/wbi/index/top/feed/rcmd"
 BIG_ID = 123456789012345678901234567891
@@ -64,7 +65,7 @@ class InlineAds(unittest.TestCase):
         self.assertEqual(json.dumps(self.rewrite(url, result), sort_keys=True), wanted)
 
     def test_url_scope(self):
-        for url in (WX_AD, WX_EXT, APP_FEED, APP_SPLASH):
+        for url in (WX_AD, WX_EXT, APP_FEED, APP_STORY, APP_SPLASH):
             for suffix in ("", "?a=1&b=2"):
                 with self.subTest(url=url + suffix):
                     self.assertEqual(len(self.matching_rules(url + suffix)), 1)
@@ -79,7 +80,7 @@ class InlineAds(unittest.TestCase):
             "https://mp.weixin.qq.com/mp/relatedarticle",
             "https://mp.weixin.qq.com/cgi-bin/bizlogin",
             "https://mp.weixin.qq.com/s?next=/mp/getappmsgad",
-            "https://app.bilibili.com/x/v2/feed/index/story",
+            APP_STORY + "/cart",
             "https://app.bilibili.com/x/v2/splash/show",
             "https://app.bilibili.com/x/v2/splash/brand/list",
             "https://app.bilibili.com/x/v2/splash/event/list2",
@@ -99,7 +100,7 @@ class InlineAds(unittest.TestCase):
             {entry.strip() for entry in hosts[0].split(",")},
             {urlsplit(url).hostname for url in (WX_AD, APP_FEED)},
         )
-        for url in (WX_AD, WX_EXT, APP_FEED, APP_SPLASH):
+        for url in (WX_AD, WX_EXT, APP_FEED, APP_STORY, APP_SPLASH):
             rule, = self.matching_rules(url)
             self.assertTrue(rule.jq)
             self.assertIsNotNone(rule.mime)
@@ -110,10 +111,32 @@ class InlineAds(unittest.TestCase):
             for bad in ("text/html; charset=UTF-8", "application/grpc", "application/jsonp",
                         "text/javascript", "text/plain", "application/octet-stream", ""):
                 self.assertFalse(rule.matches(url, mime=bad))
-        self.assertEqual(len(self.rules), 6)
-        self.assertEqual(sum(bool(rule.jq) for rule in self.rules), 3)
+        self.assertEqual(len(self.rules), 7)
+        self.assertEqual(sum(bool(rule.jq) for rule in self.rules), 4)
         self.assertEqual(sum(rule.phase == "request" for rule in self.rules), 2)
         self.assertEqual(sum(rule.action == WECHAT_IMPRESSION_ACTION for rule in self.rules), 1)
+
+    def test_story_removes_only_confirmed_ads_from_a_mixed_page(self):
+        organic = {"card_goto": "vertical_av", "id": BIG_ID, "ad_info": {"is_ad": True, "creative_id": 40}}
+        ad = {"card_goto": "vertical_ad_av", "ad_info": {"is_ad": True, "creative_id": 11}}
+        another_ad = {**ad, "ad_info": {"is_ad": True, "creative_id": 12}}
+        keep = [
+            organic, {"card_goto": "vertical_av", "id": 23},
+            {"card_goto": "vertical_ad_av", "ad_info": {"is_ad": "true", "creative_id": 13}},
+            {"card_goto": "vertical_ad_av", "ad_info": {"is_ad": True, "creative_id": 0}},
+        ]
+        body = {"code": 0, "data": {"items": [ad, *keep, another_ad], "next": BIG_ID, "has_more": 1}}
+        self.check_result(APP_STORY, body, {**body, "data": {**body["data"], "items": keep}})
+        for payload in (
+            {**body, "code": -101}, {**body, "success": False}, {**body, "error": {"code": 403}},
+            {"code": 0, "data": {"items": [ad, another_ad, None]}},
+            {"code": 0, "data": {"items": {"ad": ad}}}, [],
+        ):
+            self.check_result(APP_STORY, payload, payload)
+        suite = read_sections(PLUGIN.with_name("iPad-AdSuite.lpx"))["rewrite"]
+        rules = [Rewrite.parse(line) for line in suite]
+        story = [rule.jq for rule in rules if rule.matches(APP_STORY)]
+        self.assertEqual(story, [self.matching_rules(APP_STORY)[0].jq])
 
     def test_wechat_preserves_article_fields(self):
         source = {

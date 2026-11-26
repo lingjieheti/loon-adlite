@@ -20,6 +20,8 @@ GitHub 每天北京时间 11:27 排期比对本页和覆盖说明（COVERAGE.md�
 | 抖音 · 合并 | 从 Choler 的旧版实现核对推荐流广告标记，从 Belcheck 的旧版 iOS 静态分析核对候选开屏路径。本站仅处理同时包含可识别非广告作品或直播的成功 JSON。当前客户端的实际命中仍待验证。[Choler 字段示例](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Script/douyin.js#L27-L43) · [Belcheck 分析](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L25-L65) · [抖音测试边界](COVERAGE.md#抖音主-app) |
 | 小红书、知乎、微博、酷安等内容 App · 合并 | 逐个核对首页广告卡、微博广告标记及酷安赞助卡，只从指定数组移除匹配项。腾讯视频和优酷的规则针对特定广告主机。爱奇艺另按首页、搜索卡片的广告标记以及官方频道资源记录的展示位过滤。视频口播和与正片合流的广告仍可能播放。[知乎广告卡](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/zhihu.js#L33-L69) · [微博字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L140-L155) · [其他内容 App 的来源](COVERAGE.md#内容和影音) |
 
+1RTB、Tanx、猫眼小程序及小红书本轮补充的广告主机，分别核对了官方 iOS SDK、公开请求记录和当前 DNS。B 站竖屏推荐以 iOS 抓包的 card_goto、ad_info.is_ad 和 creative_id 联合标记复核。[独立投放主机](COVERAGE.md#独立投放主机补漏) · [竖屏样本](https://github.com/UserC23/bilibili-ads-loon/blob/38ad51c6bef2be64625b7a86e9bf8aac44a4119a/docs/analysis.md#L137-L146)
+
 米家、同花顺系、LINE、百度地图、下厨房和美图秀秀采用完整广告主机名。BOSS 直聘、去哪儿和掌上京彩匹配各自已知的广告路径，掌上京彩仅处理静态主机上的指定图片目录。每日来源比对任务追踪固定版本的上游文件。[逐项广告位置与证据](COVERAGE.md#更多常用-app-的广告位)
 
 微信公众文章的监测规则依据存档页面脚本中的请求和回调独立编写，并核对了请求封装附加的 `devicetype`、`clientversion`、`x5` 和 `f` 参数。[公共参数](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/tmpl42f400.js#L342-L350) · [GET 请求组装](https://github.com/pomestyle/Weixin_Pilgrim/blob/e58122cef49c3668782623c82ba9fc1e405d491a/src/main/resources/static/fhdf/tmpl42f400.js#L396-L406)

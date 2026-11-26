@@ -1,6 +1,6 @@
 # 常用 App 去广告的覆盖范围
 
-iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 31 条原生复写，并列出 24 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 82 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 87 个。域名拦截无需证书。懒人版另有 32 条原生复写，并列出 24 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
 
 按 App 查看正常业务入口、保留的规则和实机验证边界，请参阅[连接兼容性复核](COMPATIBILITY.md)。
 
@@ -34,6 +34,15 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 同样按完整域名拦截 `t.gdt.qq.com`。腾讯发布的 iOS 转化 SDK 使用该主机的 `/conv/sdk/spa/conv`，应用通过这条路径从设备上报广告转化。广告主服务器之间的归因回传不经过设备上的 Loon，仍可发生。[腾讯 iOS SDK 接入说明](https://qzonestyle.gtimg.cn/open_proj/gdt_gw/cms/uploads/ios-sdk-v1.4.pdf) · [官方 SDK 下载](https://imgcache.qq.com/qzone/biz/gdt/dev/sdk/ios/release/GDT_iOS_Track_SDK.zip) · [腾讯转化回传说明](https://qzonestyle.gtimg.cn/open_proj/gdt_gw/cms/uploads/conversion-api2-1108-.pdf)
 
 上述三个主机的所有路径均受域名规则约束，包括使用 `?ADTAG=` 的请求。EasyList China 为 `qq.com` 网站列有这项通用放行。插件保留聊天、推送、登录和支付的共用主机，以及有具体路径放行记录的 `c.gdt.qq.com`、`v.gdt.qq.com`。广告主配置的第三方点击监测仍可能生效。[网页放行规则](https://github.com/easylist/easylistchina/blob/560a345168f36ca2bfbbf3280b0037451d6e3c80/easylistchina.txt#L15813-L15820) · [点击与统计路径的例外](https://github.com/xinggsf/Adblock-Plus-Rule/blob/65eb7d27b0716e6c92c9fddb8bc316aadc048e75/rule.txt#L264-L265) · [腾讯关于点击监测的说明](https://tencentads.com/Faqlist/Detail/397)
+
+## 独立投放主机补漏
+
+| 场景 | 拦截范围与证据 |
+| --- | --- |
+| 1RTB 广告 SDK | sdk.1rtb.net 和 zlsdk.1rtb.net。PICOOC 的公开 iOS 记录和山东校园规则都指向 /sdk/req_ad。匿名探测两者均返回 204。[PICOOC 开屏记录](https://ntnas.top/archives/52/) · [山东校园请求记录](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partS/ShanDongXiaoYuan.lpx#L22-L25) |
+| 阿里妈妈 Tanx SDK | opehs.tanx.com。官方 iOS SDK 发布包包含该主机，终端记录中见到 /japi 请求。同一 SDK 提供激励广告，使用这些广告领权益时可能受影响。[官方 iOS SDK](https://github.com/Alimama-TanxSDK/TanxSDK/tree/9f26282f362c32c15f3652072db01b18bf39563e) · [激励场景](https://cocoapods.org/pods/TanxSDK) · [终端记录](https://cn.v2ex.com/t/970893#reply10) |
+| 猫眼电影小程序 | ad.maoyan.com 的独立弹窗及横幅广告。该主机的 /api/position/detail 匿名返回 HTTP 200 与广告位参数错误。电影海报和业务请求使用各自入口。[广告位接口](https://ad.maoyan.com/api/position/detail) · [早期请求记录](https://t.me/Aa28413761/851) |
+| 小红书 | ads-img-al.xhscdn.com 的广告图片，补充此前已列入的图片和视频广告主机。[客户端报告](https://github.com/AdguardTeam/AdguardFilters/issues/207497) · [iOS 对照记录](https://www.v2ex.com/t/1151745) |
 
 ## 短视频和购物广告监测
 
@@ -134,7 +143,7 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 | --- | --- | --- |
 | 百度贴吧 | tiebac.baidu.com 保留原始 HTTPS 连接。 | iPhone 请求记录表明同一域名载有正常帖子，旧看图广告响应使用原有链路。[iPhone 请求记录](https://github.com/app2smile/rules/issues/247) |
 | 得物 | app.dewu.com 保留原始 HTTPS 连接。 | 该主机用于商品、鉴别和分享入口，旧开屏广告可能显示。[得物 App 关联配置](https://app.dewu.com/.well-known/apple-app-site-association) |
-| 猫眼 | p0.pipi.cn 的普通剧照和人物图片沿用原连接。 | 两处广告目录的图片可能再次显示。[猫眼图片样本](https://p0.pipi.cn/basicdata/25bfd6d753706dc7ed8077fa5007898cf9e86.jpg?imageMogr2/thumbnail/2500x2500%3E) |
+| 猫眼 | 猫眼小程序的独立广告主机由精确域名规则处理。 | 猫眼 App 的 p0.pipi.cn 共用图床按原连接处理。已核验该图床会返回正常影片图片。[独立广告位](#独立投放主机补漏) |
 | 转转 | app.zhuanzhuan.com 保留原始 HTTPS 连接。 | 此主机也承担正常二手交易和搜索入口，开屏广告可能显示。[转转官网](https://app.zhuanzhuan.com/) |
 | BOSS 直聘 | `api-ios.zhipin.com/api/zpCommon/user/startupAd` 启动广告。 | [iOS 启动广告接口](https://github.com/zirawell/R-Store/blob/a4f3b10d6038d77ae3e1ff68bd19a49071ebabd3/Rule/QuanX/Adblock/App/B/Boss%E7%9B%B4%E8%81%98/snippet/boss.snippet#L13-L15) |
 | 去哪儿 | `homefront.qunar.com/front/splash/ad` 独立开屏广告请求。 | [去哪儿开屏](https://github.com/fmz200/wool_scripts/blob/58f6cce6dbd5c5fe50c2998938f9c2ba631a7c18/Loon/plugin/split/partQ/Qunar.lpx#L14-L16) |
@@ -150,8 +159,9 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 
 | App | 已实现的规则 | 适用条件与依据 |
 | --- | --- | --- |
-| 小红书、知乎 | 小红书首页去掉带非空 `ads_info` 对象的广告卡，另拦三台广告素材主机。知乎首页按 `type=feed_advert` 过滤 | 小红书保留仅有商品关联、直播标记的普通条目，知乎保留未知类型。作者自行植入的推广通常没有这类标记。[小红书](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/xiaohongshu_splash_ad_block.plugin#L58-L65) · [知乎](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/zhihu.js#L33-L69) |
+| 小红书、知乎 | 小红书首页去掉带非空 `ads_info` 对象的广告卡，另拦四台广告素材主机。知乎首页按 `type=feed_advert` 过滤 | 小红书保留仅有商品关联、直播标记的普通条目，知乎保留未知类型。作者自行植入的推广通常没有这类标记。[小红书](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/xiaohongshu_splash_ad_block.plugin#L58-L65) · [知乎](https://github.com/app2smile/rules/blob/df6366a7024e0b3f0aa3510c5b791eea6f3cba89/js/zhihu.js#L33-L69) |
 | 哔哩哔哩 App 开屏 | 在 `/x/v2/splash/list` 的成功 JSON 中，素材同时满足 `is_ad=true`、`cm_mark=1` 和有效数值 ID 时才移除。`show`、`keep_ids` 只清理同一响应中仅属于已删广告的数值引用。 | 固定资料中的一条商业素材被识别。独立的品牌图、活动和曝光上报接口继续使用原响应。实际客户端是否使用该路径，仍取决于版本与投放。[开屏响应样本](https://github.com/realysy/bili-apis/blob/3802052be89effc3bbd27574037942310a23672d/docs/APP_widget/splash.md#L321-L351) · [移动端请求观测](https://github.com/UserC23/bilibili-ads-loon/blob/38ad51c6bef2be64625b7a86e9bf8aac44a4119a/docs/analysis.md#L36-L46) |
+| 哔哩哔哩 App 竖屏推荐 | 在 app.bilibili.com 的 /x/v2/feed/index/story 成功 JSON 中，只移除同时有 vertical_ad_av、明确广告标记和正数创意 ID 的卡。 | 仅当同页还存在正常竖屏视频时才移除。保留普通卡、分页字段以及竖屏关联推荐和购物入口。[iOS 抓包证据](https://github.com/UserC23/bilibili-ads-loon/blob/38ad51c6bef2be64625b7a86e9bf8aac44a4119a/docs/analysis.md#L137-L146) |
 | 微信、哔哩哔哩 | 公众号文章广告列表、B 站 App 首页的推广卡和混排横幅中的广告子项。 | 微信文章保留阅读互动。B 站只按卡片类型和去向移除推广，普通视频或直播卡可以带有 `ad_info`。网页首页的推荐使用原始响应，推广卡可能显示。[内嵌广告说明](README.md#内嵌广告) |
 | 微博主 App | 关注流的 `statuses` 以及首页、推荐流的 `items` 中，只移除带数值 `is_ad=1` 或精确标签 `mblogtypename="广告"` 的微博。另有原有开屏和素材主机规则。 | 普通微博、文字里出现“广告”的正文和未标记推广继续显示。保留正常微博的顺序及分页字段。[广告标记](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L140-L155) · [关注流](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L438-L452) · [首页和推荐](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/weibo/weibo_main.js#L96-L102) |
 | 微博轻享版 | 在 `api.weibo.cn/2/ad/weibointl` 的成功 JSON 中，仅清空 `data` 广告数组。 | 只匹配这条路径，覆盖取决于当前版本是否使用它。[轻享版专用接口](https://github.com/gj0134/Loon-Plugins/blob/5c835d0db14a4808c19cd010641be1235b6b3d73/plugins/Weibo-Intl-AdBlock.plugin#L7-L16) |

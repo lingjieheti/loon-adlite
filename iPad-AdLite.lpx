@@ -1,7 +1,7 @@
 #!name = iPad 轻量去广告
 #!desc = 仅按完整主机名拦截部分网页与 App 广告。激励广告可能无法领取，可随时停用。
 #!author = lingjieheti
-#!date = 2026-11-22
+#!date = 2026-11-27
 
 [Rule]
 # Google AdMob / Ad Manager
@@ -74,6 +74,11 @@ DOMAIN,adsmind.apdcdn.tc.qq.com,REJECT
 DOMAIN,ad.tencentmusic.com,REJECT
 DOMAIN,tmead.y.qq.com,REJECT
 
+# 广告投放 SDK · 1RTB 和阿里妈妈
+DOMAIN,sdk.1rtb.net,REJECT
+DOMAIN,zlsdk.1rtb.net,REJECT
+DOMAIN,opehs.tanx.com,REJECT
+
 # 穿山甲广告 SDK · 专用日志主机
 DOMAIN,log-api.pangolin-sdk-toutiao.com,REJECT
 DOMAIN,log-api.pangolin-sdk-toutiao-b.com,REJECT
@@ -105,6 +110,9 @@ DOMAIN,dsp-x.jd.com,REJECT
 # 美团
 DOMAIN,mads.meituan.com,REJECT
 
+# 猫眼电影小程序 · 独立广告位
+DOMAIN,ad.maoyan.com,REJECT
+
 # 大众点评 · 独立广告接口
 DOMAIN,ad.api.dianping.com,REJECT
 
@@ -132,6 +140,7 @@ DOMAIN,bootpreload.uve.weibo.com,REJECT
 DOMAIN,adimg.uve.weibo.com,REJECT
 
 # 小红书
+DOMAIN,ads-img-al.xhscdn.com,REJECT
 DOMAIN,ads-img-qc.xhscdn.com,REJECT
 DOMAIN,ads-video-al.xhscdn.com,REJECT
 DOMAIN,ads-video-qc.xhscdn.com,REJECT
