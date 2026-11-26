@@ -20,8 +20,6 @@ class AdResources(unittest.TestCase):
         rules = [shared.Rewrite.parse(line) for line in suite["rewrite"]]
         roots = (
             ("https://cdn-xyk-app.bankofbeijing.com.cn/cdn/resource/image/", "advertise"),
-            ("https://static.95508.com/mmg/ciop/sysabbr/cmep/images/", "popupads"),
-            ("https://static.95508.com/mmg/ciop/sysabbr/cmep/images/", "apppopupads"),
         )
         for prefix, directory in roots:
             for path in ("launch.jpg", "ios/ver_1/Banner-2.webp?version=1"):

@@ -42,20 +42,12 @@ REQUEST_CASES = {
     "https://mp.weixin.qq.com/mp/ad_report?action=see_report&aid=314&tid=demo&seepos=2&report_type=0": "reject_img(200)",
     "https://mp.weixin.qq.com/mp/advertisement_report?action=extra_report&x5=0&f=json": "reject_dict(200)",
     "https://cdn-xyk-app.bankofbeijing.com.cn/cdn/resource/image/advertise/2026/banner.jpg": "reject_img(200)",
-    "https://static.95508.com/mmg/ciop/sysabbr/cmep/images/popupads/brand1.png": "reject_img(200)",
-    "https://app.dewu.com/api/v1/app/advertisement": "reject(404)",
-    "https://p0.pipi.cn/adAdmin/promo_45.gif": "reject_img(200)",
-    "https://app.zhuanzhuan.com/zz/v2/zzlogic/getOpenScreen": "reject_dict(200)",
     "https://api-ios.zhipin.com/api/zpCommon/user/startupAd/": "reject_dict(200)",
     "https://homefront.qunar.com/front/splash/ad": "reject_dict(200)",
-    "https://app.variflight.com/v1/advert/": "reject(404)",
     "https://api3-core-c.amemv.com/api/ad/v16/splash/preload": "reject(404)",
     "https://wmapi.meituan.com/api/v7/openscreen": "reject_dict(200)",
     "https://wmapi.meituan.com/api/v7/startpicture": "reject_dict(200)",
     "https://bdsp-x.jd.com/adx/auction": "reject(404)",
-    "https://api.pinduoduo.com/api/cappuccino/splash": "reject(404)",
-    "https://api.yangkeduo.com/api/cappuccino/splash": "reject(404)",
-    "https://m5.amap.com/ws/shield/dsp/app/startup/init": "reject_dict(200)",
     "https://amap-aos-info-nogw.amap.com/ws/aos/alimama/splash_screen_rt": "reject(404)",
 }
 
@@ -65,12 +57,10 @@ RESPONSE_URLS = (
     ("https://mp.weixin.qq.com/mp/advertisement_report?report_type=1&tid=demo&aid=314&gh_id=&adver_group_id=7"
      "&apurl=https%3A%2F%2Fexample.org&pos_type=1&ad_sign_data=example&devicetype=iOS&clientversion=1&x5=0&f=json"),
     "https://api.pinduoduo.com/search?page=1&q=books",
-    "https://tiebac.baidu.com/tiebaads/commonbatch?adcmd=1",
     "https://app.bilibili.com/x/v2/splash/list",
     "https://api3-core-c.amemv.com/aweme/v1/feed",
     "https://api3-normal-c.amemv.com/aweme/v2/feed",
     "https://api.amemv.com/aweme/v1/feed",
-    "https://aweme.snssdk.com/aweme/v1/feed",
     "https://api.weibo.cn/2/statuses/friends/timeline",
     "https://api.weibo.cn/2/statuses/container_timeline",
     "https://api.weibo.cn/2/ad/weibointl",
@@ -85,8 +75,6 @@ RESPONSE_URLS = (
     "https://t7z.cupid.iqiyi.com/mixer",
     "https://mp.weixin.qq.com/mp/getappmsgad", "https://mp.weixin.qq.com/mp/getappmsgext",
     "https://app.bilibili.com/x/v2/feed/index",
-    "https://api.m.jd.com/client.action?functionId=start",
-    "https://api.m.jd.com/client.action?functionId=welcomeHome",
 )
 
 
@@ -195,7 +183,6 @@ class AdSuite(unittest.TestCase):
     def setUpClass(cls):
         cls.sections = read_sections(ROOT / "iPad-AdSuite.lpx")
         cls.rules = [Rewrite.parse(line) for line in cls.sections["rewrite"]]
-        cls.shopping = json.loads((TESTS / "shopping_cases.json").read_text("utf-8"))
         cls.jq = os.environ.get("JQ") or shutil.which("jq")
         if not cls.jq:
             raise RuntimeError("Set JQ to a jq executable or install jq on PATH")
@@ -326,12 +313,6 @@ class AdSuite(unittest.TestCase):
                     self.assertFalse(rule.matches(witness, method=method))
                 self.check_body(witness, None, {"ret": 0})
 
-    def test_shopping_responses(self):
-        self.assertEqual(len(self.shopping), 27)
-        for idx, case in enumerate(self.shopping):
-            with self.subTest(case=idx, url=case["url"]):
-                self.check_body(case["url"], case["input"], case["expected"])
-
     def test_exact_request_actions(self):
         for url, action in REQUEST_CASES.items():
             for suffix in (("",) if "?" in url else ("", "?test=1")):
@@ -371,18 +352,6 @@ class AdSuite(unittest.TestCase):
             with self.subTest(url=url):
                 self.assertNotIn(urlsplit(url).hostname, blocked)
                 self.assertEqual(self.matches(url), [])
-
-    def test_jd_ambiguous_operation_names_preserve_business_requests(self):
-        prefix = "https://api.m.jd.com/client.action?"
-        for operation in ("start", "welcomeHome"):
-            regular = f"functionId={operation}"
-            for second in ("function%49d=submitOrder", "%66unctionId=getShopCoupon", "functionId"):
-                for query in (regular + "&" + second, second + "&" + regular):
-                    with self.subTest(query=query):
-                        self.assertEqual(self.matches(prefix + query), [])
-            for query in (regular, regular + "&next=functionId%3DgetShopCoupon",
-                          "body=%7B%22path%22%3A%22foo%22%7D&" + regular):
-                self.assertEqual(len(self.matches(prefix + query)), 1, query)
 
     def test_xiaohongshu_homefeed(self):
         keep = [

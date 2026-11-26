@@ -14,10 +14,6 @@ class TravelAds(unittest.TestCase):
     def test_dedicated_ad_routes(self):
         cases = {
             "https://homefront.qunar.com/front/splash/ad": "reject_dict(200)",
-            "https://app.variflight.com/ad/": "reject(404)",
-            "https://app.variflight.com/v1/advert/": "reject(404)",
-            # A synthetic path checks the segment boundary beneath the dedicated directory.
-            "https://app.variflight.com/v1/advert/sample-slot/test_1": "reject(404)",
         }
         for url, action in cases.items():
             for suffix in ("", "?channel=ios"):

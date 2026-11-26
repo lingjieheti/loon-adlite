@@ -2,11 +2,11 @@
 #!desc = 过滤微信公众号文章广告及部分广告监测、哔哩哔哩 App 首页广告卡和有商业标记的开屏素材。使用 Loon 原生复写，需为下列两个主机启用 HTTPS 解密。
 #!author = lingjieheti
 #!loon_version = 3.5.1(978)
-#!date = 2026-11-23
+#!date = 2026-11-27
 
 [Rewrite]
 # 微信公众号 · 只拦已知广告可见位置和停留时间的图片信标
-request if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/ad_report\?action=see_report&aid=[A-Za-z0-9_-]+&tid=[A-Za-z0-9_-]+&(?:seepos=[1-3]&report_type=0|seetime=(?:500|1000|2000)&report_type=1)$/ then reject_img(200)
+request if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/ad_report\?action=see_report&aid=[A-Za-z0-9_-]+&tid=[A-Za-z0-9_-]+&(?:seepos=[1-3]&report_type=0|seetime=(?:500|1000|2000)&report_type=1)$/ && ${request.method} == "GET" then reject_img(200)
 
 # 微信公众号 · 广告点击时间、曝光时长等附加上报
 request if ${url} ~= /^https:\/\/mp\.weixin\.qq\.com\/mp\/advertisement_report\?action=extra_report(?:&extra_data=[^&#;]+&__biz=[A-Za-z0-9_%+=.-]+)?(?:&(?:uin|key|pass_ticket|wxtoken|devicetype|clientversion|appmsg_token|x5|f)=[^&#;]*)*$/ then reject_dict(200)

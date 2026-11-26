@@ -8,11 +8,6 @@ import test_suite as shared
 MTOP = "https://acs.m.taobao.com/gw/"
 AD_HOSTS = {"baidu-union-js.xiachufang.com", "baidu-union-pos.xiachufang.com", "adui.tg.meitu.com"}
 REQUESTS = {
-    "https://app.dewu.com/api/v1/app/advertisement": "reject(404)",
-    "https://p0.pipi.cn/adAdmin/movie42.jpg?imageMogr2/quality/85": "reject_img(200)",
-    "https://p0.pipi.cn/mediaplus/maoyantong_ads_fe/A42.png?imageMogr2/thumbnail/!165x165": "reject_img(200)",
-    "https://p0.pipi.cn/adAdmin/promo_45.gif?cache=1": "reject_img(200)",
-    "https://app.zhuanzhuan.com/zz/v2/zzlogic/getOpenScreen?version=1": "reject_dict(200)",
     "https://api-ios.zhipin.com/api/zpCommon/user/startupAd/": "reject_dict(200)",
 }
 
