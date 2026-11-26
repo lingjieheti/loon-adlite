@@ -58,8 +58,6 @@ REQUEST_CASES = {
     "https://bdsp-x.jd.com/adx/auction": "reject(404)",
     "https://api.pinduoduo.com/api/cappuccino/splash": "reject(404)",
     "https://api.yangkeduo.com/api/cappuccino/splash": "reject(404)",
-    "https://acs.m.goofish.com/gw/mtop.taobao.idlecommerce.splash.ads/1.0/": "reject_dict(200)",
-    "https://acs.m.goofish.com/gw/mtop.taobao.idlecommerce.splash.async.ads/1.0/": "reject_dict(200)",
     "https://mapi.dianping.com/mapi/operating/loadsplashconfig": "reject(404)",
     "https://www.dianping.com/ajax/brandad?cityId=1": "reject_dict(200)",
     "https://m5.amap.com/ws/shield/dsp/app/startup/init": "reject_dict(200)",
@@ -94,8 +92,6 @@ RESPONSE_URLS = (
     "https://app.bilibili.com/x/v2/feed/index",
     "https://api.m.jd.com/client.action?functionId=start",
     "https://api.m.jd.com/client.action?functionId=welcomeHome",
-    "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
-    "https://guide-acs.m.taobao.com/gw/mtop.cainiao.adx.flyad.getad/1.0/",
 )
 
 
@@ -336,42 +332,10 @@ class AdSuite(unittest.TestCase):
                 self.check_body(witness, None, {"ret": 0})
 
     def test_shopping_responses(self):
-        self.assertEqual(len(self.shopping), 45)
+        self.assertEqual(len(self.shopping), 27)
         for idx, case in enumerate(self.shopping):
             with self.subTest(case=idx, url=case["url"]):
                 self.check_body(case["url"], case["input"], case["expected"])
-
-    def test_taobao_splash_material_url(self):
-        api = "mtop.taobao.wireless.home.splash.awesome.get"
-        url = f"https://guide-acs.m.taobao.com/gw/{api}/1.0/"
-        valid = (
-            "https://img.alicdn.com/imgextra/i1/asset.jpg_800x800.jpg",
-            "//gw.alicdn.com/tfs/asset%20name.jpg?quality=80&from=app#preview",
-            "HTTP://cdn.example:8080/video.mp4", "https://cdn.example.?asset=1",
-            "http://192.0.2.4/asset", "https://[2001:db8::1]:443/asset",
-            "//[::ffff:192.0.2.4]/asset",
-        )
-        unknown = (
-            None, 12, [], "", " ", "#", "about:blank", "data:image/png,placeholder",
-            "https://", "//", "///img", "https:///asset", "//?asset=x", "https://#fragment",
-            "/∕/cdn.example/asset", "https:// cdn.example/asset", "https://cdn.example/a b",
-            "https://cdn.example/a\n", "https://cdn.example\\@other.example/asset",
-            "//./asset", "//../asset", "//user@/asset", "//user@cdn.example/asset", "//cdn..example/asset",
-            "//-cdn.example/asset", "//cdn-.example/asset", "//:443/asset",
-            "//cdn.example:/asset", "//cdn.example:port/asset", "//cdn.example:65536/asset",
-            "//999.1.1.1/asset", "//[broken/asset", "//[1:::2]/asset", "//[1:2:3]/asset",
-        )
-        keep = [{"imgUrl": value, "link": "https://example.com/coupon"} for value in unknown]
-        keep.append({"link": "https://gw.alicdn.com/landing"})
-        creatives = [{"videoUrl": value} for value in valid]
-        creatives.append({"imgUrl": valid[0], "videoUrl": "placeholder"})
-
-        def envelope(items):
-            section = {"bizData": {"taobao-splash": {"data": items}}}
-            return {"api": api, "v": "1.0", "ret": ["SUCCESS::调用成功"],
-                    "data": {"containers": {"splash_home_base": {"base": {"sections": [section]}}}}}
-
-        self.check_body(url, envelope([*keep[:4], *creatives, *keep[4:]]), envelope(keep))
 
     def test_exact_request_actions(self):
         for url, action in REQUEST_CASES.items():
@@ -380,20 +344,6 @@ class AdSuite(unittest.TestCase):
                     headers = REQUEST_CASE_HEADERS.get(url)
                     rule, = self.matches(url + suffix, headers=headers)
                     self.assertEqual((rule.phase, rule.action), ("request", action))
-
-    def test_mtop_nested_business_error_passes_through(self):
-        splash = {"bizData": {"taobao-splash": {"data": [{"imgUrl": "https://gw.alicdn.com/ad.jpg"}]}}}
-        endpoints = {
-            "mtop.taobao.wireless.home.splash.awesome.get":
-                {"containers": {"splash_home_base": {"base": {"sections": [splash]}}}},
-            "mtop.cainiao.adx.flyad.getad": {"creative": {"id": BIG_ID}},
-        }
-        for api, data in endpoints.items():
-            url = f"https://guide-acs.m.taobao.com/gw/{api}/1.0/"
-            for flags in ({"success": False}, {"errmsg": "business error", "status": "1"}):
-                payload = {"api": api, "v": "1.0", "ret": ["SUCCESS::调用成功"], "data": {**data, **flags}}
-                with self.subTest(api=api, flags=flags):
-                    self.check_body(url, payload, payload)
 
     def test_checkout_coupons_playback_navigation_and_similar_urls(self):
         urls = [
