@@ -13,12 +13,6 @@ MINI = "https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement"
 REQUESTS = {
     "https://wmapi.meituan.com/api/v7/openscreen": "reject_dict(200)",
     "https://wmapi.meituan.com/api/v7/startpicture": "reject_dict(200)",
-    "https://p0.meituan.net/adunion/example.webp": "reject_img(200)",
-    "https://p1.meituan.net/adunion/opaque-synthetic-id": "reject_img(200)",
-    "https://p1.meituan.net/adunion/example.png@800w": "reject_img(200)",
-    "https://img.meituan.net/bizad/bizad_brandCpt_123456.jpg": "reject_img(200)",
-    "https://img.meituan.net/adunion/example.jpg.webp": "reject_img(200)",
-    "https://img.meituan.net/adunion/example.gif.webp": "reject_img(200)",
 }
 
 

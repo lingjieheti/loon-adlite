@@ -1,6 +1,6 @@
 # 常用 App 去广告的覆盖范围
 
-iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 45 条原生复写，并列出 39 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 41 条原生复写，并列出 34 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
 
 ## 网页广告
 
@@ -55,14 +55,14 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 
 ## 美团
 
-美团部分包含 6 条原生复写，涉及 6 个完整主机名。美团的独立广告主机继续由域名规则拦截。[域名依据](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan.lpx#L12-L22)
+美团部分包含 4 条原生复写，涉及 3 个完整主机名。美团的独立广告主机继续由域名规则拦截。[域名依据](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan.lpx#L12-L22)
 
 | 场景 | 规则匹配与处理 | 验证边界 |
 | --- | --- | --- |
 | 美团主 App 开屏 | `mop.meituan.com/api/entryModule/startupPicture`。在匹配的 JSON 中，只清空 `resource` 或 `resourcesMap` 下名为 `startupPicArea` 的数组，兼容相应对象位于顶层或 `data` 中的结构。 | 上游注明适配 12.67.403。当前 iPad 客户端尚无实机命中记录。首页其他弹窗和分发路径可能继续显示。[上游版本](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/MT.snippet#L1-L3) · [请求路径](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/MT.snippet#L60-L63) · [结构](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/MT.js#L97-L109) |
 | 美团外卖 App 开屏 | `wmapi.meituan.com/api/v7/loadInfo` 的已识别 JSON 中，只清空 `data.startpicture.ad` 广告数组。另用一条规则处理同主机 `/api/v7/openscreen`、`/api/v7/startpicture` 两个专用路径。 | `loadInfo` 的其他启动配置和 `mk` 字段保留。外卖首页推荐、商户菜单、配送费和订单各有自己的业务接口。外卖 App 的客户端版本与主 App 分开计算。[开屏字段](https://github.com/blackmatrix7/ios_rule_script/blob/0b6897dc17e0c513d25449c935a9694818e32f0c/script/startup/startup.js#L76-L87) · [三个外卖路径](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan-MeituanWaimai.lpx#L12-L16) |
 | 美团餐饮微信小程序 | `rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement` 的成功响应中，若报错、参数错误、冲突或未找到标志为真，则保留原响应。其余符合条件的响应只移除 `data.adSiteList` 内 `adSiteId` 符合 `adunit-…` 格式的条目，后缀限非空的英文字母、数字、下划线或连字符。 | 核查时匿名访问返回 HTTP 200、`code=200`、`success=true`，其中一个广告位经规则处理后变为零个，其他字段一致。这项结果来自公开接口响应。餐饮小程序的结账、企业餐和优惠权益不能用这条结果推断。[公开接口](https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement) · [路径来源](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partD/DianPing.lpx#L19-L27) |
-| 广告素材 | 一条规则匹配 `p0.meituan.net` 和 `p1.meituan.net` 的 `/adunion/`，另一条匹配 `img.meituan.net/bizad/bizad_brandCpt_数字.jpg`，以及该主机 `/adunion/` 目录内以 `.gif.webp` 或 `.jpg.webp` 结尾的素材。 | 同主机上其他目录的商户、菜品和评价图片不会命中这两条规则。素材请求被拦后，客户端仍可能留下占位或等待重试。[p0/p1 目录](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Rewrite/MeituanAppAdMedia.snippet#L4-L7) · [品牌图文件名](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partM/Meituan-MeituanWaimai.lpx#L12-L16) · [img 素材后缀](https://github.com/zirawell/R-Store/blob/d0f4dd305bade7cc6a38e3445a768d72aaea0e5b/Rule/QuanX/Adblock/App/M/%E7%BE%8E%E5%9B%A2/rewrite/meituan.conf#L4) |
+| 共享图片主机 | p0.meituan.net、p1.meituan.net、img.meituan.net 保留原始 HTTPS 连接。 | 三个主机也提供正常酒店图或商品图。原来在这些主机上过滤的部分广告素材可能再次显示。[点评酒店图片文档](https://h5.dianping.com/app/bep-docs/sky-doc/hotelopenapi/hotel_open_api_interface.html) · [美团订单商品图文档](https://h5.dianping.com/app/bep-docs/sky-doc/ordercenter/orderdetail_api.html) |
 
 上述 6 个主机承载的其他 HTTPS 请求也可能在本机经过 TLS 解密。网络耗时、缓存条件和 App 实现都会影响实际体验。菜单图片、结算页或优惠券出现异常时，可停用懒人版，在同一网络重复打开相同页面，比对两次结果。[Loon 解密范围](https://nsloon.app/docs/MitM/)
 
@@ -76,7 +76,7 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 | 拼多多 | 开屏配置、首页及刷新接口中标为 `ad_module` 的模块，以及已知混合搜索页的付费商品卡。 | 首页只按明确的模块名过滤。个人中心的取货通知与优惠横幅整块保留。订单、支付、优惠券、聊天和普通商品推荐有保留用例。本次验证用的是离线样本。[开屏配置](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partP/Pinduoduo.lpx#L11-L14) · [首页字段](https://github.com/ishowshu/qx/blob/3ad7bec45ec25cd41edfbae70db3869106e01890/script/pdd.js#L30-L46) · [刷新路径](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/Pinduoduo.snippet#L24) |
 | 快递 100 等接入拼多多广告联盟的 App | 拦截 `video-dsp.pddpic.com` 的推广视频素材。公开路径记录来自快递 100，规则按完整域名生效。 | 运单接口、商品图片和普通视频域名不在本条规则中。[素材路径](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partK/KuaiDi100.lpx#L154-L158) · [独立域名记录](https://github.com/vokins/ad/blob/5f177915e12fbaed055dd2ef79f56b97f689ac58/ad.lsr#L341) |
 | 闲鱼 | 共用的 MTOP 业务网关保留原始 HTTPS 连接 | 闲鱼技术团队记录了用 MTOP 拉取消息的机制。同步和异步开屏广告可能再次显示。[闲鱼消息团队技术说明](https://juejin.cn/post/7005836853001748517) |
-| 大众点评 | App 已知开屏配置；直连 `ad.api.dianping.com` 的广告请求；城市首页桌面网页版的顶部品牌广告位。 | 网页广告位需为 `www.dianping.com` 开启 HTTPS 解密。核对公开网页脚本后，用两个城市的公开请求验证了广告位接口，当时均未返回广告素材。App 如经共用网关或直连 IP 投放，精确域名规则可能无法命中。[美团对广告域名的说明](https://tech.meituan.com/2017/03/17/shark-sdk.html) · [点评网页广告组件](https://www.dpfile.com/app/dpindex-new-static/static/index.min.8f40fd44cb44a7195d5502a5a2831516.js) · [App 开屏配置](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partD/DianPing.lpx#L17-L25) |
+| 大众点评 | 按精确主机拦截 ad.api.dianping.com 的独立广告请求。 | 点评 App 网关与桌面网页保留原始 HTTPS 连接，App 开屏与网页城市横幅可能再次显示。[点评网络团队对广告域名的说明](https://tech.meituan.com/2017/03/17/shark-sdk.html) |
 | 高德地图、铁路 12306 | 高德的两条启动广告接口，铁路 12306 的独立广告主机 | 路线、导航、查票和购票接口不在名单中。App 自带的开屏倒计时可能继续显示。[高德地图](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partG/AutoNavi.lpx#L27-L36) · [铁路 12306](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/part1/12306.lpx#L14-L22) |
 
 **拼多多搜索**　规则只处理已知 `api.pinduoduo.com/search` 的成功 JSON。混合结果中，卡片须同时具备商品名称、匹配的商品 ID、广告创意 ID、商家 ID 及数值大于零的广告竞价（`ocpcBid`）才会移除。同件商品的自然结果、优惠信息和翻页游标都会保留。若整页都是推广，规则保留原页，避免产生无法继续翻页的空列表。[公开搜索接口与字段](https://github.com/zheng515253/spiderDemo/blob/da58b9332336118e185517fc741d9f72fc1e9452/pddSpider/spiders/pdd_keyword_goods_v8.py#L92-L111) · [搜索路径记录](https://github.com/Reukix/ukix/blob/44daad38c7d9b24379cb969f2a1a89ca49ec3297/Script/Pinduoduo.sgmodule#L27)
@@ -86,6 +86,12 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 ### 淘宝消息排查
 
 在 Loon 刷新原订阅后，请用同一网络分别测试淘宝消息页能否收到新消息，以及锁屏时有无通知。若问题仍在，可在同一台设备上切换本插件，对比两次收到的情况。锁屏通知还可检查 iOS 里淘宝的通知权限。排查时记录 Loon 命中的规则和主机名即可，勿分享聊天内容或带令牌的完整请求 URL。[淘宝开放平台消息说明](https://developer.alibaba.com/docs/doc.htm?articleId=103423&docType=1&treeId=55) · [Apple 推送网络要求](https://support.apple.com/zh-cn/102266)
+
+### 大众点评和山姆卡顿排查
+
+大众点评技术团队将商户图和笔记头图列为影响移动网页首屏渲染的资源。新版收窄点评网关、网页和美团共用图床的解密范围，已用公开的酒店与商品图片核对三个图床。实机加载耗时需用同一网络、同一店铺页面对照。[点评首屏研究](https://tech.meituan.com/2026/03/13/Qwik-practice-in-dianping.html)
+
+山姆已核对官网、会员协议、购物网关和网页资源主机的规则匹配。旧的第三方规则曾被报告影响山姆购物车和订单。若山姆仍卡，在同一网络下只切换本插件，分别打开同一商品页或购物车，并在 Loon 请求记录中查慢请求的主机、策略及实际命中的插件。分享日志时仅保留主机和规则名称即可。[山姆会员协议](https://m-sams.walmartmobile.cn/common/terms-of-agreement?agreementType=3) · [第三方规则历史反馈](https://github.com/blackmatrix7/ios_rule_script/issues/881) · [第三方规则现有匹配](https://github.com/blackmatrix7/ios_rule_script/blob/0b6897dc17e0c513d25449c935a9694818e32f0c/rewrite/Loon/AllInOne/AllInOne.plugin#L214)
 
 ## 国产 App 的独立广告主机
 
