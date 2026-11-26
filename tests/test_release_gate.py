@@ -52,8 +52,8 @@ class ReleaseAuditTests(unittest.TestCase):
             gate.run(self.base, head, False, report)
         self.assertEqual(report["变更文件"], ["README.md"])
         self.assertEqual(report["手工精确域名数"], 77)
-        self.assertEqual(report["HTTPS 主机数"], 41)
-        self.assertEqual(report["复写条数"], 48)
+        self.assertEqual(report["HTTPS 主机数"], 39)
+        self.assertEqual(report["复写条数"], 45)
         with self.assertRaises(ValueError):
             gate.run(self.base, self.base, False, {})
         with self.assertRaises(ValueError):

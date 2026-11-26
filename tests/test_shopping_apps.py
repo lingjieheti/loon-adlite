@@ -59,6 +59,54 @@ class ShoppingAppAds(unittest.TestCase):
             with self.subTest(url=url):
                 self.assertEqual(self.matches(url), [])
 
+    def test_message_and_shared_commerce_hosts_bypass_the_plugin(self):
+        # Offline route probes. Paths and ports do not establish current iOS endpoints.
+        urls = (
+            MTOP + "mtop.taobao.wireless.home.newface.awesome.get/1.0/",
+            "https://guide-acs.m.taobao.com/gw/mtop.trade.order.create/1.0/",
+            "https://guide-acs.m.taobao.com/gw/mtop.taobao.wireless.home.splash.awesome.get/1.0/",
+            "https://guide-acs.m.taobao.com/gw/mtop.cainiao.adx.flyad.getad/1.0/",
+            "https://msgacs.m.taobao.com/accs/auth",
+            "https://amdc.m.taobao.com/",
+            "https://wss-cntaobao.dingtalk.com/",
+            "https://acs.m.goofish.com/gw/mtop.taobao.idlemessage.session.sync/3.0/",
+            "https://acs.m.goofish.com/gw/mtop.taobao.idlecommerce.splash.ads/1.0/",
+            "https://acs.m.goofish.com/gw/mtop.taobao.idlecommerce.splash.async.ads/1.0/",
+            "https://wss-goofish.dingtalk.com/",
+            "https://courier.push.apple.com:5223/",
+            "https://courier.push.apple.com:443/",
+        )
+        for name in ("iPad-AdSuite.lpx", "iPad-AdLite.lpx", "iPad-InlineAds.lpx"):
+            sections = shared.read_sections(shared.ROOT / name)
+            blocked = {line.split(",")[1] for line in sections.get("rule", [])}
+            decrypted = {host.strip() for line in sections.get("mitm", [])
+                         for host in line.partition("=")[2].split(",")}
+            rewrites = [shared.Rewrite.parse(line) for line in sections.get("rewrite", [])]
+            for url in urls:
+                with self.subTest(plugin=name, url=url):
+                    host = urlsplit(url).hostname
+                    self.assertNotIn(host, blocked)
+                    self.assertNotIn(host, decrypted)
+                    for method in ("GET", "POST"):
+                        self.assertFalse(any(rule.matches(url, method=method) for rule in rewrites))
+
+    def test_other_apps_message_and_transaction_requests_are_not_rewritten_or_rejected(self):
+        blocked = {line.split(",")[1] for line in self.suite["rule"]}
+        for url in (
+            "https://long.weixin.qq.com/",
+            "https://short.weixin.qq.com/",
+            "https://jpushjd.m.jd.com/",
+            "https://jpushsc.m.jd.com/",
+            "https://api.m.jd.com/client.action?functionId=submitOrder",
+            "https://api.pinduoduo.com/order/prepay",
+            "https://api.weibo.cn/2/direct_messages/user_list",
+            "https://api.zhihu.com/notifications/v3/message",
+        ):
+            with self.subTest(url=url):
+                self.assertNotIn(urlsplit(url).hostname, blocked)
+                for method in ("GET", "POST"):
+                    self.assertEqual(self.matches(url, method=method), [])
+
     def test_dedicated_ad_domains_are_exact_in_both_plugins(self):
         profiles = (self.suite, shared.read_sections(shared.ROOT / "iPad-AdLite.lpx"))
         for profile in profiles:

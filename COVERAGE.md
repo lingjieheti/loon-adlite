@@ -1,6 +1,6 @@
 # 常用 App 去广告的覆盖范围
 
-iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 48 条原生复写，并列出 41 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
+iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固定的精确域名规则，本次上游同步另收录 5 个主机，合计 82 个。域名拦截无需证书。懒人版另有 45 条原生复写，并列出 39 个需要在本机进行 HTTPS 解密的完整主机名。域名数会随审核后的上游更新而变化。同一款 App 可能从多个渠道投放广告，规则数量不能换算为拦截率。[当前订阅内容](iPad-AdSuite.lpx)
 
 ## 网页广告
 
@@ -71,17 +71,21 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 77 条固�
 | App | 已实现的规则 | 适用条件与保留内容 |
 | --- | --- | --- |
 | 京东 | 京媒广告请求、另一竞价主机的 `/adx/` 路径。能识别操作名时，清空开屏图和次数，剔除首页两种悬浮推广楼层 | 要求 URL 中只有一个明确的 `functionId=start` 或 `functionId=welcomeHome`。同一请求出现无值或重复的操作名、或含百分号编码的参数名时跳过。普通参数值仍可编码。新版可能把操作名及正文编码，此时这两条复写会跳过。商品图片 CDN、比价、优惠券、购物车和订单均未列为拦截目标。[京媒 SDK](https://help-sdk-doc.jd.com/ansdkDoc/faq/faq.html) · [首页字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/jingdong/jingdong.js#L258-L280) · [竞价接口](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/jd_splash_ad_block.plugin#L19-L25) · [新版样本和限制](https://github.com/zbsdsb/loon-adblock-plugins/blob/890f64953efc870d4ca6cc5ec19b048c88ec73bb/tests/jd-test.js#L26-L50) |
-| 淘宝 | 淘宝开屏配置的 `taobao-splash` 槽，仅移除含有效 HTTP、HTTPS 或协议相对素材地址的广告条目，保留只有跳转链接、空协议或无主机的条目 | 校验方法名、版本和 MTOP 成功状态。正常首页、红包、商品视频、详情和结算不在复写路径中。首页混排的商业推荐仍可能出现。[淘宝开屏字段](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Scripts/myBlockAds.js#L84-L121) |
-| 菜鸟 | 淘宝网关中菜鸟专用广告投放接口的成功响应 | 仅在接口和响应形状吻合时清空广告数据。即使网关返回成功，业务层明确失败或返回非空 `errmsg` 时也保留原响应。[MTOP 网关与业务状态示例](https://developer.alibaba.com/support/hotProblemDetail.htm?id=346101&source=doc) 没有取得真实成功投放响应。[菜鸟维护者规则](https://github.com/UserC23/cainiao-ads-loon/blob/e6aac018f1a61df72b51a290a4beb99993692b77/CainiaoAds.plugin#L49-L50) |
+| 淘宝 | 手机网页版首页的指定轮播曝光回调 | 淘宝与菜鸟共用的 MTOP 网关保留原始 HTTPS 连接。淘宝 App 这处开屏广告可能再次显示。[消息排查](#淘宝消息排查) |
+| 菜鸟 | 淘宝与菜鸟共用的 MTOP 网关保留原始 HTTPS 连接 | 原先针对该网关的菜鸟广告过滤已撤下。[菜鸟 App 网关记录](https://github.com/UserC23/cainiao-ads-loon/blob/e6aac018f1a61df72b51a290a4beb99993692b77/CHANGELOG.md#L24-L27) |
 | 拼多多 | 开屏配置、首页及刷新接口中标为 `ad_module` 的模块，以及已知混合搜索页的付费商品卡。 | 首页只按明确的模块名过滤。个人中心的取货通知与优惠横幅整块保留。订单、支付、优惠券、聊天和普通商品推荐有保留用例。本次验证用的是离线样本。[开屏配置](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partP/Pinduoduo.lpx#L11-L14) · [首页字段](https://github.com/ishowshu/qx/blob/3ad7bec45ec25cd41edfbae70db3869106e01890/script/pdd.js#L30-L46) · [刷新路径](https://github.com/ZenmoFeiShi/Qx/blob/5df3cafc468419e7b58b0f4a1b75df0786ab1c67/Pinduoduo.snippet#L24) |
 | 快递 100 等接入拼多多广告联盟的 App | 拦截 `video-dsp.pddpic.com` 的推广视频素材。公开路径记录来自快递 100，规则按完整域名生效。 | 运单接口、商品图片和普通视频域名不在本条规则中。[素材路径](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partK/KuaiDi100.lpx#L154-L158) · [独立域名记录](https://github.com/vokins/ad/blob/5f177915e12fbaed055dd2ef79f56b97f689ac58/ad.lsr#L341) |
-| 闲鱼 | 同步和异步开屏广告。 | 按方法名匹配，保留购物网关的其他请求。[闲鱼](https://github.com/Thelongdarkorg/loon-plugins/blob/2d0443ce1ecec36cf173634e77ba52224efbdc38/xianyu_splash_ad_block.plugin#L30-L40) |
+| 闲鱼 | 共用的 MTOP 业务网关保留原始 HTTPS 连接 | 闲鱼技术团队记录了用 MTOP 拉取消息的机制。同步和异步开屏广告可能再次显示。[闲鱼消息团队技术说明](https://juejin.cn/post/7005836853001748517) |
 | 大众点评 | App 已知开屏配置；直连 `ad.api.dianping.com` 的广告请求；城市首页桌面网页版的顶部品牌广告位。 | 网页广告位需为 `www.dianping.com` 开启 HTTPS 解密。核对公开网页脚本后，用两个城市的公开请求验证了广告位接口，当时均未返回广告素材。App 如经共用网关或直连 IP 投放，精确域名规则可能无法命中。[美团对广告域名的说明](https://tech.meituan.com/2017/03/17/shark-sdk.html) · [点评网页广告组件](https://www.dpfile.com/app/dpindex-new-static/static/index.min.8f40fd44cb44a7195d5502a5a2831516.js) · [App 开屏配置](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partD/DianPing.lpx#L17-L25) |
 | 高德地图、铁路 12306 | 高德的两条启动广告接口，铁路 12306 的独立广告主机 | 路线、导航、查票和购票接口不在名单中。App 自带的开屏倒计时可能继续显示。[高德地图](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partG/AutoNavi.lpx#L27-L36) · [铁路 12306](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/part1/12306.lpx#L14-L22) |
 
 **拼多多搜索**　规则只处理已知 `api.pinduoduo.com/search` 的成功 JSON。混合结果中，卡片须同时具备商品名称、匹配的商品 ID、广告创意 ID、商家 ID 及数值大于零的广告竞价（`ocpcBid`）才会移除。同件商品的自然结果、优惠信息和翻页游标都会保留。若整页都是推广，规则保留原页，避免产生无法继续翻页的空列表。[公开搜索接口与字段](https://github.com/zheng515253/spiderDemo/blob/da58b9332336118e185517fc741d9f72fc1e9452/pddSpider/spiders/pdd_keyword_goods_v8.py#L92-L111) · [搜索路径记录](https://github.com/Reukix/ukix/blob/44daad38c7d9b24379cb969f2a1a89ca49ec3297/Script/Pinduoduo.sgmodule#L27)
 
 将 99 张公开历史商品卡放入模拟分页响应，实际规则移除了 11 张推广卡，其余 88 张内容及顺序一致。核查时，搜索接口向匿名请求返回 HTTP 403，当前 iOS 版本是否仍走同一接口有待实测。[历史商品样本](https://github.com/onetwo1/pinduoduo/blob/021ed7772373ef382ef7f96f006cc92b4201035a/pin_duoduo/pin_duoduo/data/data.json#L5-L7) · [回归用例](tests/test_pdd_updates.py)
+
+### 淘宝消息排查
+
+在 Loon 刷新原订阅后，请用同一网络分别测试淘宝消息页能否收到新消息，以及锁屏时有无通知。若问题仍在，可在同一台设备上切换本插件，对比两次收到的情况。锁屏通知还可检查 iOS 里淘宝的通知权限。排查时记录 Loon 命中的规则和主机名即可，勿分享聊天内容或带令牌的完整请求 URL。[淘宝开放平台消息说明](https://developer.alibaba.com/docs/doc.htm?articleId=103423&docType=1&treeId=55) · [Apple 推送网络要求](https://support.apple.com/zh-cn/102266)
 
 ## 国产 App 的独立广告主机
 
