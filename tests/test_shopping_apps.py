@@ -90,6 +90,34 @@ class ShoppingAppAds(unittest.TestCase):
                     for method in ("GET", "POST"):
                         self.assertFalse(any(rule.matches(url, method=method) for rule in rewrites))
 
+    def test_sams_club_business_and_cdn_traffic_bypasses_the_plugin(self):
+        urls = (
+            "https://www.samsclub.cn/",
+            "https://cms.samsclub.cn/",
+            "https://m-sams.walmartmobile.cn/common/terms-of-agreement?agreementType=3",
+            "https://api-sams.walmartmobile.cn/api/v1/sams/trade/order/getOftenBuyGoods",
+            "https://api-sams.walmartmobile.cn/api/v1/sams/goods-portal/spu/searchRecommendPool",
+            "https://sams-home-online-1302115363.file.myqcloud.com/",
+            "https://mcdn-sams.walmartmobile.cn/assets/index.e0ab9c1d.js",
+            "https://decoration-sams.walmartmobile.cn/",
+            "https://hub-kefu.walmartmobile.cn/",
+            "https://sam-retail-static-1302115363.file.myqcloud.com/",
+            "https://ssl.captcha.qq.com/",
+        )
+        for name in ("iPad-AdLite.lpx", "iPad-InlineAds.lpx", "iPad-AdSuite.lpx"):
+            sections = shared.read_sections(shared.ROOT / name)
+            blocked = {line.split(",")[1] for line in sections.get("rule", [])}
+            decrypted = {host.strip() for line in sections.get("mitm", [])
+                         for host in line.partition("=")[2].split(",")}
+            rewrites = [shared.Rewrite.parse(line) for line in sections.get("rewrite", [])]
+            for url in urls:
+                with self.subTest(plugin=name, url=url):
+                    host = urlsplit(url).hostname
+                    self.assertNotIn(host, blocked)
+                    self.assertNotIn(host, decrypted)
+                    for method in ("GET", "POST"):
+                        self.assertFalse(any(rule.matches(url, method=method) for rule in rewrites))
+
     def test_other_apps_message_and_transaction_requests_are_not_rewritten_or_rejected(self):
         blocked = {line.split(",")[1] for line in self.suite["rule"]}
         for url in (
