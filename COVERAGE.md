@@ -62,7 +62,7 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 82 条固�
 - **主机范围**仅为 `api3-core-c.amemv.com`、`api3-normal-c.amemv.com`、`api.amemv.com`。这些是共享 API 主机。开启解密后，发往这些主机的其他 HTTPS 请求也可能在本机经过 TLS 解密；插件只在指定路径执行复写。
 - **推荐信息流**仅匹配 `/aweme/v1/feed` 和 `/aweme/v2/feed`。HTTP 200 的 JSON 须包含数值 `status_code=0` 和顶层 `aweme_list` 数组。仅当同页还含可识别的非广告作品或直播时，才过滤广告。作品取 `aweme_id`，直播取 `room_id`、`live_room.id` 或 `live_room.id_str`，这些标识须为正整数字样。过滤时只移除直接条目中 `is_ads` 为布尔 `true` 或数值 `1` 的对象。纯广告页、广告以外只有占位项的页面，以及找不到可识别作品或直播的页面均原样保留，避免翻页后只剩空白。带货和本地生活标记本身不会触发删除。其余条目的顺序、分页游标和预取字段保留。没有上述广告标记时直接返回，无需重新构造数组。[历史广告标记](https://github.com/Choler/Surge/blob/3d9d3ed61676cd0e3f309156e47e60f509ae612a/Script/douyin.js#L27-L43)
 - **定向请求与编码**。查询参数名为 `aweme_id` 或 `aweme_ids` 的定向请求跳过处理。参数名含百分号编码时也跳过，避免改动指定作品。只有参数值含编码时，普通推荐仍按上述条件过滤。分享及其他视频路径、带明确失败标记的响应、Protobuf 等二进制响应和结构未知的 JSON 均保留。[上游数据格式边界](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Docs/DouyinAdClean.md#L47-L65)
-- **候选开屏接口**共有五个完整路径，分别为`/api/ad/v1/splash/stock`、`/api/ad/v16/splash/preload`、`/api/ad/splash/stock/realtime/v14`、`/api/ad/splash/stock/realtime/v15`、`/api/ad/splash/aweme/v15`。路径出自旧安装包；与前述四个主机的组合是基于静态配置的预防性匹配，缺少各组合的运行时捕获。拒绝请求后仍可能有本地倒计时、缓存画面或重试等待。[候选路径与证据](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Rewrite/DouyinAdClean.snippet#L9-L17)
+- **候选开屏接口**共有五个完整路径，分别为`/api/ad/v1/splash/stock`、`/api/ad/v16/splash/preload`、`/api/ad/splash/stock/realtime/v14`、`/api/ad/splash/stock/realtime/v15`、`/api/ad/splash/aweme/v15`。路径出自旧安装包；与前述三个主机的组合是基于静态配置的预防性匹配，缺少各组合的运行时捕获。拒绝请求后仍可能有本地倒计时、缓存画面或重试等待。[候选路径与证据](https://github.com/belcheckyoung/Belcheck-QX-AdBlock/blob/12a4f9a5d21dd7efbf35b6b4d0e7e28889d6d24c/Rewrite/DouyinAdClean.snippet#L9-L17)
 
 ## 美团
 
@@ -75,7 +75,7 @@ iPhone 和 iPad 共用[懒人版订阅](README.md#安装)。插件有 82 条固�
 | 美团餐饮微信小程序 | `rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement` 的成功响应中，若报错、参数错误、冲突或未找到标志为真，则保留原响应。其余符合条件的响应只移除 `data.adSiteList` 内 `adSiteId` 符合 `adunit-…` 格式的条目，后缀限非空的英文字母、数字、下划线或连字符。 | 核查时匿名访问返回 HTTP 200、`code=200`、`success=true`，其中一个广告位经规则处理后变为零个，其他字段一致。这项结果来自公开接口响应。餐饮小程序的结账、企业餐和优惠权益不能用这条结果推断。[公开接口](https://rms.meituan.com/api/v1/rmsmina/c/queryWechatAdvertisement) · [路径来源](https://github.com/fmz200/wool_scripts/blob/7bc19e8b57b4a67ecefade790574472de69074d0/Loon/plugin/split/partD/DianPing.lpx#L19-L27) |
 | 共享图片主机 | p0.meituan.net、p1.meituan.net、img.meituan.net 保留原始 HTTPS 连接。 | 三个主机也提供正常酒店图或商品图。原来在这些主机上过滤的部分广告素材可能再次显示。[点评酒店图片文档](https://h5.dianping.com/app/bep-docs/sky-doc/hotelopenapi/hotel_open_api_interface.html) · [美团订单商品图文档](https://h5.dianping.com/app/bep-docs/sky-doc/ordercenter/orderdetail_api.html) |
 
-上述 6 个主机承载的其他 HTTPS 请求也可能在本机经过 TLS 解密。网络耗时、缓存条件和 App 实现都会影响实际体验。菜单图片、结算页或优惠券出现异常时，可停用懒人版，在同一网络重复打开相同页面，比对两次结果。[Loon 解密范围](https://nsloon.app/docs/MitM/)
+上述三个美团复写主机承载的其他 HTTPS 请求也可能在本机经过 TLS 解密。网络耗时、缓存条件和 App 实现都会影响实际体验。菜单图片、结算页或优惠券出现异常时，可停用懒人版，在同一网络重复打开相同页面，比对两次结果。[Loon 解密范围](https://nsloon.app/docs/MitM/)
 
 ## 购物和生活
 
